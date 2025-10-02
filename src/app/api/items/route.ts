@@ -1,15 +1,37 @@
 import { NextResponse } from "next/server";
-import { supabaseServer } from "@/app/shared/api/supabase-server";
+import { supabaseServer } from "@/shared/api/supabase-server";
 import { nanoid } from "nanoid";
 import crypto from "crypto"; // Secret Key 생성용
 import {
   ANON_USERS_TABLE_NAME,
   ITEMS_TABLE_NAME,
-} from "@/app/shared/config/constants";
+} from "@/shared/config/constants";
 
-// 비밀 키 생성 함수 (예시)
+// 비밀 키 생성 함수
 const generateSecretKey = () => {
   return crypto.randomBytes(16).toString("hex"); // 32자리 16진수 문자열
+};
+
+export const GET = async (req: Request) => {
+  try {
+    const url = new URL(req.url);
+    const limit = Number(url.searchParams.get("limit") ?? 10);
+    const offset = Number(url.searchParams.get("offset") ?? 0);
+
+    const { data, error } = await supabaseServer
+      .from("items")
+      .select(
+        "id, item_name, price, image, is_online, item_source, nickname, is_sold"
+      )
+      .order("id", { ascending: false })
+      .range(offset, offset + limit - 1);
+
+    if (error) throw error;
+
+    return NextResponse.json(data);
+  } catch (err) {
+    return NextResponse.json({ error: err }, { status: 500 });
+  }
 };
 
 export async function POST(request: Request) {

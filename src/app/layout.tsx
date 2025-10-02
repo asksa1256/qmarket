@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { QueryProvider } from "./shared/providers/QueryProvider";
 import { pretendard } from "./shared/config/fonts";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Q-Market",
@@ -17,6 +18,13 @@ export default function RootLayout({
     <html lang="ko">
       <body className={`${pretendard.className} antialiased`}>
         <QueryProvider>{children}</QueryProvider>
+        <Toaster
+          position="bottom-center"
+          richColors
+          toastOptions={{
+            className: "font-pretendard",
+          }}
+        />
       </body>
     </html>
   );

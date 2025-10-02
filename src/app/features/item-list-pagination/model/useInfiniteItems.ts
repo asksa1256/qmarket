@@ -1,47 +1,25 @@
-import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
-import { fetchItemsPage } from "@/entities/item/model/client-fetch";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { Item } from "@/entities/item/model/types";
-import { ITEMS_PAGE_SIZE } from "@/shared/config/constants";
 
-interface InfiniteItemData {
-  items: Item[];
-  nextOffset: number | undefined;
-}
+const fetchClientItems = async (
+  limit: number,
+  offset: number
+): Promise<Item[]> => {
+  const res = await fetch(`/api/items?limit=${limit}&offset=${offset}`);
+  if (!res.ok) throw new Error("상품 데이터를 불러오지 못했습니다.");
+  return res.json();
+};
 
-export const useInfiniteItems = (initialItems: Item[]) => {
+export function useInfiniteItems(initialItems: Item[]) {
   return useInfiniteQuery({
     queryKey: ["items"],
-    queryFn: async ({ pageParam = 0 }) => {
-      if (pageParam === 0) {
-        const nextOffset =
-          initialItems.length < ITEMS_PAGE_SIZE ? undefined : ITEMS_PAGE_SIZE;
-        return {
-          items: initialItems,
-          nextOffset: nextOffset,
-        };
-      }
-
-      const items = await fetchItemsPage(pageParam);
-      const nextOffset =
-        items.length < ITEMS_PAGE_SIZE
-          ? undefined
-          : pageParam + ITEMS_PAGE_SIZE;
-
-      return { items, nextOffset };
-    },
-
-    initialPageParam: 0,
+    queryFn: ({ pageParam = 0 }) => fetchClientItems(10, pageParam),
+    getNextPageParam: (lastPage, allPages) =>
+      lastPage.length === 10 ? allPages.length * 10 : undefined,
     initialData: {
-      pages: [
-        {
-          items: initialItems,
-          nextOffset:
-            initialItems.length < ITEMS_PAGE_SIZE ? undefined : ITEMS_PAGE_SIZE,
-        },
-      ],
+      pages: [initialItems],
       pageParams: [0],
-    } as InfiniteData<InfiniteItemData, number>,
-
-    getNextPageParam: (lastPage) => lastPage.nextOffset,
+    },
+    initialPageParam: 0,
   });
-};
+}

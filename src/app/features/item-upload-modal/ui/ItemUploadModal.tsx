@@ -12,8 +12,7 @@ import {
   DialogTrigger,
 } from "@/shared/ui/dialog";
 import { Input } from "@/shared/ui/input";
-import { useState, type FormEvent } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { supabase } from "@/shared/api/supabase-client";
 import { sanitize } from "@/shared/lib/sanitize";
@@ -24,9 +23,49 @@ import { ItemFormValues, ItemFormSchema } from "../model/schema";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ITEM_SOURCES_MAP } from "@/shared/config/constants";
+import { Item } from "@/entities/item/model/types";
 
 export default function ItemUploadModal() {
   const queryClient = useQueryClient();
+
+  const createItemMutation = useMutation({
+    mutationFn: async (values: ItemFormValues) => {
+      const dataToInsert = {
+        item_name: sanitize(values.item_name),
+        price: values.price,
+        is_sold: values.is_sold === "sold",
+        is_online: values.is_online === "online",
+        item_source: ITEM_SOURCES_MAP[values.item_source],
+        nickname: sanitize(values.nickname),
+      };
+
+      const { data, error } = await supabase
+        .from("items")
+        .insert([dataToInsert])
+        .select();
+
+      if (error) {
+        throw new Error(error.message);
+      }
+      return data;
+    },
+    onSuccess: (newItem) => {
+      toast.success("상품이 등록되었습니다!");
+
+      queryClient.setQueryData<Item[]>(["items"], (old) => {
+        if (!old || old.length === 0) {
+          // 캐시가 비어있으면 새 데이터로 교체
+          return newItem;
+        }
+        // 기존 캐시에 새 데이터 추가
+        return [newItem[0], ...old];
+      });
+    },
+    onError: (err) => {
+      toast.error("상품 등록에 실패했습니다.");
+      console.error(err);
+    },
+  });
 
   const form = useForm<ItemFormValues>({
     resolver: zodResolver(ItemFormSchema),
@@ -40,38 +79,14 @@ export default function ItemUploadModal() {
     },
   });
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { isSubmitting },
-    reset,
-  } = form;
+  const { register, handleSubmit, control, reset } = form;
 
-  const onSubmit = async (values: ItemFormValues) => {
-    try {
-      const dataToInsert = {
-        item_name: sanitize(values.item_name),
-        price: values.price,
-        is_sold: values.is_sold === "sold",
-        is_online: values.is_online === "online",
-        item_source: ITEM_SOURCES_MAP[values.item_source],
-        nickname: sanitize(values.nickname),
-      };
-
-      const { error } = await supabase.from("items").insert([dataToInsert]);
-
-      if (error) {
-        throw new Error(error.message);
-      }
-
-      toast.success("상품이 등록되었습니다!");
-      queryClient.invalidateQueries({ queryKey: ["items"] });
-      reset(); // 폼 초기화
-    } catch (err) {
-      toast.error("상품 등록에 실패했습니다.");
-      console.error(err);
-    }
+  const onSubmit = (values: ItemFormValues) => {
+    createItemMutation.mutate(values, {
+      onSuccess: () => {
+        reset(); // 폼 초기화
+      },
+    });
   };
 
   return (
@@ -218,8 +233,8 @@ export default function ItemUploadModal() {
               <DialogClose asChild>
                 <Button variant="outline">닫기</Button>
               </DialogClose>
-              <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "등록 중..." : "등록하기"}
+              <Button type="submit" disabled={createItemMutation.isPending}>
+                {createItemMutation.isPending ? "등록 중..." : "등록하기"}
               </Button>
             </DialogFooter>
           </form>
