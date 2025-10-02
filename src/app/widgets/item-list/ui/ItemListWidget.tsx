@@ -51,7 +51,7 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
         <TableBody>
           {items.map((item, index) => (
             <Popover
-              key={item.id}
+              key={`${item.id}-${index}`}
               open={openIndex === index}
               onOpenChange={(isOpen) => setOpenIndex(isOpen ? index : null)}
             >

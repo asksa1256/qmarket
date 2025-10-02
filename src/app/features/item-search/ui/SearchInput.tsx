@@ -1,7 +1,7 @@
 "use client";
 
 import { Input } from "@/shared/ui/input";
-import { ChangeEvent, useState, useMemo } from "react";
+import { ChangeEvent, useEffect, useState, useMemo } from "react";
 import debounce from "@/shared/lib/debounce";
 
 interface SearchInputProps {
@@ -15,7 +15,13 @@ export default function SearchInput({
   className,
   onSearch,
 }: SearchInputProps) {
+  // 입력창에 바로 반영될 로컬 상태
   const [inputValue, setInputValue] = useState(value);
+
+  // 부모 value 변경 시 동기화
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
 
   const debouncedSearch = useMemo(
     () => debounce((val: string) => onSearch(val), 500),
@@ -23,7 +29,7 @@ export default function SearchInput({
   );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value); // 입력은 바로 반영
+    setInputValue(e.target.value); // 입력창 즉시 반영
     debouncedSearch(e.target.value); // 검색 요청만 debounce
   };
 
@@ -31,7 +37,7 @@ export default function SearchInput({
     <Input
       type="text"
       placeholder="상품명 검색"
-      value={inputValue}
+      value={inputValue} // 내부 상태 사용
       onChange={handleChange}
       className={className}
     />

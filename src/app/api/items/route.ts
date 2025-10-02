@@ -21,16 +21,28 @@ export const GET = async (req: Request) => {
     const limit = Number(url.searchParams.get("limit") ?? 10);
     const offset = Number(url.searchParams.get("offset") ?? 0);
     const search = searchParams.get("search") || "";
+    const sort = searchParams.get("sort");
 
-    const query = supabaseServer
+    let query = supabaseServer
       .from("items")
       .select(
         "id, item_name, price, image, is_online, item_source, nickname, is_sold"
       )
-      .order("id", { ascending: false })
       .range(offset, offset + limit - 1);
 
     if (search) query.ilike("item_name", `%${search}%`);
+
+    // 정렬
+    if (!sort) {
+      // 기본 정렬: 최신순 (id 내림차순)
+      query = query.order("id", { ascending: false });
+    }
+    if (sort === "price_asc") {
+      query = query.order("price", { ascending: true });
+    }
+    if (sort === "price_desc") {
+      query = query.order("price", { ascending: false });
+    }
 
     const { data, error } = await query;
 

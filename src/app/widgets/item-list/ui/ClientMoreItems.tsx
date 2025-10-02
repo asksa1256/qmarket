@@ -15,9 +15,16 @@ export default function ClientMoreItems({
   initialItems,
 }: ClientMoreItemsProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [sort, setSort] = useState<"price_asc" | "price_desc" | null>(null);
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, error } =
-    useInfiniteItems(initialItems, searchQuery);
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    error,
+    refetch,
+  } = useInfiniteItems(initialItems, searchQuery, sort);
 
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
@@ -29,6 +36,11 @@ export default function ClientMoreItems({
         item.item_name.toLowerCase().includes(searchQuery.toLowerCase())
       );
   }, [data, searchQuery]);
+
+  // sort가 바뀔 때마다 페이지 리셋
+  useEffect(() => {
+    refetch();
+  }, [sort, refetch]);
 
   useEffect(() => {
     if (!loadMoreRef.current || !hasNextPage) return;
@@ -54,6 +66,11 @@ export default function ClientMoreItems({
     );
   }
 
+  const handleResetFilter = () => {
+    setSort(null);
+    setSearchQuery("");
+  };
+
   return (
     <div className="mt-6 pt-6">
       {/* 검색, 정렬 */}
@@ -63,6 +80,24 @@ export default function ClientMoreItems({
           className="w-auto"
           onSearch={(e: string) => setSearchQuery(e)}
         />
+
+        <button
+          className="px-3 py-1 border rounded text-sm"
+          onClick={() =>
+            setSort((prev) =>
+              prev === "price_asc" ? "price_desc" : "price_asc"
+            )
+          }
+        >
+          {sort === "price_asc" ? "가격 낮은순" : "가격 높은순"}
+        </button>
+
+        <button
+          className="px-3 py-1 border rounded text-sm"
+          onClick={handleResetFilter}
+        >
+          초기화
+        </button>
       </div>
 
       {/* 아이템 목록 */}
