@@ -6,6 +6,8 @@ import { useRef, useEffect, useMemo } from "react";
 import { ItemListWidget } from "@/widgets/item-list/ui/ItemListWidget";
 import { useState } from "react";
 import SearchInput from "@/features/item-search/ui/SearchInput";
+import ItemUploadModal from "@/features/item-upload-modal/ui/ItemUploadModal";
+import { Button } from "@/shared/ui/button";
 
 interface ClientMoreItemsProps {
   initialItems: Item[];
@@ -73,31 +75,35 @@ export default function ClientMoreItems({
 
   return (
     <div className="mt-6 pt-6">
-      {/* 검색, 정렬 */}
-      <div className="flex mb-4">
-        <SearchInput
-          value={searchQuery}
-          className="w-auto"
-          onSearch={(e: string) => setSearchQuery(e)}
-        />
+      <div className="flex items-center justify-between mb-4 gap-2">
+        {/* 검색창 */}
+        <div className="flex flex-1 justify-end">
+          <SearchInput
+            value={searchQuery}
+            className="border border-gray-300 rounded-lg shadow-sm text-sm w-auto"
+            onSearch={(e: string) => setSearchQuery(e)}
+          />
+        </div>
 
-        <button
-          className="px-3 py-1 border rounded text-sm"
+        {/* 정렬 버튼 */}
+        <Button
+          variant="outline"
           onClick={() =>
             setSort((prev) =>
               prev === "price_asc" ? "price_desc" : "price_asc"
             )
           }
         >
-          {sort === "price_asc" ? "가격 낮은순" : "가격 높은순"}
-        </button>
+          {sort === "price_asc" || !sort ? "가격 낮은순" : "가격 높은순"}
+        </Button>
 
-        <button
-          className="px-3 py-1 border rounded text-sm"
-          onClick={handleResetFilter}
-        >
+        {/* 초기화 버튼 */}
+        <Button variant="outline" onClick={handleResetFilter}>
           초기화
-        </button>
+        </Button>
+
+        {/* 상품 등록 버튼 */}
+        <ItemUploadModal />
       </div>
 
       {/* 아이템 목록 */}
@@ -106,7 +112,9 @@ export default function ClientMoreItems({
       {/* 무한 스크롤 */}
       <div ref={loadMoreRef} className="h-10">
         {isFetchingNextPage ? (
-          <p className="text-center mt-4">추가 상품 로드 중...</p>
+          <p className="text-center mt-4 text-gray-500 text-sm">
+            추가 상품 로드 중...
+          </p>
         ) : hasNextPage ? null : (
           <p className="text-center mt-4 text-gray-500 text-sm">
             모든 상품을 불러왔습니다.

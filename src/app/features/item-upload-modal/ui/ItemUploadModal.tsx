@@ -85,7 +85,7 @@ export default function ItemUploadModal() {
       <DialogTrigger asChild>
         <Button
           variant="default"
-          className="w-auto mx-auto bg-blue-600 hover:bg-blue-700"
+          className="w-auto mx-auto font-bold bg-blue-600 hover:bg-blue-700"
         >
           상품 등록하기
         </Button>
@@ -99,9 +99,9 @@ export default function ItemUploadModal() {
           </DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="max-h-[50vh] pr-4">
+        <ScrollArea className="max-h-[60vh] pr-4">
           <form onSubmit={handleSubmit(onSubmit)} className="mb-4">
-            <div className="grid gap-8">
+            <div className="grid gap-8 px-2">
               <div className="grid gap-3">
                 <label htmlFor="item_name" className="text-sm">
                   상품명

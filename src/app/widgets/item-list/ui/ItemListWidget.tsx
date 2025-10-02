@@ -57,7 +57,7 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
             >
               <PopoverTrigger asChild>
                 <TableRow
-                  className={`cursor-pointer ${
+                  className={`cursor-default ${
                     item.is_sold ? "opacity-40" : "opacity-100"
                   } ${
                     index % 2 === 0 ? "bg-white" : "bg-gray-50"
@@ -77,7 +77,7 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
                       className={`${
                         item.is_sold
                           ? "bg-red-100 text-red-700"
-                          : "bg-green-600 text-white"
+                          : "bg-blue-600 text-white"
                       } px-2 py-1 rounded-full`}
                     >
                       {item.is_sold ? "판매완료" : "판매중"}
@@ -88,7 +88,7 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
                       variant="secondary"
                       className={`${
                         item.is_online
-                          ? "bg-blue-600 text-white"
+                          ? "bg-green-600 text-white"
                           : "bg-gray-200 text-gray-600"
                       } px-2 py-1 rounded-full`}
                     >
@@ -133,12 +133,6 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
           ))}
         </TableBody>
       </Table>
-
-      {isLoading && (
-        <p className="text-center text-sm p-8">
-          상품 목록을 불러오는 중입니다...
-        </p>
-      )}
 
       {!isLoading && items.length === 0 && (
         <p className="text-center text-sm p-8 text-gray-500">
