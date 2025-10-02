@@ -22,12 +22,12 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
         <TableCaption className="sr-only">아이템 목록</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="text-center">상품명</TableHead>
-            <TableHead className="text-center">가격</TableHead>
-            <TableHead className="text-center">판매 상태</TableHead>
-            <TableHead className="text-center">온라인</TableHead>
-            <TableHead className="text-center">출처</TableHead>
-            <TableHead className="text-center">판매자</TableHead>
+            <TableHead className="text-center font-bold">상품명</TableHead>
+            <TableHead className="text-center font-bold">가격</TableHead>
+            <TableHead className="text-center font-bold">판매 상태</TableHead>
+            <TableHead className="text-center font-bold">온라인</TableHead>
+            <TableHead className="text-center font-bold">출처</TableHead>
+            <TableHead className="text-center font-bold">판매자</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -42,7 +42,7 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
                 <Badge
                   variant="secondary"
                   className={
-                    item.is_sold ? undefined : "bg-blue-500 text-white"
+                    item.is_sold ? undefined : "bg-blue-600 text-white"
                   }
                 >
                   {item.is_sold ? "판매완료" : "판매중"}
@@ -52,7 +52,7 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
                 <Badge
                   variant="secondary"
                   className={
-                    item.is_online ? "bg-blue-500 text-white" : undefined
+                    item.is_online ? "bg-green-600 text-white" : undefined
                   }
                 >
                   {item.is_online ? "온라인" : "미접속"}
@@ -67,11 +67,8 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
                 </Badge>
               </TableCell>
               <TableCell className="text-center">
-                <Badge
-                  variant="secondary"
-                  className="text-gray-700 truncate text-sm"
-                >
-                  <span className="font-bold text-gray-900">
+                <Badge variant="secondary" className="text-gray-700 truncate">
+                  <span className="font-medium text-gray-900">
                     {item.nickname}
                   </span>
                 </Badge>
