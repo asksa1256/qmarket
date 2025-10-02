@@ -9,6 +9,9 @@ import {
   TableRow,
 } from "@/shared/ui/table";
 import { Badge } from "@/shared/ui/badge";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
+import { useState } from "react";
+import ItemImage from "@/shared/ui/ItemImage";
 
 interface ItemListWidgetProps {
   items: Item[];
@@ -16,6 +19,8 @@ interface ItemListWidgetProps {
 }
 
 export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
   return (
     <div className="space-y-4">
       <Table className="min-w-full border border-gray-200 rounded-lg shadow-sm overflow-hidden">
@@ -42,64 +47,89 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
             </TableHead>
           </TableRow>
         </TableHeader>
+
         <TableBody>
           {items.map((item, index) => (
-            <TableRow
+            <Popover
               key={item.id}
-              className={`${item.is_sold ? "opacity-40" : "opacity-100"} ${
-                index % 2 === 0 ? "bg-white" : "bg-gray-50"
-              } hover:bg-gray-100 transition-colors`}
+              open={openIndex === index}
+              onOpenChange={(isOpen) => setOpenIndex(isOpen ? index : null)}
             >
-              <TableCell className="text-center font-medium text-gray-800">
-                {item.item_name}
-              </TableCell>
-              <TableCell className="text-center text-gray-700">
-                {item.price.toLocaleString()}원
-              </TableCell>
-              <TableCell className="text-center">
-                <Badge
-                  variant="secondary"
-                  className={`${
-                    item.is_sold
-                      ? "bg-red-100 text-red-700"
-                      : "bg-green-600 text-white"
-                  } px-2 py-1 rounded-full`}
+              <PopoverTrigger asChild>
+                <TableRow
+                  className={`cursor-pointer ${
+                    item.is_sold ? "opacity-40" : "opacity-100"
+                  } ${
+                    index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                  } hover:bg-gray-100 transition-colors`}
+                  onMouseEnter={() => setOpenIndex(index)}
+                  onMouseLeave={() => setOpenIndex(null)}
                 >
-                  {item.is_sold ? "판매완료" : "판매중"}
-                </Badge>
-              </TableCell>
-              <TableCell className="text-center">
-                <Badge
-                  variant="secondary"
-                  className={`${
-                    item.is_online
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-200 text-gray-600"
-                  } px-2 py-1 rounded-full`}
-                >
-                  {item.is_online ? "온라인" : "미접속"}
-                </Badge>
-              </TableCell>
-              <TableCell className="text-center">
-                <Badge
-                  variant="outline"
-                  className="bg-yellow-100 text-yellow-800 border-yellow-200 px-2 py-1 rounded-full"
-                >
-                  {item.item_source}
-                </Badge>
-              </TableCell>
-              <TableCell className="text-center">
-                <Badge
-                  variant="secondary"
-                  className="text-gray-700 truncate px-2 py-1 rounded"
-                  title={item.nickname} // hover 시 전체 이름 표시
-                >
-                  <span className="font-medium text-gray-900">
-                    {item.nickname}
-                  </span>
-                </Badge>
-              </TableCell>
-            </TableRow>
+                  <TableCell className="text-center font-medium text-gray-800">
+                    {item.item_name}
+                  </TableCell>
+                  <TableCell className="text-center text-gray-700">
+                    {item.price.toLocaleString()}원
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <Badge
+                      variant="secondary"
+                      className={`${
+                        item.is_sold
+                          ? "bg-red-100 text-red-700"
+                          : "bg-green-600 text-white"
+                      } px-2 py-1 rounded-full`}
+                    >
+                      {item.is_sold ? "판매완료" : "판매중"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <Badge
+                      variant="secondary"
+                      className={`${
+                        item.is_online
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-200 text-gray-600"
+                      } px-2 py-1 rounded-full`}
+                    >
+                      {item.is_online ? "온라인" : "미접속"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <Badge
+                      variant="outline"
+                      className="bg-yellow-100 text-yellow-800 border-yellow-200 px-2 py-1 rounded-full"
+                    >
+                      {item.item_source}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <Badge
+                      variant="secondary"
+                      className="text-gray-700 truncate px-2 py-1 rounded"
+                      title={item.nickname}
+                    >
+                      <span className="font-medium text-gray-900">
+                        {item.nickname}
+                      </span>
+                    </Badge>
+                  </TableCell>
+                </TableRow>
+              </PopoverTrigger>
+
+              <PopoverContent
+                className="w-64 p-4 shadow-lg rounded-lg bg-white"
+                side="right"
+                align="start"
+              >
+                <div className="flex flex-col items-center gap-2">
+                  <ItemImage name={item.item_name} imgUrl={item.image} />
+                  <p className="text-center font-medium text-gray-900">
+                    {item.item_name}
+                  </p>
+                </div>
+              </PopoverContent>
+            </Popover>
           ))}
         </TableBody>
       </Table>
