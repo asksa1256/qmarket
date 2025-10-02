@@ -15,10 +15,14 @@ const generateSecretKey = () => {
 export const GET = async (req: Request) => {
   try {
     const url = new URL(req.url);
+    const { searchParams } = req.url
+      ? url
+      : { searchParams: new URLSearchParams() };
     const limit = Number(url.searchParams.get("limit") ?? 10);
     const offset = Number(url.searchParams.get("offset") ?? 0);
+    const search = searchParams.get("search") || "";
 
-    const { data, error } = await supabaseServer
+    const query = supabaseServer
       .from("items")
       .select(
         "id, item_name, price, image, is_online, item_source, nickname, is_sold"
@@ -26,8 +30,12 @@ export const GET = async (req: Request) => {
       .order("id", { ascending: false })
       .range(offset, offset + limit - 1);
 
-    if (error) throw error;
+    if (search) query.ilike("item_name", `%${search}%`);
 
+    const { data, error } = await query;
+
+    if (error)
+      return NextResponse.json({ error: error.message }, { status: 500 });
     return NextResponse.json(data);
   } catch (err) {
     return NextResponse.json({ error: err }, { status: 500 });
