@@ -96,7 +96,6 @@ export default function ItemUploadModal() {
           <DialogTitle>상품 등록하기</DialogTitle>
           <DialogDescription className="flex flex-col">
             <span>판매하실 상품 정보를 등록해주세요.</span>
-            <span>* 상품 이미지는 관리자 확인 후 등록됩니다.</span>
           </DialogDescription>
         </DialogHeader>
 
