@@ -23,7 +23,6 @@ import { ItemFormValues, ItemFormSchema } from "../model/schema";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ITEM_SOURCES_MAP } from "@/shared/config/constants";
-import { Item } from "@/entities/item/model/types";
 
 export default function ItemUploadModal() {
   const queryClient = useQueryClient();
@@ -49,17 +48,9 @@ export default function ItemUploadModal() {
       }
       return data;
     },
-    onSuccess: (newItem) => {
+    onSuccess: () => {
       toast.success("상품이 등록되었습니다!");
-
-      queryClient.setQueryData<Item[]>(["items"], (old) => {
-        if (!old || old.length === 0) {
-          // 캐시가 비어있으면 새 데이터로 교체
-          return newItem;
-        }
-        // 기존 캐시에 새 데이터 추가
-        return [newItem[0], ...old];
-      });
+      queryClient.invalidateQueries({ queryKey: ["items"] });
     },
     onError: (err) => {
       toast.error("상품 등록에 실패했습니다.");

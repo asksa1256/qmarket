@@ -48,6 +48,7 @@ export default function ClientMoreItems({
   return (
     <div className="mt-6 pt-6">
       <ItemListWidget items={allItems} isLoading={isFetchingNextPage} />
+
       <div ref={loadMoreRef} className="h-10">
         {isFetchingNextPage ? (
           <p className="text-center mt-4">추가 상품 로드 중...</p>
