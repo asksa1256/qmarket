@@ -73,7 +73,7 @@ export default function ClientMoreItems({
         {isFetchingNextPage ? (
           <p className="text-center mt-4">추가 상품 로드 중...</p>
         ) : hasNextPage ? null : (
-          <p className="text-center mt-4 text-gray-500">
+          <p className="text-center mt-4 text-gray-500 text-sm">
             모든 상품을 불러왔습니다.
           </p>
         )}
