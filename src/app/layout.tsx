@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { QueryProvider } from "./shared/providers/QueryProvider";
+import { pretendard } from "./shared/config/fonts";
 
 export const metadata: Metadata = {
   title: "Q-Market",
@@ -14,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased`}>
+      <body className={`${pretendard.className} antialiased`}>
         <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
