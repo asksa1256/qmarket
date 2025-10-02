@@ -118,9 +118,9 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
               </PopoverTrigger>
 
               <PopoverContent
-                className="w-64 p-4 shadow-lg rounded-lg bg-white"
+                className="w-auto px-8 py-4 shadow-lg rounded-lg bg-white"
                 side="right"
-                align="start"
+                align="end"
               >
                 <div className="flex flex-col items-center gap-2">
                   <ItemImage name={item.item_name} imgUrl={item.image} />
