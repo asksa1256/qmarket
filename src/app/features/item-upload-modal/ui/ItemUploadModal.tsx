@@ -23,9 +23,12 @@ import { ItemFormValues, ItemFormSchema } from "../model/schema";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ITEM_SOURCES_MAP } from "@/shared/config/constants";
+import { Lock, Plus } from "lucide-react";
+import { useUser } from "@/shared/providers/UserProvider";
 
 export default function ItemUploadModal() {
   const queryClient = useQueryClient();
+  const user = useUser();
 
   const createItemMutation = useMutation({
     mutationFn: async (values: ItemFormValues) => {
@@ -87,7 +90,7 @@ export default function ItemUploadModal() {
           variant="default"
           className="w-auto mx-auto font-bold bg-blue-600 hover:bg-blue-700"
         >
-          아이템 등록
+          {user ? <Plus /> : <Lock />} 아이템 등록
         </Button>
       </DialogTrigger>
 
