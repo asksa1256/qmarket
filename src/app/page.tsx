@@ -1,6 +1,5 @@
 import { fetchInitialItems } from "./entities/item/model/server-fetch";
-import ClientMoreItems from "./widgets/item-list/ui/ClientMoreItems";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./shared/ui/tabs";
+import TabView from "./widgets/tab-view/ui/TabView";
 
 export default async function Home() {
   const initialItems = await fetchInitialItems(10, 0);
@@ -15,22 +14,7 @@ export default async function Home() {
           </p>
         </div>
 
-        <Tabs defaultValue="items" className="max-w-4xl mx-auto">
-          <TabsList className="w-full">
-            <TabsTrigger value="items" className="cursor-pointer py-2">
-              판매 현황
-            </TabsTrigger>
-            <TabsTrigger value="marketPrices" className="cursor-pointer py-2">
-              시세 조회
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="items">
-            <ClientMoreItems initialItems={initialItems} />
-          </TabsContent>
-
-          <TabsContent value="marketPrices">시세 조회</TabsContent>
-        </Tabs>
+        <TabView initialItems={initialItems} />
       </section>
     </main>
   );
