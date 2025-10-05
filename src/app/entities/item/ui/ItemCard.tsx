@@ -1,11 +1,12 @@
-import { Item } from "../model/types";
 import { Badge } from "@/shared/ui/badge";
 import Image from "next/image";
-import { Button } from "@/shared/ui/button";
-import { Pencil } from "lucide-react";
+import ItemEditModal from "@/features/item-upload-modal/ui/ItemEditModal";
+import { Item } from "../model/types";
+
+type ItemCardType = Omit<Item, "nickname">;
 
 interface ItemCardProps {
-  item: Item;
+  item: ItemCardType;
 }
 
 const ItemCard = ({ item }: ItemCardProps) => {
@@ -24,19 +25,15 @@ const ItemCard = ({ item }: ItemCardProps) => {
         />
       </figure>
 
-      <Button
-        variant="outline"
-        aria-label="아이템 수정"
-        className="absolute right-4 top-4"
-      >
-        <Pencil /> 수정하기
-      </Button>
+      <ItemEditModal item={item} />
 
       <div className="flex items-start space-x-4 self-start">
         {/* 아이템 정보 */}
         <div className="flex-grow min-w-0 flex flex-col gap-4">
           <div className="mt-2">
-            <h3 className="text-lg font-semibold truncate">{item.item_name}</h3>
+            <h3 className="text-lg font-semibold truncate">
+              {item.item_name}({item.item_gender})
+            </h3>
             <p className="text-3xl font-bold text-blue-700 flex items-center gap-0.5">
               {item.price.toLocaleString()}
               <span className="text-base mt-1">원</span>

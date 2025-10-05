@@ -15,34 +15,9 @@ export const fetchInitialItems = async (
     .select(
       `
         id, item_name, price, image, 
-        is_online, item_source, nickname, is_sold, user_id
+        is_online, item_source, nickname, is_sold, user_id, item_gender
     `
     )
-    .order("id", { ascending: false })
-    .range(offset, offset + limit - 1);
-
-  if (error) {
-    console.error("서버 초기 데이터 로딩 오류:", error);
-    throw new Error(error.message);
-  }
-
-  return data as Item[];
-};
-
-export const fetchMyItems = async (
-  userId: string,
-  limit: number = 10,
-  offset: number = 0
-): Promise<Item[]> => {
-  const { data, error } = await supabaseServer
-    .from("items")
-    .select(
-      `
-        id, item_name, price, image, 
-        is_online, item_source, nickname, is_sold, user_id
-    `
-    )
-    .eq("user_id", userId)
     .order("id", { ascending: false })
     .range(offset, offset + limit - 1);
 

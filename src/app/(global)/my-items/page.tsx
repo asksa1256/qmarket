@@ -1,4 +1,3 @@
-import { fetchMyItems } from "@/entities/item/model/server-fetch";
 import ItemCardWidget from "@/widgets/item-list/ui/ItemCardWidget";
 import { createClient } from "@/shared/api/supabase-server-cookie";
 
@@ -7,8 +6,6 @@ export default async function MyItemsPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const initialItems = await fetchMyItems(user?.id!, 10, 0);
 
   return (
     <section className="max-w-4xl mx-auto">
@@ -19,7 +16,7 @@ export default async function MyItemsPage() {
         </p>
       </div>
 
-      <ItemCardWidget items={initialItems} />
+      <ItemCardWidget userId={user?.id!} />
     </section>
   );
 }
