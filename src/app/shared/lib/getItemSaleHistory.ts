@@ -27,7 +27,8 @@ interface DailySaleHistoryRow {
  * 아이템 판매 완료 내역 일별 조회 함수
  */
 export default async function getItemSaleHistory(
-  itemName: string
+  itemName: string,
+  itemGender: string
 ): Promise<SaleHistory[]> {
   if (!itemName || itemName.trim().length === 0) {
     return [];
@@ -35,12 +36,16 @@ export default async function getItemSaleHistory(
 
   // 1. RPC 함수 호출 (일별 집계 데이터)
   const [rpcResult, detailResult] = await Promise.all([
-    supabase.rpc("get_daily_sale_history", { item_name_input: itemName }),
+    supabase.rpc("get_daily_sale_history", {
+      item_name_input: itemName,
+      item_gender_input: itemGender,
+    }),
     // 2. 상세 거래 내역 전체 쿼리 (별도의 쿼리)
     supabase
       .from("items")
       .select("item_name, price, updated_at")
-      .eq("item_name", itemName) // 해당 아이템만 필터링
+      .eq("item_name", itemName)
+      .eq("item_gender", itemGender)
       .not("is_sold", "is", false) // 판매 완료된 내역만 필터링
       .order("updated_at", { ascending: false }),
   ]);

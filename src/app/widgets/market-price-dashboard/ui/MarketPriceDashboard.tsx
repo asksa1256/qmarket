@@ -12,6 +12,7 @@ import getItemSaleHistory, {
   SaleHistory,
 } from "@/shared/lib/getItemSaleHistory";
 import SaleHistoryChart from "@/widgets/sale-history-chart/ui/SaleHistoryChart";
+import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
 
 export default function MarketPriceDashboard() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,34 +26,35 @@ export default function MarketPriceDashboard() {
   // 거래 내역 상태
   const [saleHistory, setSaleHistory] = useState<SaleHistory[]>([]);
 
-  const handleSearch = useCallback(() => {
+  const handleSearch = useCallback(async () => {
     const trimmedInput = searchQuery.trim();
-    if (trimmedInput) {
-      // 검색어, 로딩 상태 업데이트
-      setSearchQuery(trimmedInput);
-      setIsLoading(true);
-
-      // 시세 조회
-      getItemMarketPrice(trimmedInput)
-        .then(setMarketPrice)
-        .finally(() => setIsLoading(false));
-      getTradedMarketPrice(trimmedInput)
-        .then(setTradedPrice)
-        .finally(() => setIsLoading(false));
-
-      // 판매 완료 내역 조회
-      getItemSaleHistory(trimmedInput)
-        .then(setSaleHistory)
-        .catch((error) => console.error("판매 내역 조회 오류:", error));
-    } else {
-      setSearchQuery("");
+    if (!trimmedInput) {
       setMarketPrice("");
+      setTradedPrice("");
       setSaleHistory([]);
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const [market, traded, history] = await Promise.all([
+        getItemMarketPrice(trimmedInput, itemGender),
+        getTradedMarketPrice(trimmedInput, itemGender),
+        getItemSaleHistory(trimmedInput, itemGender),
+      ]);
+
+      setMarketPrice(market);
+      setTradedPrice(traded);
+      setSaleHistory(history);
+    } catch (error) {
+      console.error("시세 조회 오류:", error);
+    } finally {
       setIsLoading(false);
     }
-  }, [searchQuery]);
+  }, [searchQuery, itemGender]);
 
-  const hasMarketPrice = marketPrice !== "";
+  const hasMarketPrice = marketPrice !== "" && tradedPrice !== "";
 
   return (
     <section className="max-w-4xl mx-auto">
@@ -73,31 +75,53 @@ export default function MarketPriceDashboard() {
       </div>
 
       {/* 검색창 */}
-      <div className="flex flex-1 justify-center mt-8 gap-2">
-        {/* setItemGender를 '남', '여' 둘 중 하나로 선택할 수 있는 shadcn/ui RadioGroup */}
+      <div className="flex flex-1 items-center justify-center mt-8 gap-8">
+        {/* 성별 선택 */}
+        <div className="flex items-center justify-center">
+          <RadioGroup
+            defaultValue="남"
+            onValueChange={(value) => setItemGender(value)}
+            className="flex gap-6"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="남" id="male" />
+              <label htmlFor="male">남</label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="여" id="female" />
+              <label htmlFor="female">여</label>
+            </div>
+          </RadioGroup>
+        </div>
 
-        <SearchInput
-          value={searchQuery}
-          className="text-sm w-auto"
-          onSearch={(e: string) => setSearchQuery(e)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") handleSearch();
-          }}
-        />
-        <Button
-          size="icon"
-          title="시세 검색하기"
-          className="bg-blue-600 hover:bg-blue-700"
-          onClick={handleSearch}
-        >
-          <Search />
-        </Button>
+        {/* 검색바 */}
+        <div className="flex gap-2">
+          <SearchInput
+            value={searchQuery}
+            className="text-sm w-auto"
+            onSearch={(e: string) => setSearchQuery(e)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSearch();
+            }}
+          />
+          <Button
+            size="icon"
+            title="시세 검색하기"
+            className="bg-blue-600 hover:bg-blue-700"
+            onClick={handleSearch}
+          >
+            <Search />
+          </Button>
+        </div>
       </div>
 
       {hasMarketPrice && (
         <div className="border-t mt-10 pb-10">
           <h2 className="text-2xl font-bold pt-8 mb-4">
-            💰 <span className="text-blue-600 mr-1">{searchQuery}</span>
+            💰{" "}
+            <span className="text-blue-600 mr-1">
+              {searchQuery}({itemGender})
+            </span>
             시세 조회
           </h2>
 
@@ -138,7 +162,11 @@ export default function MarketPriceDashboard() {
               표시됩니다.
             </p>
             <div className="p-4 border border-gray-200 rounded-lg shadow-inner bg-white">
-              <SaleHistoryChart data={saleHistory} itemName={searchQuery} />
+              <SaleHistoryChart
+                data={saleHistory}
+                itemName={searchQuery}
+                itemGender={itemGender}
+              />
             </div>
           </div>
         </div>
