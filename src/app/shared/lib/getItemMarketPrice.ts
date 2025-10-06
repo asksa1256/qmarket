@@ -7,7 +7,7 @@ import { supabase } from "@/shared/api/supabase-client";
  */
 export default async function getItemMarketPrice(itemName: string) {
   if (!itemName || itemName.trim().length === 0) {
-    return 0;
+    return "0";
   }
 
   const TRIM_RATE = 0.05; // 상하위 5%
