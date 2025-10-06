@@ -5,7 +5,7 @@ export const ItemFormSchema = z.object({
   price: z.number().min(0, { message: "가격은 0 이상이어야 합니다." }),
   is_sold: z.enum(["selling", "sold"]),
   is_online: z.enum(["online", "offline"]),
-  item_source: z.enum(["gatcha", "shop", "lottery"]),
+  item_source: z.enum(["gatcha", "shop", "lottery", "magic"]),
   item_gender: z.enum(["w", "m"]),
 });
 

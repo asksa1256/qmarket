@@ -1,5 +1,5 @@
 export type IsOnline = "online" | "offline";
-export type ItemSource = "gatcha" | "shop" | "lottery" | "etc";
+export type ItemSource = "gatcha" | "shop" | "lottery" | "magic";
 export type SaleStatus = "selling" | "sold";
 export type ItemGender = "w" | "m";
 

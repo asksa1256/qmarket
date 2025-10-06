@@ -51,7 +51,7 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
         (key) =>
           ITEM_SOURCES_MAP[key as keyof typeof ITEM_SOURCES_MAP] ===
           item.item_source
-      ) as "gatcha" | "shop" | "lottery",
+      ) as "gatcha" | "shop" | "lottery" | "magic",
       item_gender: Object.keys(ITEM_GENDER_MAP).find(
         (key) =>
           ITEM_GENDER_MAP[key as keyof typeof ITEM_GENDER_MAP] ===
@@ -260,8 +260,12 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
                         <Label htmlFor="source2">상점</Label>
                       </div>
                       <div className="flex items-center gap-3">
-                        <RadioGroupItem value="lottery" id="source3" />
-                        <Label htmlFor="source3">복권</Label>
+                        <RadioGroupItem value="magic" id="source3" />
+                        <Label htmlFor="source3">요술상자</Label>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="lottery" id="source4" />
+                        <Label htmlFor="source4">복권</Label>
                       </div>
                     </RadioGroup>
                   )}

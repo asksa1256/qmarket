@@ -243,6 +243,10 @@ export default function ItemUploadModal() {
                         <Label htmlFor="source2">상점</Label>
                       </div>
                       <div className="flex items-center gap-3">
+                        <RadioGroupItem value="magic" id="source3" />
+                        <Label htmlFor="source3">요술상자</Label>
+                      </div>
+                      <div className="flex items-center gap-3">
                         <RadioGroupItem value="lottery" id="source3" />
                         <Label htmlFor="source3">복권</Label>
                       </div>
