@@ -36,10 +36,9 @@ export default function ItemUploadModal() {
       const dataToInsert = {
         item_name: sanitize(values.item_name),
         price: values.price,
-        is_sold: values.is_sold === "sold",
-        is_online: values.is_online === "online",
+        is_sold: true,
+        // is_online: values.is_online === "online",
         item_source: ITEM_SOURCES_MAP[values.item_source],
-        nickname: user?.nickname,
         item_gender: ITEM_GENDER_MAP[values.item_gender],
         user_id: user?.id,
       };
@@ -70,7 +69,6 @@ export default function ItemUploadModal() {
       item_name: "",
       price: 0,
       is_sold: "selling",
-      is_online: "online",
       item_source: "gatcha",
       item_gender: "m",
     },
@@ -169,34 +167,8 @@ export default function ItemUploadModal() {
                 />
               </div>
 
-              {/* 판매중/판매완료 */}
-              <div className="grid gap-3">
-                <label htmlFor="selling1" className="text-sm">
-                  판매 상태
-                </label>
-                <Controller
-                  name="is_sold"
-                  control={control}
-                  render={({ field }) => (
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      value={field.value}
-                    >
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="selling" id="selling1" />
-                        <Label htmlFor="selling1">판매중</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="sold" id="selling2" />
-                        <Label htmlFor="selling2">판매완료</Label>
-                      </div>
-                    </RadioGroup>
-                  )}
-                />
-              </div>
-
               {/* 온라인/미접속 */}
-              <div className="grid gap-3">
+              {/* <div className="grid gap-3">
                 <label htmlFor="online1" className="text-sm">
                   접속 상태
                 </label>
@@ -219,7 +191,7 @@ export default function ItemUploadModal() {
                     </RadioGroup>
                   )}
                 />
-              </div>
+              </div> */}
 
               {/* 아이템 출처 */}
               <div className="grid gap-3">

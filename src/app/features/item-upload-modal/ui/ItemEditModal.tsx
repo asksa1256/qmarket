@@ -68,7 +68,7 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
         item_name: sanitize(values.item_name),
         price: values.price,
         is_sold: values.is_sold === "sold",
-        is_online: values.is_online === "online",
+        // is_online: values.is_online === "online",
         item_source: ITEM_SOURCES_MAP[values.item_source],
         item_gender: ITEM_GENDER_MAP[values.item_gender],
         updated_at: new Date().toISOString(),
@@ -213,7 +213,7 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
               </div>
 
               {/* 온라인/미접속 */}
-              <div className="grid gap-3">
+              {/* <div className="grid gap-3">
                 <label htmlFor="online" className="text-sm">
                   접속 상태
                 </label>
@@ -236,7 +236,7 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
                     </RadioGroup>
                   )}
                 />
-              </div>
+              </div> */}
 
               {/* 아이템 출처 */}
               <div className="grid gap-3">

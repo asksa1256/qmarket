@@ -25,6 +25,12 @@ export default async function MyItemsPage() {
         <p className="text-gray-500 text-sm">
           판매중인 아이템을 조회/수정할 수 있습니다.
         </p>
+        <p className="text-gray-500 text-sm">
+          * '판매 완료' 처리는 '수정하기'를 이용해주세요.
+        </p>
+        <p className="text-gray-500 text-sm">
+          * '판매 완료' 처리된 아이템의 가격은 '거래 시세'에 반영됩니다.
+        </p>
       </div>
 
       <ItemCardWidget userId={user.id} />
