@@ -98,7 +98,7 @@ export default function MarketPriceDashboard() {
             * 현재 시세: 현재 판매중인 가격 기준
           </p>
           <p className="text-sm text-gray-500">
-            * 거래 시세: 판매 완료된 가격 기준 (정확도가 더 높습니다.)
+            * 거래 시세: 판매 완료된 가격 기준 (실거래가)
           </p>
 
           {/* 시세 */}

@@ -59,8 +59,8 @@ export default function ItemCardWidget({ userId }: Props) {
   }
 
   return (
-    <div>
-      <ol>
+    <div className="pb-10">
+      <ol className="space-y-4">
         {items.map((item) => (
           <ItemCard key={item.id} item={item} />
         ))}
