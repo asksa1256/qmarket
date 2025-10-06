@@ -16,7 +16,7 @@ interface SaleHistoryChartProps {
   itemName: string;
 }
 
-// 툴팁의 내용 포맷을 사용자 정의합니다.
+// payload[0].value에 dataKey의 값이 들어옵니다.
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     const price = payload[0].value.toLocaleString();
@@ -53,7 +53,7 @@ export default function SaleHistoryChart({
           <XAxis
             dataKey="date"
             tickLine={false}
-            axisLine={{ stroke: "#e0ee0" }}
+            axisLine={{ stroke: "#e0e0e0" }}
             fontSize={12}
             tickFormatter={(value) => value.slice(5)} // 날짜에서 월-일만 표시
           />
@@ -61,14 +61,16 @@ export default function SaleHistoryChart({
             tickLine={false}
             axisLine={false}
             fontSize={12}
-            tickFormatter={(value) => `${(value / 100000000).toFixed(1)}억`} // 억 단위로 포맷
+            // 억 단위 포맷은 데이터의 범위에 따라 적절히 조정하세요.
+            tickFormatter={(value) => `${(value / 100000000).toFixed(1)}`}
           />
           <Tooltip content={<CustomTooltip />} />
           <Line
             type="monotone"
-            dataKey="averagePrice"
+            // 💡 핵심 수정: dataKey를 'avgPrice'로 변경
+            dataKey="avgPrice"
             name="거래 가격"
-            stroke="#3b82f6" // Tailwind blue-500
+            stroke="#3b82f6"
             dot={{ r: 4 }}
             activeDot={{ r: 8 }}
             strokeWidth={2}

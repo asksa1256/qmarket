@@ -6,25 +6,37 @@ export interface SaleHistory {
 }
 
 /**
- * 아이템 판매 완료 내역 일별 조회 함수
+ * 아이템 판매 완료 내역 일별 조회 함수 (Supabase RPC 사용)
  */
 export default async function getItemSaleHistory(
   itemName: string
 ): Promise<SaleHistory[]> {
-  // 실제 Supabase 쿼리 로직은 복잡하므로, 여기서는 시간순 정렬된 더미 데이터를 반환합니다.
-  // 실제 쿼리: items 테이블에서 'item_name'으로 필터링, 'is_sold'가 true인 레코드를
-  // 'sold_date'별로 그룹화하여 'price'의 평균을 계산하는 복잡한 쿼리가 필요합니다.
+  if (!itemName || itemName.trim().length === 0) {
+    return [];
+  }
 
-  return [
-    { date: "2025-09-25", avgPrice: 15000000 },
-    { date: "2025-09-26", avgPrice: 15500000 },
-    { date: "2025-09-27", avgPrice: 14800000 },
-    { date: "2025-09-28", avgPrice: 16000000 },
-    { date: "2025-09-29", avgPrice: 15200000 },
-    { date: "2025-09-30", avgPrice: 15700000 },
-    { date: "2025-10-01", avgPrice: 16300000 },
-  ];
+  // 1. RPC 함수 호출
+  // PostgREST는 DB 함수 호출 시, 매개변수 이름을 함수의 매개변수 이름(item_name_input)과 맞춰서 JSON 객체로 보냅니다.
+  const { data, error } = await supabase.rpc("get_daily_sale_history", {
+    item_name_input: itemName,
+  });
 
-  // 판매 내역 없을 경우
-  // return [];
+  if (error) {
+    console.error("판매 내역 조회 중 오류 (RPC):", error);
+    // 실제 운영 환경에서는 에러 로깅 후 빈 배열 반환
+    return [];
+  }
+
+  if (!data || data.length === 0) {
+    return [];
+  }
+
+  // 2. 응답 데이터 SaleHistory 인터페이스에 맞게 포맷 및 반환
+  // DB 함수의 결과 컬럼명은 sale_date와 avg_price입니다.
+  const historyData: SaleHistory[] = data.map((row: any) => ({
+    date: row.sale_date, // 'YYYY-MM-DD' 형식의 문자열
+    avgPrice: Number(row.avg_price), // NUMERIC을 number로 변환
+  }));
+
+  return historyData;
 }
