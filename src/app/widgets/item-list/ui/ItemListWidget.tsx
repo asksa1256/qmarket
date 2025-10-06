@@ -31,7 +31,7 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
               상품명
             </TableHead>
             <TableHead className="text-center font-medium text-sm text-gray-700">
-              가격 (원)
+              가격 (사이버머니)
             </TableHead>
             <TableHead className="text-center font-medium text-sm text-gray-700">
               판매상태
@@ -42,27 +42,27 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
             <TableHead className="text-center font-medium text-sm text-gray-700">
               판매자
             </TableHead>
-            <TableHead className="text-center font-medium text-sm text-gray-700">
+            {/* <TableHead className="text-center font-medium text-sm text-gray-700">
               온라인
-            </TableHead>
+            </TableHead> */}
           </TableRow>
         </TableHeader>
 
         <TableBody>
-          {items.map((item, index) => (
+          {items.map((item, idx) => (
             <Popover
-              key={`${item.id}-${index}`}
-              open={openIndex === index}
-              onOpenChange={(isOpen) => setOpenIndex(isOpen ? index : null)}
+              key={`${item.id}-${idx}`}
+              open={openIndex === idx}
+              onOpenChange={(isOpen) => setOpenIndex(isOpen ? idx : null)}
             >
               <PopoverTrigger asChild>
                 <TableRow
                   className={`cursor-default ${
                     item.is_sold ? "opacity-40" : "opacity-100"
                   } ${
-                    index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                    idx % 2 === 0 ? "bg-white" : "bg-gray-50"
                   } hover:bg-gray-100 transition-colors`}
-                  onMouseEnter={() => setOpenIndex(index)}
+                  onMouseEnter={() => setOpenIndex(idx)}
                   onMouseLeave={() => setOpenIndex(null)}
                 >
                   <TableCell className="text-center font-bold text-gray-800">
@@ -102,7 +102,7 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
                       </span>
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-center">
+                  {/* <TableCell className="text-center">
                     <Badge
                       variant="secondary"
                       className={`${
@@ -113,7 +113,7 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
                     >
                       {item.is_online ? "온라인" : "미접속"}
                     </Badge>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               </PopoverTrigger>
 

@@ -27,7 +27,7 @@ const ItemCard = ({ item }: ItemCardProps) => {
 
       <ItemEditModal item={item} />
 
-      <div className="flex items-start space-x-4 self-start">
+      <div className="flex items-start self-start">
         {/* 아이템 정보 */}
         <div className="flex-grow min-w-0 flex flex-col gap-4">
           <div className="mt-2">
@@ -52,14 +52,14 @@ const ItemCard = ({ item }: ItemCardProps) => {
               </Badge>
 
               {/* 판매자 온라인 여부 (is_online) */}
-              <Badge
+              {/* <Badge
                 variant="secondary"
                 className={
                   item.is_online ? "bg-blue-500 text-white" : undefined
                 }
               >
                 {item.is_online ? "온라인" : "미접속"}
-              </Badge>
+              </Badge> */}
 
               {/* 상품 출처 (is_gatcha) */}
               <Badge

@@ -46,7 +46,7 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
       item_name: item.item_name,
       price: item.price,
       is_sold: item.is_sold ? "sold" : "selling",
-      is_online: item.is_online ? "online" : "offline",
+      // is_online: item.is_online ? "online" : "offline",
       item_source: Object.keys(ITEM_SOURCES_MAP).find(
         (key) =>
           ITEM_SOURCES_MAP[key as keyof typeof ITEM_SOURCES_MAP] ===
