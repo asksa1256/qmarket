@@ -1,5 +1,6 @@
 import ItemCardWidget from "@/widgets/item-list/ui/ItemCardWidget";
 import { createClient } from "@/shared/api/supabase-server-cookie";
+import ItemUploadModal from "@/features/item-upload-modal/ui/ItemUploadModal";
 
 export default async function MyItemsPage() {
   const supabase = await createClient();
@@ -31,6 +32,10 @@ export default async function MyItemsPage() {
         <p className="text-gray-500 text-sm">
           * '판매 완료' 처리된 아이템의 가격은 '거래 시세'에 반영됩니다.
         </p>
+      </div>
+
+      <div className="flex w-full mb-8 justify-end">
+        <ItemUploadModal />
       </div>
 
       <ItemCardWidget userId={user.id} />

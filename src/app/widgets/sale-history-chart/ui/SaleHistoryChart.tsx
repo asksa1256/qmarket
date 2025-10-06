@@ -24,7 +24,7 @@ export default function SaleHistoryChart({
   if (!data || data.length === 0) {
     return (
       <div className="text-center py-10 text-gray-500">
-        최근 {itemName}의 판매 완료 내역이 없습니다.
+        {itemName}의 판매 완료 내역이 없습니다.
       </div>
     );
   }

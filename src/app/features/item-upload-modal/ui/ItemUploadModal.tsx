@@ -98,7 +98,7 @@ export default function ItemUploadModal() {
     <Dialog open={open} onOpenChange={setOpen}>
       <Button
         variant="default"
-        className="w-auto mx-auto font-bold bg-blue-600 hover:bg-blue-700"
+        className="w-auto font-bold bg-blue-600 hover:bg-blue-700"
         onClick={handleItemUploadOpen}
       >
         {user ? <Plus /> : <Lock />} 아이템 등록

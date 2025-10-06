@@ -65,7 +65,6 @@ export default function MarketPriceDashboard() {
         </p>
         <p className="text-sm text-gray-500">
           * 등록 건수 10개 미만일 경우, 대체 시세로 중앙값이 표시됩니다.
-          (정확도가 떨어질 수 있습니다.)
           <span className="text-sm text-gray-400 block ml-4">
             * 중앙값: 등록된 매물 개수(최대 10개) / 2
           </span>
@@ -76,13 +75,18 @@ export default function MarketPriceDashboard() {
       <div className="flex flex-1 justify-center mt-8 gap-2">
         <SearchInput
           value={searchQuery}
-          className="border border-gray-300 rounded-lg shadow-sm text-sm w-auto"
+          className="text-sm w-auto"
           onSearch={(e: string) => setSearchQuery(e)}
           onKeyDown={(e) => {
             if (e.key === "Enter") handleSearch();
           }}
         />
-        <Button size="icon" onClick={handleSearch}>
+        <Button
+          size="icon"
+          title="시세 검색하기"
+          className="bg-blue-600 hover:bg-blue-700"
+          onClick={handleSearch}
+        >
           <Search />
         </Button>
       </div>
