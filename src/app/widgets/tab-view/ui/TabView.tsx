@@ -3,6 +3,7 @@
 import ClientMoreItems from "@/widgets/item-list/ui/ClientMoreItems";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Item } from "@/entities/item/model/types";
+import MarketPriceDashboard from "@/widgets/market-price-dashboard/ui/MarketPriceDashboard";
 
 interface Props {
   initialItems: Item[];
@@ -24,7 +25,9 @@ export default function TabView({ initialItems }: Props) {
         <ClientMoreItems initialItems={initialItems} />
       </TabsContent>
 
-      <TabsContent value="marketPrices">시세 조회</TabsContent>
+      <TabsContent value="marketPrices">
+        <MarketPriceDashboard />
+      </TabsContent>
     </Tabs>
   );
 }

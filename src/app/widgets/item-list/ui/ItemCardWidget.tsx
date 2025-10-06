@@ -2,7 +2,6 @@
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import ItemCard from "@/entities/item/ui/ItemCard";
-// import { fetchMyItems } from "@/entities/item/model/server-fetch";
 import { Item } from "@/entities/item/model/types";
 import { supabase } from "@/shared/api/supabase-client";
 
