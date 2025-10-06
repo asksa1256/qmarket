@@ -1,7 +1,10 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import getItemMarketPrice from "@/shared/lib/getItemMarketPrice";
+import {
+  getItemMarketPrice,
+  getTradedMarketPrice,
+} from "@/shared/lib/getItemMarketPrice";
 import SearchInput from "@/features/item-search/ui/SearchInput";
 import { Button } from "@/shared/ui/button";
 import { Search } from "lucide-react";
@@ -11,11 +14,14 @@ import getItemSaleHistory, {
 import SaleHistoryChart from "@/widgets/sale-history-chart/ui/SaleHistoryChart";
 
 export default function MarketPriceDashboard() {
-  const [marketPrice, setMarketPrice] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // 판매 완료 내역 상태
+  // 시세 상태
+  const [marketPrice, setMarketPrice] = useState(""); // 현재 시세
+  const [tradedPrice, setTradedPrice] = useState(""); // 거래 시세
+
+  // 거래 내역 상태
   const [saleHistory, setSaleHistory] = useState<SaleHistory[]>([]);
 
   const handleSearch = useCallback(() => {
@@ -28,6 +34,9 @@ export default function MarketPriceDashboard() {
       // 시세 조회
       getItemMarketPrice(trimmedInput)
         .then(setMarketPrice)
+        .finally(() => setIsLoading(false));
+      getTradedMarketPrice(trimmedInput)
+        .then(setTradedPrice)
         .finally(() => setIsLoading(false));
 
       // 판매 완료 내역 조회
@@ -48,7 +57,7 @@ export default function MarketPriceDashboard() {
     <section className="max-w-4xl mx-auto">
       <div className="mt-3">
         <p className="text-sm text-gray-500">
-          * 최근 판매 내역 100개까지의 데이터를 기준으로 계산합니다.
+          * 최근 판매 내역 50개까지의 데이터를 기준으로 계산합니다.
         </p>
         <p className="text-sm text-gray-500">
           * 등록 건수 10개 이상일 경우, 상하위 5%를 제외한 평균(트림 평균)으로
@@ -108,7 +117,7 @@ export default function MarketPriceDashboard() {
               <span className="ml-1 text-blue-600 text-3xl font-extrabold">
                 {isLoading
                   ? "계산 중..."
-                  : Number(marketPrice).toLocaleString()}
+                  : Number(tradedPrice).toLocaleString()}
                 원
               </span>
             </li>
