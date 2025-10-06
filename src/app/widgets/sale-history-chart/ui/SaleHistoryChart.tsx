@@ -10,25 +10,12 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import CustomChartTooltip from "@/shared/ui/CustomChartToolTip";
 
 interface SaleHistoryChartProps {
   data: SaleHistory[];
   itemName: string;
 }
-
-// payload[0].value에 dataKey의 값이 들어옵니다.
-const CustomTooltip = ({ active, payload, label }: any) => {
-  if (active && payload && payload.length) {
-    const price = payload[0].value.toLocaleString();
-    return (
-      <div className="bg-white p-3 border border-gray-200 rounded-md shadow-lg">
-        <p className="font-bold text-sm text-gray-700">{label}</p>
-        <p className="text-sm text-blue-600">거래 가격: {price}원</p>
-      </div>
-    );
-  }
-  return null;
-};
 
 export default function SaleHistoryChart({
   data,
@@ -61,13 +48,24 @@ export default function SaleHistoryChart({
             tickLine={false}
             axisLine={false}
             fontSize={12}
-            // 억 단위 포맷은 데이터의 범위에 따라 적절히 조정하세요.
-            tickFormatter={(value) => `${(value / 100000000).toFixed(1)}`}
+            tickFormatter={(value) => {
+              const absValue = Math.abs(value);
+
+              if (absValue >= 100000000) {
+                // 1억 이상: '억' 단위
+                return `${(value / 100000000).toFixed(1)}억`;
+              }
+              if (absValue >= 10000) {
+                // 1만 이상: '만' 단위
+                return `${(value / 10000).toFixed(0)}만`;
+              }
+              // 그 외 (1000원대 포함)는 그대로 표시
+              return `${value.toFixed(0)}`;
+            }}
           />
-          <Tooltip content={<CustomTooltip />} />
+          <Tooltip content={<CustomChartTooltip />} />
           <Line
             type="monotone"
-            // 💡 핵심 수정: dataKey를 'avgPrice'로 변경
             dataKey="avgPrice"
             name="거래 가격"
             stroke="#3b82f6"

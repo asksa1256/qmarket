@@ -1,12 +1,14 @@
 import { supabase } from "../api/supabase-client";
+import { Transaction } from "@/features/transaction-list/model/types";
 
 export interface SaleHistory {
-  date: string; // 'YYYY-MM-DD'
+  date: string;
   avgPrice: number;
+  transactions: Transaction[];
 }
 
 /**
- * 아이템 판매 완료 내역 일별 조회 함수 (Supabase RPC 사용)
+ * 아이템 판매 완료 내역 일별 조회 함수
  */
 export default async function getItemSaleHistory(
   itemName: string
@@ -15,28 +17,59 @@ export default async function getItemSaleHistory(
     return [];
   }
 
-  // 1. RPC 함수 호출
-  // PostgREST는 DB 함수 호출 시, 매개변수 이름을 함수의 매개변수 이름(item_name_input)과 맞춰서 JSON 객체로 보냅니다.
-  const { data, error } = await supabase.rpc("get_daily_sale_history", {
-    item_name_input: itemName,
+  // 1. RPC 함수 호출 (일별 집계 데이터)
+  const [rpcResult, detailResult] = await Promise.all([
+    supabase.rpc("get_daily_sale_history", { item_name_input: itemName }),
+    // 2. 상세 거래 내역 전체 쿼리 (별도의 쿼리)
+    supabase
+      .from("items")
+      .select("item_name, price, updated_at")
+      .eq("item_name", itemName) // 해당 아이템만 필터링
+      .not("is_sold", "is", false) // 판매 완료된 내역만 필터링
+      .order("updated_at", { ascending: false }),
+  ]);
+
+  const { data: rpcData, error: rpcError } = rpcResult;
+  const { data: detailData, error: detailError } = detailResult;
+
+  if (rpcError || detailError) {
+    console.error("판매 내역 조회 중 오류:", rpcError || detailError);
+    return [];
+  }
+
+  if (!rpcData || rpcData.length === 0) {
+    return [];
+  }
+
+  // 3. 상세 내역을 날짜별로 그룹핑
+  const transactionsByDate: { [date: string]: Transaction[] } = {};
+  if (detailData) {
+    detailData.forEach((row: any) => {
+      // updated_at (timestamptz)에서 날짜 ('YYYY-MM-DD')만 추출
+      const saleDate = new Date(row.updated_at).toISOString().split("T")[0];
+
+      const transaction: Transaction = {
+        item_name: row.item_name,
+        price: row.price,
+        updated_at: row.updated_at,
+      };
+
+      if (!transactionsByDate[saleDate]) {
+        transactionsByDate[saleDate] = [];
+      }
+      transactionsByDate[saleDate].push(transaction);
+    });
+  }
+
+  // 4. RPC 결과(집계)와 상세 내역 병합
+  const historyData: SaleHistory[] = rpcData.map((row: any) => {
+    const date = row.sale_date;
+    return {
+      date: date,
+      avgPrice: Number(row.avg_price),
+      transactions: transactionsByDate[date] || [], // 상세 내역 배열 추가
+    };
   });
-
-  if (error) {
-    console.error("판매 내역 조회 중 오류 (RPC):", error);
-    // 실제 운영 환경에서는 에러 로깅 후 빈 배열 반환
-    return [];
-  }
-
-  if (!data || data.length === 0) {
-    return [];
-  }
-
-  // 2. 응답 데이터 SaleHistory 인터페이스에 맞게 포맷 및 반환
-  // DB 함수의 결과 컬럼명은 sale_date와 avg_price입니다.
-  const historyData: SaleHistory[] = data.map((row: any) => ({
-    date: row.sale_date, // 'YYYY-MM-DD' 형식의 문자열
-    avgPrice: Number(row.avg_price), // NUMERIC을 number로 변환
-  }));
 
   return historyData;
 }
