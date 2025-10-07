@@ -34,6 +34,9 @@ export default async function MyItemsPage() {
           * &apos;판매 완료&apos; 처리된 아이템의 가격은 &apos;거래 시세&apos;에
           반영됩니다.
         </p>
+        <p className="text-gray-500 text-sm">
+          * 시세 조작 방지를 위해 아이템 삭제 기능은 제공되지 않습니다.
+        </p>
       </div>
 
       <div className="flex w-full mb-8 justify-between">

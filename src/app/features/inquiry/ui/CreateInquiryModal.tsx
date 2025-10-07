@@ -73,6 +73,9 @@ const CreateInquiryModal = () => {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader className="mb-4">
           <DialogTitle>문의하기</DialogTitle>
+          <DialogDescription>
+            * 시세 조작 방지를 위해 아이템 삭제 문의는 받지 않습니다.
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit}>
