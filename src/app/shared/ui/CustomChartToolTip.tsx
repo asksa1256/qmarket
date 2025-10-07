@@ -17,14 +17,12 @@ export default function CustomChartTooltip({
     const formattedAvgPrice = Number(avgPrice).toLocaleString();
 
     return (
-      <div
-        className="bg-white p-3 border border-gray-200 rounded-md shadow-lg"
-        style={{ minWidth: "250px" }}
-      >
-        <p className="font-bold text-sm text-blue-600 mb-2">
-          🧮 평균 거래 가격: {formattedAvgPrice}원
+      <div className="bg-white p-3 border border-gray-200 rounded-md shadow-lg w-auto">
+        <p className="text-sm">
+          🧮 평균 거래 가격:{" "}
+          <span className="text-blue-600 font-bold">{formattedAvgPrice}원</span>
         </p>
-        <TransactionList payload={payload} label={label!} />{" "}
+        {/* <TransactionList payload={payload} label={label!} />{" "} */}
       </div>
     );
   }
