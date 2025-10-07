@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import ButtonToMain from "@/shared/ui/LinkButton/ButtonToMain";
 
 export default function SignUpForm() {
   const router = useRouter();
@@ -79,10 +80,7 @@ export default function SignUpForm() {
 
   return (
     <div className="w-md mx-auto mt-10 p-6 pb-12">
-      <Button variant="ghost" className="mb-4" onClick={() => router.push("/")}>
-        <ArrowLeft />
-        메인으로
-      </Button>
+      <ButtonToMain className="mb-4" />
 
       <div className="mb-12 text-center">
         <h2 className="text-2xl font-bold mb-1">회원가입</h2>

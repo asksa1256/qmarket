@@ -13,7 +13,7 @@ import { Label } from "@/shared/ui/label";
 import { Button } from "@/shared/ui/button";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import ButtonToMain from "@/shared/ui/LinkButton/ButtonToMain";
 
 export default function SignInForm() {
   const router = useRouter();
@@ -60,10 +60,7 @@ export default function SignInForm() {
 
   return (
     <div className="w-md mx-auto mt-10 p-6">
-      <Button variant="ghost" className="mb-4" onClick={() => router.push("/")}>
-        <ArrowLeft />
-        메인으로
-      </Button>
+      <ButtonToMain className="mb-4" />
 
       <div className="mb-12 text-center">
         <h2 className="text-2xl font-bold mb-1">로그인</h2>
