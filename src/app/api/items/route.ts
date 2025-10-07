@@ -16,7 +16,7 @@ export const GET = async (req: Request) => {
     let query = supabaseServer
       .from("items")
       .select(
-        "id, item_name, price, image, is_online, item_source, nickname, is_sold, item_gender, updated_at"
+        "id, item_name, price, image, is_online, item_source, nickname, is_sold, item_gender, created_at"
       )
       .range(offset, offset + limit - 1);
 

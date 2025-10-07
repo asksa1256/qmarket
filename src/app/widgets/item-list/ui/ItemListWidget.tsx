@@ -126,7 +126,7 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
                     </Badge>
                   </TableCell> */}
                   <TableCell className="text-center text-sm text-gray-500">
-                    {formatDate(item.updated_at)}
+                    {formatDate(item.created_at)}
                   </TableCell>
                 </TableRow>
               </PopoverTrigger>

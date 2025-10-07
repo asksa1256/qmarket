@@ -14,5 +14,5 @@ export interface Item {
   is_sold: SaleStatus; // 판매중/판매완료
   item_gender: ItemGender; // 아이템 성별
   user_id: string; // 아이템 등록 유저 uuid
-  updated_at: string;
+  created_at: string; // 등록일
 }
