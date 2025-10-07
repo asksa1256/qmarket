@@ -39,9 +39,9 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
             <TableHead className="text-center font-medium text-sm text-gray-700">
               뽑기/상점/복권
             </TableHead>
-            <TableHead className="text-center font-medium text-sm text-gray-700">
+            {/* <TableHead className="text-center font-medium text-sm text-gray-700">
               판매자
-            </TableHead>
+            </TableHead> */}
             {/* <TableHead className="text-center font-medium text-sm text-gray-700">
               온라인
             </TableHead> */}
@@ -91,7 +91,7 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
                       {item.item_source}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-center">
+                  {/* <TableCell className="text-center">
                     <Badge
                       variant="secondary"
                       className="text-gray-700 truncate px-2 py-1 rounded"
@@ -101,7 +101,7 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
                         {item.nickname}
                       </span>
                     </Badge>
-                  </TableCell>
+                  </TableCell> */}
                   {/* <TableCell className="text-center">
                     <Badge
                       variant="secondary"
@@ -127,6 +127,9 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
                   <p className="text-center font-medium text-gray-900">
                     {item.item_name}
                   </p>
+                  <span className="text-gray-500 text-sm">
+                    판매자: {item.nickname}
+                  </span>
                 </div>
               </PopoverContent>
             </Popover>
