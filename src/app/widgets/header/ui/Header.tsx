@@ -6,6 +6,7 @@ import { useUser } from "@/shared/providers/UserProvider";
 import { logout } from "@/features/sign-in-form/model/actions";
 import { toast } from "sonner";
 import Link from "next/link";
+import CreateInquiryModal from "@/features/inquiry/ui/CreateInquiryModal";
 
 export default function Header() {
   const router = useRouter();
@@ -26,7 +27,7 @@ export default function Header() {
         Q-Market
       </Link>
 
-      <div className="ml-auto">
+      <div className="ml-auto flex gap-2">
         {user ? (
           <div className="flex gap-2 items-center">
             <span className="text-sm mr-4">
@@ -42,6 +43,7 @@ export default function Header() {
         ) : (
           <Button onClick={() => router.push("/signin")}>로그인</Button>
         )}
+        <CreateInquiryModal />
       </div>
     </header>
   );
