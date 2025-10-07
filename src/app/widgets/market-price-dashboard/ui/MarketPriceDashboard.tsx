@@ -73,13 +73,15 @@ export default function MarketPriceDashboard() {
           * 최근 판매 내역 50개까지의 데이터를 기준으로 계산합니다.
         </p>
         <p className="text-sm text-gray-500">
-          * 등록 건수 10개 이상일 경우, 상하위 5%를 제외한 평균(트림 평균)으로
-          계산됩니다.
+          * <b>등록 건수 10개 이상</b>일 경우, <b>상하위 5%를 제외한 평균값</b>
+          이 적용됩니다.
         </p>
         <p className="text-sm text-gray-500">
-          * 등록 건수 10개 미만일 경우, 대체 시세로 중앙값이 표시됩니다.
+          * <b>등록 건수 10개 미만</b>일 경우, 대체 시세로 <b>중간값</b>이
+          적용됩니다. (일부 극단값 영향 최소화)
           <span className="text-sm text-gray-400 block ml-4">
-            * 중앙값: 등록된 매물 개수(최대 10개) / 2
+            * 예시: [5000, 100000, 129000, 130000, 150000]의 시세 = 129000
+            (중간값)
           </span>
         </p>
       </div>
@@ -136,10 +138,10 @@ export default function MarketPriceDashboard() {
           </h2>
 
           <p className="text-sm text-gray-500">
-            * 현재 시세: 현재 판매중인 가격 기준
+            * <b>현재 시세</b>: 현재 <b>판매중</b>인 가격 기준
           </p>
           <p className="text-sm text-gray-500">
-            * 거래 시세: 판매 완료된 가격 기준 (실거래가)
+            * <b>거래 시세</b>: <b>판매 완료</b>된 가격 기준 (실거래가)
           </p>
 
           {/* 시세 */}
