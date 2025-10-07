@@ -19,7 +19,7 @@ export default function CustomChartTooltip({
     return (
       <div className="bg-white p-3 border border-gray-200 rounded-md shadow-lg w-auto">
         <p className="text-sm">
-          🧮 평균 거래 가격:{" "}
+          🧮 평균 거래가:{" "}
           <span className="text-blue-600 font-bold">{formattedAvgPrice}원</span>
         </p>
         {/* <TransactionList payload={payload} label={label!} />{" "} */}

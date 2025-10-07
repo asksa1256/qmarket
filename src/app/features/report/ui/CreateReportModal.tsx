@@ -15,12 +15,12 @@ import { toast } from "sonner";
 import { supabase } from "@/shared/api/supabase-client";
 import { sanitize } from "@/shared/lib/sanitize";
 import { Input } from "@/shared/ui/input";
-import { BadgeQuestionMark } from "lucide-react";
+import { Siren } from "lucide-react";
 import { useUser } from "@/shared/providers/UserProvider";
 
-const CreateInquiryModal = () => {
+const CreateReportModal = () => {
   const [contact, setContact] = useState("");
-  const [inquiry, setInquiry] = useState("");
+  const [report, setReport] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const user = useUser();
 
@@ -29,16 +29,16 @@ const CreateInquiryModal = () => {
     setIsSubmitting(true);
 
     try {
-      if (inquiry === "") {
+      if (report === "") {
         toast.error("문의사항을 입력해주세요.");
         return;
       }
 
       const createdAt = new Date().toISOString();
 
-      const { error } = await supabase.from("inquiry").insert([
+      const { error } = await supabase.from("report").insert([
         {
-          inquiry: sanitize(inquiry),
+          report: sanitize(report),
           contact: sanitize(contact),
           created_at: createdAt,
         },
@@ -46,13 +46,13 @@ const CreateInquiryModal = () => {
 
       if (error) throw error;
 
-      toast.success("문의가 등록되었습니다.");
+      toast.success("신고가 접수되었습니다.");
 
-      setInquiry("");
+      setReport("");
       setContact("");
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(`문의 등록 실패: ${error.message}`);
+        toast.error(`신고 등록 실패: ${error.message}`);
       } else {
         toast.error("알 수 없는 오류가 발생했습니다.");
       }
@@ -66,15 +66,16 @@ const CreateInquiryModal = () => {
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="outline" size="icon">
-          <BadgeQuestionMark />
+          <Siren />
         </Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader className="mb-4">
-          <DialogTitle>문의하기</DialogTitle>
+          <DialogTitle>신고하기</DialogTitle>
           <DialogDescription>
-            * 신고 기능은 로그인 후 이용할 수 있습니다.
+            * 시세 조작이 의심되는 아이템이나 어뷰징 유저에 대한 신고 내용을
+            작성해주세요.
           </DialogDescription>
         </DialogHeader>
 
@@ -82,11 +83,11 @@ const CreateInquiryModal = () => {
           <div className="grid gap-8">
             <div className="grid gap-3">
               <Textarea
-                id="inquiry"
-                name="inquiry"
-                placeholder="문의사항 입력"
-                value={inquiry}
-                onChange={(e) => setInquiry(e.target.value)}
+                id="report"
+                name="report"
+                placeholder="내용 입력"
+                value={report}
+                onChange={(e) => setReport(e.target.value)}
               />
             </div>
             <div className="grid gap-3">
@@ -117,4 +118,4 @@ const CreateInquiryModal = () => {
   );
 };
 
-export default CreateInquiryModal;
+export default CreateReportModal;

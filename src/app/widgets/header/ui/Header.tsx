@@ -7,6 +7,7 @@ import { logout } from "@/features/sign-in-form/model/actions";
 import { toast } from "sonner";
 import Link from "next/link";
 import CreateInquiryModal from "@/features/inquiry/ui/CreateInquiryModal";
+import CreateReportModal from "@/features/report/ui/CreateReportModal";
 
 export default function Header() {
   const router = useRouter();
@@ -43,7 +44,10 @@ export default function Header() {
         ) : (
           <Button onClick={() => router.push("/signin")}>로그인</Button>
         )}
+
         <CreateInquiryModal />
+
+        {user && <CreateReportModal />}
       </div>
     </header>
   );
