@@ -68,24 +68,6 @@ export default function MarketPriceDashboard() {
 
   return (
     <section className="max-w-4xl mx-auto">
-      <div className="rounded-xl border p-4 mt-4">
-        <p className="text-sm text-gray-500">
-          * <b>등록 건수 10개 이상</b>일 경우, <b>상하위 5%를 제외한 평균값</b>
-          이 적용됩니다.
-        </p>
-        <p className="text-sm text-gray-500">
-          * <b>등록 건수 10개 미만</b>일 경우, 대체 시세로 <b>중간값</b>이
-          적용됩니다.
-          <span className="text-sm text-gray-400 block ml-4">
-            - 예시: [5000, 100000, 129000, 130000, 150000]의 시세 = 129000
-            (중간값)
-          </span>
-        </p>
-        <p className="text-sm text-gray-500">
-          * 최근 판매 내역 50개까지의 데이터를 기준으로 계산합니다.
-        </p>
-      </div>
-
       {/* 검색창 */}
       <div className="flex flex-1 items-center justify-center mt-8 gap-8">
         {/* 성별 선택 */}
