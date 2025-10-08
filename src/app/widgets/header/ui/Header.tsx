@@ -8,10 +8,19 @@ import { toast } from "sonner";
 import Link from "next/link";
 import CreateInquiryModal from "@/features/inquiry/ui/CreateInquiryModal";
 import CreateReportModal from "@/features/report/ui/CreateReportModal";
+import { login } from "@/features/sign-in-form/model/actions";
 
 export default function Header() {
   const router = useRouter();
   const user = useUser();
+
+  const handleSignIn = async () => {
+    const res = await login();
+
+    if (res.url) {
+      window.location.href = res.url;
+    }
+  };
 
   const handleSignOut = async () => {
     try {
@@ -42,7 +51,7 @@ export default function Header() {
             </Button>
           </div>
         ) : (
-          <Button onClick={() => router.push("/signin")}>로그인</Button>
+          <Button onClick={handleSignIn}>로그인</Button>
         )}
 
         <CreateInquiryModal />
