@@ -21,10 +21,15 @@ import { ScrollArea } from "@/shared/ui/scroll-area";
 import { ItemFormValues, ItemFormSchema } from "../model/schema";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ITEM_SOURCES_MAP, ITEM_GENDER_MAP } from "@/shared/config/constants";
+import {
+  ITEM_SOURCES_MAP,
+  ITEM_GENDER_MAP,
+  ITEM_CATEGORY_MAP,
+} from "@/shared/config/constants";
 import { Lock, Plus } from "lucide-react";
 import { useUser } from "@/shared/providers/UserProvider";
 import { useState } from "react";
+import { cn } from "@/shared/lib/utils";
 
 export default function ItemUploadModal() {
   const [open, setOpen] = useState(false);
@@ -42,6 +47,7 @@ export default function ItemUploadModal() {
         nickname: user?.nickname,
         item_gender: ITEM_GENDER_MAP[values.item_gender],
         user_id: user?.id,
+        category: ITEM_CATEGORY_MAP[values.category],
       };
 
       const { data, error } = await supabase
@@ -137,6 +143,46 @@ export default function ItemUploadModal() {
                 )}
               </div>
 
+              {/* 아이템 카테고리 */}
+              <div className="grid gap-3">
+                <label htmlFor="category" className="text-sm">
+                  카테고리
+                </label>
+                <Controller
+                  name="category"
+                  control={control}
+                  render={({ field }) => (
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      className="flex flex-wrap gap-2"
+                    >
+                      {Object.entries(ITEM_CATEGORY_MAP).map(
+                        ([key, label], idx) => (
+                          <div key={key} className="relative">
+                            <RadioGroupItem
+                              value={key}
+                              id={`category${idx + 1}`}
+                              className="peer sr-only"
+                            />
+                            <Label
+                              htmlFor={`category${idx + 1}`}
+                              className={cn(
+                                "cursor-pointer rounded-full border px-4 py-2 text-sm transition",
+                                "text-gray-700 hover:bg-blue-50",
+                                "peer-data-[state=checked]:bg-blue-600 peer-data-[state=checked]:text-white peer-data-[state=checked]:border-blue-600 peer-data-[state=checked]:hover:bg-blue-600"
+                              )}
+                            >
+                              {label}
+                            </Label>
+                          </div>
+                        )
+                      )}
+                    </RadioGroup>
+                  )}
+                />
+              </div>
+
               <div className="grid gap-3">
                 <label htmlFor="price" className="text-sm">
                   가격
@@ -186,48 +232,21 @@ export default function ItemUploadModal() {
                       onValueChange={field.onChange}
                       value={field.value}
                     >
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="m" id="item_gender1" />
-                        <Label htmlFor="item_gender1">
-                          {ITEM_GENDER_MAP.m}
-                        </Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="w" id="item_gender2" />
-                        <Label htmlFor="item_gender2">
-                          {ITEM_GENDER_MAP.w}
-                        </Label>
-                      </div>
+                      {Object.entries(ITEM_GENDER_MAP).map(
+                        ([key, label], idx) => (
+                          <div
+                            className="flex items-center gap-3"
+                            key={`${key}-${idx}`}
+                          >
+                            <RadioGroupItem value={key} id={key} />
+                            <Label htmlFor={key}>{label}</Label>
+                          </div>
+                        )
+                      )}
                     </RadioGroup>
                   )}
                 />
               </div>
-
-              {/* 온라인/미접속 */}
-              {/* <div className="grid gap-3">
-                <label htmlFor="online1" className="text-sm">
-                  접속 상태
-                </label>
-                <Controller
-                  name="is_online"
-                  control={control}
-                  render={({ field }) => (
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      value={field.value}
-                    >
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="online" id="online1" />
-                        <Label htmlFor="online1">온라인</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="offline" id="online2" />
-                        <Label htmlFor="online2">미접속</Label>
-                      </div>
-                    </RadioGroup>
-                  )}
-                />
-              </div> */}
 
               {/* 아이템 출처 */}
               <div className="grid gap-3">
@@ -242,22 +261,17 @@ export default function ItemUploadModal() {
                       onValueChange={field.onChange}
                       value={field.value}
                     >
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="gatcha" id="source1" />
-                        <Label htmlFor="source1">뽑기</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="shop" id="source2" />
-                        <Label htmlFor="source2">상점</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="magic" id="source3" />
-                        <Label htmlFor="source3">요술상자</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="lottery" id="source3" />
-                        <Label htmlFor="source3">복권</Label>
-                      </div>
+                      {Object.entries(ITEM_SOURCES_MAP).map(
+                        ([key, label], idx) => (
+                          <div
+                            className="flex items-center gap-3"
+                            key={`${key}=${idx}`}
+                          >
+                            <RadioGroupItem value={key} id={key} />
+                            <Label htmlFor={key}>{label}</Label>
+                          </div>
+                        )
+                      )}
                     </RadioGroup>
                   )}
                 />

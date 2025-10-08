@@ -23,7 +23,7 @@ const fetchMyItems = async (
     .select(
       `
         id, item_name, price, image,
-        is_online, item_source, nickname, is_sold, user_id, item_gender
+        is_online, item_source, nickname, is_sold, user_id, item_gender, category
     `
     )
     .eq("user_id", userId)

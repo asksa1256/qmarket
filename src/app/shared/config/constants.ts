@@ -11,6 +11,18 @@ export const ITEM_SOURCES_MAP = {
 };
 
 export const ITEM_GENDER_MAP = {
-  w: "여",
   m: "남",
+  w: "여",
+};
+
+export const ITEM_CATEGORY_MAP = {
+  hair: "머리",
+  clothes: "옷",
+  eye: "눈",
+  ear: "귀",
+  mouth: "턱",
+  bg: "배경",
+  pet: "펫",
+  acc: "소품",
+  face: "가면",
 };

@@ -7,6 +7,17 @@ export const ItemFormSchema = z.object({
   // is_online: z.enum(["online", "offline"]),
   item_source: z.enum(["gatcha", "shop", "lottery", "magic"]),
   item_gender: z.enum(["w", "m"]),
+  category: z.enum([
+    "face",
+    "hair",
+    "clothes",
+    "mouth",
+    "eye",
+    "ear",
+    "pet",
+    "acc",
+    "bg",
+  ]),
 });
 
 export type ItemFormValues = z.infer<typeof ItemFormSchema>;

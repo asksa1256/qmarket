@@ -27,8 +27,18 @@ import { ScrollArea } from "@/shared/ui/scroll-area";
 import { supabase } from "@/shared/api/supabase-client";
 import { sanitize } from "@/shared/lib/sanitize";
 import { ItemFormSchema, ItemFormValues } from "../model/schema";
-import { ITEM_GENDER_MAP, ITEM_SOURCES_MAP } from "@/shared/config/constants";
-import { Item } from "@/entities/item/model/types";
+import {
+  ITEM_GENDER_MAP,
+  ITEM_SOURCES_MAP,
+  ITEM_CATEGORY_MAP,
+} from "@/shared/config/constants";
+import {
+  Item,
+  ItemGender,
+  ItemSource,
+  ItemCategory,
+} from "@/entities/item/model/types";
+import { cn } from "@/shared/lib/utils";
 
 type ItemEditModalType = Omit<Item, "nickname" | "image">;
 
@@ -51,12 +61,17 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
         (key) =>
           ITEM_SOURCES_MAP[key as keyof typeof ITEM_SOURCES_MAP] ===
           item.item_source
-      ) as "gatcha" | "shop" | "lottery" | "magic",
+      ) as ItemSource,
       item_gender: Object.keys(ITEM_GENDER_MAP).find(
         (key) =>
           ITEM_GENDER_MAP[key as keyof typeof ITEM_GENDER_MAP] ===
           item.item_gender
-      ) as "m" | "w",
+      ) as ItemGender,
+      category: Object.keys(ITEM_CATEGORY_MAP).find(
+        (key) =>
+          ITEM_CATEGORY_MAP[key as keyof typeof ITEM_CATEGORY_MAP] ===
+          item.category
+      ) as ItemCategory,
     },
   });
 
@@ -149,6 +164,46 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
                 <Input id="item_name" {...register("item_name")} />
               </div>
 
+              {/* 아이템 카테고리 */}
+              <div className="grid gap-3">
+                <label htmlFor="category" className="text-sm">
+                  카테고리
+                </label>
+                <Controller
+                  name="category"
+                  control={control}
+                  render={({ field }) => (
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      className="flex flex-wrap gap-2"
+                    >
+                      {Object.entries(ITEM_CATEGORY_MAP).map(
+                        ([key, label], idx) => (
+                          <div key={key} className="relative">
+                            <RadioGroupItem
+                              value={key}
+                              id={`category${idx + 1}`}
+                              className="peer sr-only"
+                            />
+                            <Label
+                              htmlFor={`category${idx + 1}`}
+                              className={cn(
+                                "cursor-pointer rounded-full border px-4 py-2 text-sm transition",
+                                "text-gray-700 hover:bg-blue-50",
+                                "peer-data-[state=checked]:bg-blue-600 peer-data-[state=checked]:text-white peer-data-[state=checked]:border-blue-600 peer-data-[state=checked]:hover:bg-blue-600"
+                              )}
+                            >
+                              {label}
+                            </Label>
+                          </div>
+                        )
+                      )}
+                    </RadioGroup>
+                  )}
+                />
+              </div>
+
               <div className="grid gap-3">
                 <label htmlFor="price" className="text-sm">
                   가격
@@ -198,18 +253,17 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
                       onValueChange={field.onChange}
                       value={field.value}
                     >
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="m" id="item_gender1" />
-                        <Label htmlFor="item_gender1">
-                          {ITEM_GENDER_MAP.m}
-                        </Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="w" id="item_gender2" />
-                        <Label htmlFor="item_gender2">
-                          {ITEM_GENDER_MAP.w}
-                        </Label>
-                      </div>
+                      {Object.entries(ITEM_GENDER_MAP).map(
+                        ([key, label], idx) => (
+                          <div
+                            className="flex items-center gap-3"
+                            key={`${key}-${idx}`}
+                          >
+                            <RadioGroupItem value={key} id={key} />
+                            <Label htmlFor={key}>{label}</Label>
+                          </div>
+                        )
+                      )}
                     </RadioGroup>
                   )}
                 />
@@ -280,22 +334,17 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
                       onValueChange={field.onChange}
                       value={field.value}
                     >
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="gatcha" id="source1" />
-                        <Label htmlFor="source1">뽑기</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="shop" id="source2" />
-                        <Label htmlFor="source2">상점</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="magic" id="source3" />
-                        <Label htmlFor="source3">요술상자</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="lottery" id="source4" />
-                        <Label htmlFor="source4">복권</Label>
-                      </div>
+                      {Object.entries(ITEM_SOURCES_MAP).map(
+                        ([key, label], idx) => (
+                          <div
+                            className="flex items-center gap-3"
+                            key={`${key}=${idx}`}
+                          >
+                            <RadioGroupItem value={key} id={key} />
+                            <Label htmlFor={key}>{label}</Label>
+                          </div>
+                        )
+                      )}
                     </RadioGroup>
                   )}
                 />
