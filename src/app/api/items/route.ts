@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { supabaseServer } from "@/shared/api/supabase-server";
-import { ITEMS_TABLE_NAME } from "@/shared/config/constants";
+import {
+  ITEMS_TABLE_NAME,
+  SELECT_ITEM_COLUMNS,
+} from "@/shared/config/constants";
 
 export const GET = async (req: Request) => {
   try {
@@ -15,9 +18,7 @@ export const GET = async (req: Request) => {
 
     let query = supabaseServer
       .from("items")
-      .select(
-        "id, item_name, price, image, is_online, item_source, nickname, is_sold, item_gender, created_at"
-      )
+      .select(SELECT_ITEM_COLUMNS)
       .range(offset, offset + limit - 1);
 
     if (search) query.ilike("item_name", `%${search}%`);

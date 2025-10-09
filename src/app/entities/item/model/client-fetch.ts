@@ -1,6 +1,10 @@
 import { supabase } from "@/shared/api/supabase-client";
 import { Item } from "../model/types";
-import { ITEMS_PAGE_SIZE } from "@/shared/config/constants";
+import {
+  ITEMS_TABLE_NAME,
+  SELECT_ITEM_COLUMNS,
+  ITEMS_PAGE_SIZE,
+} from "@/shared/config/constants";
 
 /**
  * 특정 offset부터 PAGE_SIZE만큼 상품을 가져오는 함수
@@ -11,13 +15,8 @@ export const fetchItemsPage = async (offset: number): Promise<Item[]> => {
   const to = offset + ITEMS_PAGE_SIZE - 1;
 
   const { data, error } = await supabase
-    .from("items")
-    .select(
-      `
-        id, item_name, price, image, 
-        is_online, item_source, nickname, is_sold
-    `
-    )
+    .from(ITEMS_TABLE_NAME)
+    .select(SELECT_ITEM_COLUMNS)
     .order("id", { ascending: false })
     .range(from, to);
 

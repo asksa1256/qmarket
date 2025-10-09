@@ -27,14 +27,14 @@ import {
   ITEM_CATEGORY_MAP,
 } from "@/shared/config/constants";
 import { Lock, Plus } from "lucide-react";
-import { useUser } from "@/shared/providers/UserProvider";
+import { useUser } from "@/shared/hooks/useUser";
 import { useState } from "react";
 import { cn } from "@/shared/lib/utils";
 
 export default function ItemUploadModal() {
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
-  const user = useUser();
+  const { data: user } = useUser();
 
   const createItemMutation = useMutation({
     mutationFn: async (values: ItemFormValues) => {
@@ -44,7 +44,8 @@ export default function ItemUploadModal() {
         is_sold: false,
         // is_online: values.is_online === "online",
         item_source: ITEM_SOURCES_MAP[values.item_source],
-        nickname: user?.nickname,
+        nickname: user?.user_metadata.custom_claims.global_name, // 디스코드 닉네임
+        discord_id: user?.user_metadata.full_name, // 디스코드 아이디
         item_gender: ITEM_GENDER_MAP[values.item_gender],
         user_id: user?.id,
         category: ITEM_CATEGORY_MAP[values.category],
