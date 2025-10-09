@@ -36,14 +36,6 @@ export default function ClientMoreItems({
 
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
-  // const filteredItems = useMemo(() => {
-  //   if (!data) return [];
-  //   return data.pages
-  //     .flatMap((page) => page)
-  //     .filter((item) =>
-  //       item.item_name.toLowerCase().includes(searchQuery.toLowerCase())
-  //     );
-  // }, [data, searchQuery]);
   const allItems = useMemo(() => {
     if (!data) return [];
     return data.pages.flatMap((page) => page);
@@ -86,9 +78,6 @@ export default function ClientMoreItems({
   return (
     <div className="mt-4">
       <div className="rounded-xl border p-4">
-        {/* <p className="text-gray-500 text-sm">
-          * 판매 완료된 아이템은 다음날 판매 현황 목록에서 사라집니다.
-        </p> */}
         <p className="text-gray-500 text-sm">
           * 보다 정확한 시세 반영을 위해, 판매된 아이템은{" "}
           <b>&apos;내 아이템&apos; &gt; &apos;수정하기&apos;</b>에서{" "}
