@@ -3,7 +3,10 @@ import { supabaseServer } from "@/shared/api/supabase-server";
 import {
   ITEMS_TABLE_NAME,
   SELECT_ITEM_COLUMNS,
+  ITEM_CATEGORY_MAP,
 } from "@/shared/config/constants";
+
+type ItemCategoryKey = keyof typeof ITEM_CATEGORY_MAP;
 
 export const GET = async (req: Request) => {
   try {
@@ -15,13 +18,16 @@ export const GET = async (req: Request) => {
     const offset = Number(url.searchParams.get("offset") ?? 0);
     const search = searchParams.get("search") || "";
     const sort = searchParams.get("sort");
+    const category = searchParams.get("category") as ItemCategoryKey;
 
     let query = supabaseServer
       .from("items")
       .select(SELECT_ITEM_COLUMNS)
       .range(offset, offset + limit - 1);
 
+    // 필터
     if (search) query.ilike("item_name", `%${search}%`);
+    if (category) query.eq("category", ITEM_CATEGORY_MAP[category]);
 
     // 정렬
     if (!sort) {

@@ -5,7 +5,8 @@ const fetchClientItems = async (
   limit: number,
   offset: number,
   search?: string,
-  sort?: "price_asc" | "price_desc" | null
+  sort?: "price_asc" | "price_desc" | null,
+  category?: string | null
 ): Promise<Item[]> => {
   const params = new URLSearchParams({
     limit: String(limit),
@@ -16,21 +17,32 @@ const fetchClientItems = async (
   if (sort) {
     params.set("sort", sort);
   }
+  if (category) {
+    params.set("category", category);
+  }
 
   const res = await fetch(`/api/items?${params.toString()}`);
   if (!res.ok) throw new Error("상품 데이터를 불러오지 못했습니다.");
   return res.json();
 };
 
-export function useInfiniteItems(
-  initialItems: Item[],
-  search: string,
-  sort: "price_asc" | "price_desc" | null
-) {
+interface useInfiniteItemsProps {
+  initialItems: Item[];
+  search: string;
+  sort: "price_asc" | "price_desc" | null;
+  category: string | null;
+}
+
+export function useInfiniteItems({
+  initialItems,
+  search,
+  sort,
+  category,
+}: useInfiniteItemsProps) {
   return useInfiniteQuery({
-    queryKey: ["items", search, sort],
+    queryKey: ["items", search, sort, category],
     queryFn: ({ pageParam = 0 }) =>
-      fetchClientItems(10, pageParam, search, sort),
+      fetchClientItems(10, pageParam, search, sort, category),
     getNextPageParam: (lastPage, allPages) =>
       lastPage.length === 10 ? allPages.length * 10 : undefined,
     initialData: {

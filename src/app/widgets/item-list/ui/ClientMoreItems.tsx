@@ -14,6 +14,7 @@ import {
   ClockArrowDown,
   RefreshCcw,
 } from "lucide-react";
+import ItemCategoryFilter from "@/features/item-search/ui/ItemCategoryFilter";
 
 interface ClientMoreItemsProps {
   initialItems: Item[];
@@ -24,6 +25,7 @@ export default function ClientMoreItems({
 }: ClientMoreItemsProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [sort, setSort] = useState<"price_asc" | "price_desc" | null>(null);
+  const [category, setCategory] = useState<string | null>(null);
 
   const {
     data,
@@ -32,7 +34,7 @@ export default function ClientMoreItems({
     isFetchingNextPage,
     error,
     refetch,
-  } = useInfiniteItems(initialItems, searchQuery, sort);
+  } = useInfiniteItems({ initialItems, search: searchQuery, sort, category });
 
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
@@ -41,7 +43,6 @@ export default function ClientMoreItems({
     return data.pages.flatMap((page) => page);
   }, [data]);
 
-  // sort가 바뀔 때마다 페이지 리셋
   useEffect(() => {
     refetch();
   }, [sort, searchQuery, refetch]);
@@ -73,6 +74,7 @@ export default function ClientMoreItems({
   const handleResetFilter = () => {
     setSort(null);
     setSearchQuery("");
+    setCategory(null);
   };
 
   return (
@@ -86,6 +88,13 @@ export default function ClientMoreItems({
       </div>
 
       <div className="flex items-center justify-between mb-4 gap-2 mt-12">
+        {/* 성별 필터 */}
+
+        {/* 아이템 카테고리 필터 */}
+        <ItemCategoryFilter value={category} onChange={setCategory} />
+
+        {/* 판매중/판매완료 필터 */}
+
         {/* 검색창 */}
         <div className="flex flex-1 justify-end">
           <SearchInput
