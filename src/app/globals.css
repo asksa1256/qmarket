@@ -41,6 +41,10 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  --color-discord: #5865f2;
+  --color-discord-hover: #4445e7;
+  --color-discord-light: ##e0e9ff;
 }
 
 :root {
