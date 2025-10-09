@@ -116,13 +116,10 @@ export default function ItemCardWidget({ userId }: Props) {
 
   return (
     <div className="pb-10">
-      <div className="flex w-full mb-8 justify-between">
+      <div className="flex w-full mb-4 justify-between">
         <ButtonToMain />
 
         <div className="flex gap-2">
-          {/* 일일 등록 가능 횟수 */}
-          <DailyLimitDisplay />
-
           {/* 검색창 */}
           <SearchInput
             value={searchQuery}
@@ -134,7 +131,12 @@ export default function ItemCardWidget({ userId }: Props) {
         </div>
       </div>
 
-      <ol className="space-y-4">
+      {/* 일일 등록 가능 횟수 */}
+      <div className="flex justify-end mb-4">
+        <DailyLimitDisplay />
+      </div>
+
+      <ol className="space-y-4 mt-8">
         {filteredItems.map((item) => (
           <ItemCard key={item.id} item={item} />
         ))}

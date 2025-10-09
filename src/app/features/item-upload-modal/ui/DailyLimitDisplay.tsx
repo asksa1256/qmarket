@@ -40,11 +40,15 @@ export default function DailyLimitDisplay() {
   };
 
   return (
-    <div>
-      아이템 등록 가능 횟수: {status.remaining}/{DAILY_LIMIT}{" "}
+    <div className="flex items-center gap-2 text-sm font-medium">
+      <span className="text-gray-700">
+        아이템 등록 가능 횟수:{" "}
+        <span className="font-bold">{status.remaining}</span>/{DAILY_LIMIT}
+      </span>
+
       {status.remaining === 0 && (
-        <span className="text-red-600">
-          (다음 등록까지 남은 시간: {formatTime(status.remainingTime)})
+        <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-red-100 px-2 py-1 text-red-700 text-xs font-semibold">
+          ⚠️ 다음 등록까지 남은 시간: {formatTime(status.remainingTime)}
         </span>
       )}
     </div>
