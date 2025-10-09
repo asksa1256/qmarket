@@ -31,5 +31,10 @@ export const ITEM_CATEGORY_MAP = {
   game: "게임 아이템",
 };
 
+export const ITEM_SALE_STATUS_MAP = {
+  sold: "판매완료",
+  selling: "판매중",
+};
+
 export const SELECT_ITEM_COLUMNS =
   "id, item_name, price, image, is_online, item_source, nickname, is_sold, user_id, item_gender, discord_id, created_at";

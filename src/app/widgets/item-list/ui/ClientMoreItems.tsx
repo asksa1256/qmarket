@@ -15,6 +15,8 @@ import {
   RefreshCcw,
 } from "lucide-react";
 import ItemCategoryFilter from "@/features/item-search/ui/ItemCategoryFilter";
+import ItemGenderFilter from "@/features/item-search/ui/ItemGenderFilter";
+import ItemSoldFilter from "@/features/item-search/ui/ItemSoldFilter";
 
 interface ClientMoreItemsProps {
   initialItems: Item[];
@@ -26,6 +28,8 @@ export default function ClientMoreItems({
   const [searchQuery, setSearchQuery] = useState("");
   const [sort, setSort] = useState<"price_asc" | "price_desc" | null>(null);
   const [category, setCategory] = useState<string | null>(null);
+  const [gender, setGender] = useState<string | null>(null);
+  const [sold, setSold] = useState<string | null>(null);
 
   const {
     data,
@@ -34,7 +38,14 @@ export default function ClientMoreItems({
     isFetchingNextPage,
     error,
     refetch,
-  } = useInfiniteItems({ initialItems, search: searchQuery, sort, category });
+  } = useInfiniteItems({
+    initialItems,
+    search: searchQuery,
+    sort,
+    category,
+    gender,
+    sold,
+  });
 
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
@@ -45,7 +56,7 @@ export default function ClientMoreItems({
 
   useEffect(() => {
     refetch();
-  }, [sort, searchQuery, refetch]);
+  }, [sort, searchQuery, category, gender, sold, refetch]);
 
   useEffect(() => {
     if (!loadMoreRef.current || !hasNextPage) return;
@@ -88,12 +99,12 @@ export default function ClientMoreItems({
       </div>
 
       <div className="flex items-center justify-between mb-4 gap-2 mt-12">
-        {/* 성별 필터 */}
-
-        {/* 아이템 카테고리 필터 */}
-        <ItemCategoryFilter value={category} onChange={setCategory} />
-
-        {/* 판매중/판매완료 필터 */}
+        {/* 필터 */}
+        <div className="flex flex-wrap gap-2">
+          <ItemCategoryFilter value={category} onChange={setCategory} />
+          <ItemGenderFilter value={gender} onChange={setGender} />
+          <ItemSoldFilter value={sold} onChange={setSold} />
+        </div>
 
         {/* 검색창 */}
         <div className="flex flex-1 justify-end">
@@ -104,7 +115,7 @@ export default function ClientMoreItems({
           />
         </div>
 
-        {/* 정렬 버튼 */}
+        {/* 정렬 */}
         <Button
           variant="outline"
           onClick={() =>

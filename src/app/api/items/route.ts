@@ -4,9 +4,13 @@ import {
   ITEMS_TABLE_NAME,
   SELECT_ITEM_COLUMNS,
   ITEM_CATEGORY_MAP,
+  ITEM_GENDER_MAP,
+  ITEM_SALE_STATUS_MAP,
 } from "@/shared/config/constants";
 
 type ItemCategoryKey = keyof typeof ITEM_CATEGORY_MAP;
+type ItemGenderKey = keyof typeof ITEM_GENDER_MAP;
+type ItemSaleStatusKey = keyof typeof ITEM_SALE_STATUS_MAP;
 
 export const GET = async (req: Request) => {
   try {
@@ -19,6 +23,8 @@ export const GET = async (req: Request) => {
     const search = searchParams.get("search") || "";
     const sort = searchParams.get("sort");
     const category = searchParams.get("category") as ItemCategoryKey;
+    const gender = searchParams.get("gender") as ItemGenderKey;
+    const sold = searchParams.get("sold") as ItemSaleStatusKey;
 
     let query = supabaseServer
       .from("items")
@@ -28,6 +34,8 @@ export const GET = async (req: Request) => {
     // 필터
     if (search) query.ilike("item_name", `%${search}%`);
     if (category) query.eq("category", ITEM_CATEGORY_MAP[category]);
+    if (gender) query.eq("item_gender", ITEM_GENDER_MAP[gender]);
+    if (sold) query.eq("is_sold", sold === "sold");
 
     // 정렬
     if (!sort) {
