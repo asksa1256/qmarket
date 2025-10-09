@@ -55,7 +55,7 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
         <TableBody>
           {items.map((item, idx) => (
             <Popover
-              key={`${item.id}-${idx}`}
+              key={item.id}
               open={openIndex === idx}
               onOpenChange={(isOpen) => setOpenIndex(isOpen ? idx : null)}
             >
@@ -108,9 +108,12 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
                       className="text-gray-700 truncate px-2 py-1 rounded"
                       title={item.nickname}
                     >
-                      <span className="font-medium text-gray-900">
+                      <div className="flex items-center font-medium text-gray-900">
                         {item.nickname}
-                      </span>
+                        <span className="flex items-center text-xs font-medium bg-gray-200 py-0 px-0.5 text-black rounded-md">
+                          ({item.discord_id})
+                        </span>
+                      </div>
                     </Badge>
                   </TableCell>
                   {/* <TableCell className="text-center">
