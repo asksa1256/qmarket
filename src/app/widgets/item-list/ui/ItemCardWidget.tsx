@@ -15,6 +15,7 @@ import {
 import { getDailyItemCountAction } from "@/features/item-upload-modal/model/actions";
 import { DAILY_LIMIT } from "@/shared/lib/redis";
 import DailyLimitDisplay from "@/features/item-upload-modal/ui/DailyLimitDisplay";
+import useInfiniteScroll from "@/shared/hooks/useInfiniteScroll";
 
 interface Props {
   userId: string;
@@ -50,8 +51,6 @@ export default function ItemCardWidget({ userId }: Props) {
     initialData: { count: 0, remaining: DAILY_LIMIT },
   });
 
-  const loadMoreRef = useRef<HTMLDivElement | null>(null);
-
   const { data, isPending, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
       queryKey: ["my-items", userId],
@@ -74,21 +73,11 @@ export default function ItemCardWidget({ userId }: Props) {
       );
   }, [data, searchQuery]);
 
-  useEffect(() => {
-    if (!loadMoreRef.current || !hasNextPage) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 1.0 }
-    );
-
-    observer.observe(loadMoreRef.current);
-    return () => observer.disconnect();
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+  const { loadMoreRef } = useInfiniteScroll({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  });
 
   const isEmpty = !isPending && items.length === 0;
 

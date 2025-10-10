@@ -19,6 +19,7 @@ import { ItemGenderKey } from "@/features/item-search/ui/ItemGenderFilter";
 import { ItemSaleStatusKey } from "@/features/item-search/ui/ItemSoldFilter";
 import { Label } from "@/shared/ui/label";
 import LoadingSpinner from "@/shared/ui/LoadingSpinner";
+import useInfiniteScroll from "@/shared/hooks/useInfiniteScroll";
 
 interface ClientMoreItemsProps {
   initialItems: Item[];
@@ -57,8 +58,6 @@ export default function ClientMoreItems({
     sold: filters.saleStatus,
   });
 
-  const loadMoreRef = useRef<HTMLDivElement | null>(null);
-
   const allItems = useMemo(() => {
     if (!data) return [];
     return data.pages.flatMap((page) => page);
@@ -68,21 +67,11 @@ export default function ClientMoreItems({
     refetch();
   }, [sort, searchQuery, filters, refetch]);
 
-  useEffect(() => {
-    if (!loadMoreRef.current || !hasNextPage) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 1.0 }
-    );
-
-    observer.observe(loadMoreRef.current);
-    return () => observer.disconnect();
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+  const { loadMoreRef } = useInfiniteScroll({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  });
 
   if (error) {
     return (
