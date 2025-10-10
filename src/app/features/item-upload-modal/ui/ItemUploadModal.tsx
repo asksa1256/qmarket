@@ -32,6 +32,8 @@ import { cn } from "@/shared/lib/utils";
 import { insertItem } from "../model/actions";
 import { getDailyItemCountAction } from "../model/actions";
 import { DAILY_LIMIT } from "@/shared/lib/redis";
+import SearchInput from "@/features/item-search/ui/SearchInput";
+import { ItemCategory } from "@/entities/item/model/types";
 
 interface ItemUploadModalProps {
   onSuccess?: () => void;
@@ -91,7 +93,6 @@ export default function ItemUploadModal({ onSuccess }: ItemUploadModalProps) {
   });
 
   const {
-    register,
     handleSubmit,
     control,
     reset,
@@ -149,10 +150,30 @@ export default function ItemUploadModal({ onSuccess }: ItemUploadModalProps) {
                 <label htmlFor="item_name" className="text-sm">
                   아이템명
                 </label>
-                <Input
-                  id="item_name"
-                  placeholder="아이템명"
-                  {...register("item_name")}
+                <Controller
+                  name="item_name"
+                  control={control}
+                  render={({ field }) => (
+                    <SearchInput
+                      value={field.value}
+                      placeholder="아이템명"
+                      className="w-full"
+                      onSearch={field.onChange}
+                      onSelectSuggestion={(s) => {
+                        field.onChange(s.name); // 아이템명 업데이트
+
+                        const categoryKey = Object.entries(
+                          ITEM_CATEGORY_MAP
+                        ).find(
+                          ([key, label]) => label === s.category
+                        )?.[0] as keyof typeof ITEM_CATEGORY_MAP;
+
+                        if (categoryKey) {
+                          form.setValue("category", categoryKey); // 카테고리 자동 선택
+                        }
+                      }}
+                    />
+                  )}
                 />
                 {errors.item_name && (
                   <p className="text-red-600 text-sm mt-1">

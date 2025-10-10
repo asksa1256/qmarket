@@ -18,22 +18,26 @@ import {
   CommandItem,
   CommandList,
 } from "@/shared/ui/command";
+import { ItemCategory } from "@/entities/item/model/types";
 
 interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
   className?: string;
   onSearch: (value: string) => void;
+  onSelectSuggestion?: (suggestion: Suggestion) => void;
 }
 
 interface Suggestion {
   name: string;
   item_gender: string | null;
+  category: ItemCategory;
 }
 
 export default function SearchInput({
   value,
   className,
   onSearch,
+  onSelectSuggestion,
   ...rest
 }: SearchInputProps) {
   const [inputValue, setInputValue] = useState(value);
@@ -42,15 +46,11 @@ export default function SearchInput({
   const [allItems, setAllItems] = useState<Suggestion[]>([]);
 
   useEffect(() => {
-    setInputValue(value);
-  }, [value]);
-
-  // 전체 아이템 초기 로드
-  useEffect(() => {
+    // 전체 아이템 초기 로드
     const fetchItems = async () => {
       const { data, error } = await supabase
         .from(ITEMS_INFO_TABLE_NAME)
-        .select("name, item_gender");
+        .select("name, item_gender, category");
       if (!error && data) {
         setAllItems(data);
       } else {
@@ -62,7 +62,15 @@ export default function SearchInput({
 
   useEffect(() => {
     setInputValue(value);
-  }, [value]);
+
+    // 기존 값이 이미 있을 경우 (아이템 수정 모달)
+    if (value) {
+      const matched = allItems.find((item) => item.name === value);
+      if (matched) {
+        setSuggestions([matched]); // 기존 값도 검색 결과에 포함
+      }
+    }
+  }, [value, allItems]);
 
   const debouncedSearch = useMemo(
     () =>
@@ -75,6 +83,7 @@ export default function SearchInput({
         }
 
         const results = allItems.filter((item) => {
+          if (item.name === val) return true; // 완전 일치할 경우, true 리턴
           const nameChars = item.name.split(""); // 아이템 이름 글자 배열
           const inputChars = val.split(""); // 입력값 글자 배열
 
@@ -90,12 +99,13 @@ export default function SearchInput({
     const val = e.target.value;
     setInputValue(val);
     debouncedSearch(val);
-    if (!open) setSuggestionOpen(true);
+    if (!open && inputValue.length > 0) setSuggestionOpen(true);
   };
 
-  const handleSelect = (name: string) => {
-    setInputValue(name);
-    onSearch(name);
+  const handleSelect = (s: Suggestion) => {
+    setInputValue(s.name);
+    onSearch(s.name);
+    if (onSelectSuggestion) onSelectSuggestion(s);
     setSuggestionOpen(false);
   };
 
@@ -134,7 +144,7 @@ export default function SearchInput({
                     <CommandItem
                       key={idx}
                       value={s.name}
-                      onSelect={() => handleSelect(s.name)}
+                      onSelect={() => handleSelect(s)}
                     >
                       {s.name}
                     </CommandItem>

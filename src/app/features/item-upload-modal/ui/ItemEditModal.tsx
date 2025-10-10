@@ -39,6 +39,8 @@ import {
   ItemCategory,
 } from "@/entities/item/model/types";
 import { cn } from "@/shared/lib/utils";
+import SearchInput from "@/features/item-search/ui/SearchInput";
+import { ITEMS_TABLE_NAME } from "@/shared/config/constants";
 
 type ItemEditModalType = Omit<Item, "nickname" | "image">;
 
@@ -76,7 +78,6 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
   });
 
   const {
-    register,
     handleSubmit,
     control,
     formState: { errors },
@@ -96,7 +97,7 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
       };
 
       const { data, error } = await supabase
-        .from("items")
+        .from(ITEMS_TABLE_NAME)
         .update(dataToUpdate)
         .eq("id", item.id)
         .eq("user_id", item.user_id)
@@ -164,7 +165,31 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
                 <label htmlFor="item_name" className="text-sm">
                   아이템명
                 </label>
-                <Input id="item_name" {...register("item_name")} />
+                <Controller
+                  name="item_name"
+                  control={control}
+                  render={({ field }) => (
+                    <SearchInput
+                      value={field.value}
+                      placeholder="아이템명"
+                      className="w-full"
+                      onSearch={field.onChange}
+                      onSelectSuggestion={(s) => {
+                        field.onChange(s.name); // 아이템명 업데이트
+
+                        const categoryKey = Object.entries(
+                          ITEM_CATEGORY_MAP
+                        ).find(
+                          ([key, label]) => label === s.category
+                        )?.[0] as keyof typeof ITEM_CATEGORY_MAP;
+
+                        if (categoryKey) {
+                          form.setValue("category", categoryKey); // 카테고리 자동 선택
+                        }
+                      }}
+                    />
+                  )}
+                />
               </div>
 
               {/* 아이템 카테고리 */}
