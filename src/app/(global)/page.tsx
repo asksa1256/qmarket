@@ -1,4 +1,3 @@
-// app/page.tsx
 import { fetchInitialItems } from "@/entities/item/model/server-fetch";
 import TabView from "@/widgets/tab-view/ui/TabView";
 

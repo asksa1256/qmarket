@@ -18,7 +18,6 @@ import ItemMultiFilter from "@/widgets/item-multi-filter/ui/ItemMultiFilter";
 import { ItemGenderKey } from "@/features/item-search/ui/ItemGenderFilter";
 import { ItemSaleStatusKey } from "@/features/item-search/ui/ItemSoldFilter";
 import { Label } from "@/shared/ui/label";
-import LoadingSpinner from "@/shared/ui/LoadingSpinner";
 import useInfiniteScroll from "@/shared/hooks/useInfiniteScroll";
 import { useUser } from "@/shared/hooks/useUser";
 
@@ -50,8 +49,6 @@ export default function ClientMoreItems({
     isFetchingNextPage,
     error,
     refetch,
-    isLoading,
-    isFetching,
   } = useInfiniteItems({
     initialItems,
     search: searchQuery,
@@ -89,9 +86,6 @@ export default function ClientMoreItems({
     setSearchQuery("");
     setFilters({ category: null, gender: null, saleStatus: null });
   };
-
-  // 멀티 필터 적용 시 로딩 상태
-  const isRefetching = isFetching && !isLoading && !isFetchingNextPage;
 
   return (
     <div className="mt-4">
@@ -167,13 +161,7 @@ export default function ClientMoreItems({
       </div>
 
       {/* 아이템 목록 */}
-      <div className="relative">
-        {isRefetching ? (
-          <LoadingSpinner />
-        ) : (
-          <ItemListWidget items={allItems} isLoading={isFetchingNextPage} />
-        )}
-      </div>
+      <ItemListWidget items={allItems} isLoading={isFetchingNextPage} />
 
       {/* 무한 스크롤 */}
       <div ref={loadMoreRef} className="h-10">
