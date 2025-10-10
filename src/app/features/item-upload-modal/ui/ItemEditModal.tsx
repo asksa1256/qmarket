@@ -307,8 +307,6 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
                   control={control}
                   render={({ field }) => (
                     <RadioGroup
-                      // onValueChange={field.onChange}
-                      // value={field.value}
                       onValueChange={(value) => {
                         const booleanValue = value === "true";
                         field.onChange(booleanValue);
