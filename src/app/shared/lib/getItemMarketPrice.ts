@@ -7,7 +7,7 @@ import { supabase } from "@/shared/api/supabase-client";
  */
 export async function getItemMarketPrice(itemName: string, itemGender: string) {
   if (!itemName || itemName.trim().length === 0) {
-    return "0";
+    return { price: "0", count: 0 };
   }
 
   const TRIM_RATE = 0.05; // 상하위 5% (계산 제외)
@@ -26,7 +26,7 @@ export async function getItemMarketPrice(itemName: string, itemGender: string) {
   }
 
   if (!listings || listings.length === 0) {
-    return "0";
+    return { price: "0", count: 0 };
   }
 
   const prices = listings
@@ -40,15 +40,21 @@ export async function getItemMarketPrice(itemName: string, itemGender: string) {
     const trimmed = prices.slice(trimCount, count - trimCount);
     const mean =
       trimmed.reduce((sum, val) => sum + val, 0) / (trimmed.length || 1);
-    return mean.toFixed(0);
+    return { price: mean.toFixed(0), count: listings.length };
   }
 
   // 10건 미만 → 중앙값
   if (count % 2 === 1) {
-    return prices[Math.floor(count / 2)].toFixed(0);
+    return {
+      price: prices[Math.floor(count / 2)].toFixed(0),
+      count: listings.length,
+    };
   } else {
     const mid = count / 2;
-    return ((prices[mid - 1] + prices[mid]) / 2).toFixed(0);
+    return {
+      price: ((prices[mid - 1] + prices[mid]) / 2).toFixed(0),
+      count: listings.length,
+    };
   }
 }
 
@@ -60,7 +66,7 @@ export async function getTradedMarketPrice(
   itemGender: string
 ) {
   if (!itemName || itemName.trim().length === 0) {
-    return "0";
+    return { price: "0", count: 0 };
   }
 
   const TRIM_RATE = 0.05;
@@ -76,11 +82,11 @@ export async function getTradedMarketPrice(
 
   if (error) {
     console.error("판매 완료 목록 조회 중 오류:", error.message);
-    return "오류 발생";
+    throw new Error(error.message);
   }
 
   if (!soldListings || soldListings.length === 0) {
-    return "0"; // NaN 방지
+    return { price: "0", count: 0 };
   }
 
   const prices = soldListings
@@ -94,14 +100,20 @@ export async function getTradedMarketPrice(
     const trimmed = prices.slice(trimCount, count - trimCount);
     const mean =
       trimmed.reduce((sum, val) => sum + val, 0) / (trimmed.length || 1);
-    return mean.toFixed(0);
+    return { price: mean.toFixed(0), count: soldListings.length };
   }
 
   // 10건 미만 → 중앙값
   if (count % 2 === 1) {
-    return prices[Math.floor(count / 2)].toFixed(0);
+    return {
+      price: prices[Math.floor(count / 2)].toFixed(0),
+      count: soldListings.length,
+    };
   } else {
     const mid = count / 2;
-    return ((prices[mid - 1] + prices[mid]) / 2).toFixed(0);
+    return {
+      price: ((prices[mid - 1] + prices[mid]) / 2).toFixed(0),
+      count: soldListings.length,
+    };
   }
 }

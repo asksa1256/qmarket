@@ -21,8 +21,8 @@ export default function MarketPriceDashboard() {
   const [isLoading, setIsLoading] = useState(false);
 
   // 시세 상태
-  const [marketPrice, setMarketPrice] = useState(""); // 현재 시세
-  const [tradedPrice, setTradedPrice] = useState(""); // 거래 시세
+  const [marketPrice, setMarketPrice] = useState({ price: "", count: 0 }); // 현재 시세
+  const [tradedPrice, setTradedPrice] = useState({ price: "", count: 0 }); // 거래 시세
 
   // 거래 내역 상태
   const [saleHistory, setSaleHistory] = useState<SaleHistory[]>([]);
@@ -30,8 +30,8 @@ export default function MarketPriceDashboard() {
   const handleSearch = useCallback(async () => {
     const trimmedInput = searchInput.trim();
     if (!trimmedInput) {
-      setMarketPrice("");
-      setTradedPrice("");
+      setMarketPrice({ price: "", count: 0 });
+      setTradedPrice({ price: "", count: 0 });
       setSaleHistory([]);
       setSearchQuery(""); // 검색어도 초기화
       return;
@@ -47,8 +47,8 @@ export default function MarketPriceDashboard() {
         getItemSaleHistory(trimmedInput, itemGender),
       ]);
 
-      setMarketPrice(market);
-      setTradedPrice(traded);
+      setMarketPrice({ price: market.price, count: market.count });
+      setTradedPrice({ price: traded.price, count: traded.count });
       setSaleHistory(history);
     } catch (error) {
       console.error("시세 조회 오류:", error);
@@ -57,7 +57,7 @@ export default function MarketPriceDashboard() {
     }
   }, [searchInput, itemGender]);
 
-  const hasMarketPrice = marketPrice !== "" && tradedPrice !== "";
+  const hasMarketPrice = marketPrice.price !== "" && tradedPrice.price !== "";
 
   // itemGender 변경 후, searchQuery가 존재하면 자동 재조회
   useEffect(() => {
@@ -133,18 +133,28 @@ export default function MarketPriceDashboard() {
               <span className="ml-1 text-blue-600 text-3xl font-extrabold">
                 {isLoading
                   ? "계산 중..."
-                  : Number(marketPrice).toLocaleString()}
+                  : Number(marketPrice.price).toLocaleString()}
                 원
               </span>
+              {marketPrice.count < 10 && (
+                <p className="inline-block ml-1 text-sm text-gray-500">
+                  (판매중인 아이템이 10개 미만이므로 정확하지 않을 수 있습니다.)
+                </p>
+              )}
             </li>
             <li>
               - 거래 시세:{" "}
               <span className="ml-1 text-blue-600 text-3xl font-extrabold">
                 {isLoading
                   ? "계산 중..."
-                  : Number(tradedPrice).toLocaleString()}
+                  : Number(tradedPrice.price).toLocaleString()}
                 원
               </span>
+              {tradedPrice.count < 10 && (
+                <p className="inline-block ml-1 text-sm text-gray-500">
+                  (거래 내역이 10개 미만이므로 정확하지 않을 수 있습니다.)
+                </p>
+              )}
             </li>
           </ul>
 
