@@ -50,7 +50,7 @@ export default function ItemUploadModal({ onSuccess }: ItemUploadModalProps) {
       const { remaining } = await getDailyItemCountAction();
       if (remaining <= 0) {
         throw new Error(
-          "오늘 등록 가능한 아이템 수를 모두 사용했습니다. 24시간 후 다시 시도해주세요."
+          "일일 등록 횟수를 모두 사용했습니다. 내일 다시 시도해주세요."
         );
       }
 

@@ -5,7 +5,7 @@ import ItemCard from "@/entities/item/ui/ItemCard";
 import { Item } from "@/entities/item/model/types";
 import { supabase } from "@/shared/api/supabase-client";
 import ItemUploadModal from "@/features/item-upload-modal/ui/ItemUploadModal";
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import ButtonToMain from "@/shared/ui/LinkButton/ButtonToMain";
 import SearchInput from "@/features/item-search/ui/SearchInput";
 import {
@@ -45,22 +45,28 @@ export default function ItemCardWidget({ userId }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
 
   // 일일 등록 카운트 (ItemUploadModal과 refetch 연동)
-  const { refetch: refetchLimitInfo } = useQuery({
+  const { data: limitStatus, refetch: refetchLimitInfo } = useQuery({
     queryKey: ["dailyItemCount", userId],
     queryFn: getDailyItemCountAction,
     initialData: { count: 0, remaining: DAILY_LIMIT },
   });
 
-  const { data, isPending, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ["my-items", userId],
-      queryFn: ({ pageParam = 0 }) => fetchMyItems(userId, 10, pageParam),
-      getNextPageParam: (lastPage, allPages) => {
-        if (lastPage.length < 10) return undefined;
-        return allPages.length * 10;
-      },
-      initialPageParam: 0,
-    });
+  const {
+    data,
+    isPending,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch,
+  } = useInfiniteQuery({
+    queryKey: ["my-items", userId],
+    queryFn: ({ pageParam = 0 }) => fetchMyItems(userId, 10, pageParam),
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length < 10) return undefined;
+      return allPages.length * 10;
+    },
+    initialPageParam: 0,
+  });
 
   const items = data?.pages.flat() ?? [];
 
@@ -86,7 +92,12 @@ export default function ItemCardWidget({ userId }: Props) {
       <>
         <div className="flex w-full mb-8 justify-between">
           <ButtonToMain />
-          <ItemUploadModal onSuccess={refetchLimitInfo} />
+          <ItemUploadModal
+            onSuccess={() => {
+              refetchLimitInfo(); // useQuery의 refetch
+              refetch(); // useInfiniteQuery의 refetch
+            }}
+          />
         </div>
 
         <div className="flex flex-col gap-4 items-center justify-center text-sm text-gray-500">
@@ -115,14 +126,20 @@ export default function ItemCardWidget({ userId }: Props) {
             className="border border-gray-300 rounded-lg shadow-sm text-sm w-auto"
             onSearch={(e: string) => setSearchQuery(e)}
           />
+
           {/* 아이템 등록 모달 */}
-          <ItemUploadModal />
+          <ItemUploadModal
+            onSuccess={() => {
+              refetchLimitInfo();
+              refetch();
+            }}
+          />
         </div>
       </div>
 
       {/* 일일 등록 가능 횟수 */}
       <div className="flex justify-end mb-4">
-        <DailyLimitDisplay />
+        <DailyLimitDisplay remaining={limitStatus.remaining} />
       </div>
 
       <ol className="grid grid-cols-2 gap-6 mt-8">
@@ -139,7 +156,7 @@ export default function ItemCardWidget({ userId }: Props) {
           </p>
         ) : hasNextPage ? null : (
           <p className="text-center mt-4 text-gray-500 text-sm">
-            마지막 페이지입니다.
+            아이템을 모두 불러왔습니다.
           </p>
         )}
       </div>
