@@ -3,12 +3,12 @@
 import React from "react";
 import { Button } from "@/shared/ui/button";
 
-type Props = {
+interface ItemSoldFilterProps {
   value?: boolean | null;
   onChange: (value: boolean | null) => void;
-};
+}
 
-function ItemSoldFilter({ value, onChange }: Props) {
+function ItemSoldFilter({ value, onChange }: ItemSoldFilterProps) {
   const handleClick = (newValue: boolean) => {
     onChange(value === newValue ? null : newValue); // 토글
   };

@@ -4,36 +4,34 @@ import ItemCategoryFilter from "@/features/item-search/ui/ItemCategoryFilter";
 import ItemGenderFilter, {
   ItemGenderKey,
 } from "@/features/item-search/ui/ItemGenderFilter";
-import ItemSoldFilter, {
-  ItemIsSoldKey,
-} from "@/features/item-search/ui/ItemSoldFilter";
+import ItemSoldFilter from "@/features/item-search/ui/ItemSoldFilter";
 import { Label } from "@/shared/ui/label";
 
 interface ItemMultiFilterProps {
   category: string | null;
   gender: ItemGenderKey | null;
-  saleStatus: ItemIsSoldKey | null;
+  isSold: boolean | null;
   onChange: (filters: {
     category: string | null;
     gender: ItemGenderKey | null;
-    saleStatus: ItemIsSoldKey | null;
+    isSold: boolean | null;
   }) => void;
 }
 
 export default function ItemMultiFilter({
   category,
   gender,
-  saleStatus,
+  isSold,
   onChange,
 }: ItemMultiFilterProps) {
   const handleCategoryChange = (value: string | null) =>
-    onChange({ category: value, gender, saleStatus });
+    onChange({ category: value, gender, isSold });
 
   const handleGenderChange = (value: ItemGenderKey | null) =>
-    onChange({ category, gender: value, saleStatus });
+    onChange({ category, gender: value, isSold });
 
-  const handleSaleStatusChange = (value: ItemIsSoldKey | null) =>
-    onChange({ category, gender, saleStatus: value });
+  const handleisSoldChange = (value: boolean | null) =>
+    onChange({ category, gender, isSold: value });
 
   return (
     <>
@@ -56,10 +54,7 @@ export default function ItemMultiFilter({
         {/* 판매 상태 */}
         <div className="flex flex-col gap-1">
           <Label className="text-sm text-gray-600 font-medium">판매 상태</Label>
-          <ItemSoldFilter
-            value={saleStatus}
-            onChange={handleSaleStatusChange}
-          />
+          <ItemSoldFilter value={isSold} onChange={handleisSoldChange} />
         </div>
       </div>
     </>

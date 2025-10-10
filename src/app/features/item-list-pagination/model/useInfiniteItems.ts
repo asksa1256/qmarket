@@ -8,7 +8,7 @@ const fetchClientItems = async (
   sort?: "price_asc" | "price_desc" | null,
   category?: string | null,
   gender?: string | null,
-  sold?: string | null
+  sold?: boolean | null
 ): Promise<Item[]> => {
   const params = new URLSearchParams({
     limit: String(limit),
@@ -23,7 +23,7 @@ const fetchClientItems = async (
     params.set("category", category);
   }
   if (gender) params.set("gender", gender);
-  if (sold) params.set("sold", sold);
+  if (String(sold) !== "null") params.set("sold", String(sold));
 
   const res = await fetch(`/api/items?${params.toString()}`);
   if (!res.ok) throw new Error("상품 데이터를 불러오지 못했습니다.");
@@ -36,7 +36,7 @@ interface useInfiniteItemsProps {
   sort: "price_asc" | "price_desc" | null;
   category: string | null;
   gender: string | null;
-  sold: string | null;
+  sold: boolean | null;
 }
 
 export function useInfiniteItems({

@@ -16,7 +16,6 @@ import {
 } from "lucide-react";
 import ItemMultiFilter from "@/widgets/item-multi-filter/ui/ItemMultiFilter";
 import { ItemGenderKey } from "@/features/item-search/ui/ItemGenderFilter";
-import { ItemSaleStatusKey } from "@/features/item-search/ui/ItemSoldFilter";
 import { Label } from "@/shared/ui/label";
 import useInfiniteScroll from "@/shared/hooks/useInfiniteScroll";
 import { useUser } from "@/shared/hooks/useUser";
@@ -33,11 +32,11 @@ export default function ClientMoreItems({
   const [filters, setFilters] = useState<{
     category: string | null;
     gender: ItemGenderKey | null;
-    saleStatus: ItemSaleStatusKey | null;
+    isSold: boolean | null;
   }>({
     category: null,
     gender: null,
-    saleStatus: null,
+    isSold: null,
   });
 
   const { data: user } = useUser();
@@ -55,7 +54,7 @@ export default function ClientMoreItems({
     sort,
     category: filters.category,
     gender: filters.gender,
-    sold: filters.saleStatus,
+    sold: filters.isSold,
   });
 
   const allItems = useMemo(() => {
@@ -84,7 +83,7 @@ export default function ClientMoreItems({
   const handleResetFilter = () => {
     setSort(null);
     setSearchQuery("");
-    setFilters({ category: null, gender: null, saleStatus: null });
+    setFilters({ category: null, gender: null, isSold: null });
   };
 
   return (
@@ -94,7 +93,7 @@ export default function ClientMoreItems({
         <ItemMultiFilter
           category={filters.category}
           gender={filters.gender}
-          saleStatus={filters.saleStatus}
+          isSold={filters.isSold}
           onChange={setFilters}
         />
 
