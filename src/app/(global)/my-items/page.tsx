@@ -30,6 +30,9 @@ export default async function MyItemsPage() {
           <b>&apos;수정하기&apos;</b>에서 <b>&apos;판매완료&apos;</b> 상태로
           변경해주세요.
         </p>
+        <p className="text-gray-500 text-sm">
+          * <b>판매된 아이템은 수정할 수 없습니다.</b> (시세 조작 방지)
+        </p>
       </div>
 
       <ItemCardWidget userId={user.id} />

@@ -5,11 +5,7 @@ import MyItemActions from "@/widgets/my-item-actions/ui/MyItemActions";
 
 const ItemCard = ({ item }: { item: Item }) => {
   return (
-    <div
-      className={`relative flex p-4 border rounded-lg shadow-sm ${
-        item.is_sold ? "opacity-50" : ""
-      }`}
-    >
+    <div className="relative flex p-4 border rounded-lg shadow-sm">
       <figure className="overflow-hidden rounded-2xl mr-4">
         <Image
           src={item.image ?? "/images/empty.png"}
@@ -19,7 +15,7 @@ const ItemCard = ({ item }: { item: Item }) => {
         />
       </figure>
 
-      <MyItemActions item={item} />
+      <MyItemActions item={item} isSold={item.is_sold} />
 
       <div className="flex items-start self-start">
         {/* 아이템 정보 */}
@@ -44,16 +40,6 @@ const ItemCard = ({ item }: { item: Item }) => {
               >
                 {item.is_sold ? "판매완료" : "판매중"}
               </Badge>
-
-              {/* 판매자 온라인 여부 (is_online) */}
-              {/* <Badge
-                variant="secondary"
-                className={
-                  item.is_online ? "bg-blue-500 text-white" : undefined
-                }
-              >
-                {item.is_online ? "온라인" : "미접속"}
-              </Badge> */}
 
               {/* 상품 출처 (is_gatcha) */}
               <Badge
