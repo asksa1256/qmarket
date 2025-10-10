@@ -106,12 +106,16 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
                     <Badge
                       variant="secondary"
                       className="text-gray-700 truncate px-2 py-1 rounded"
-                      title="디스코드 닉네임(디스코드 아이디)"
+                      title={`디스코드 아이디: ${item.discord_id}`}
                     >
                       <div className="flex items-center font-medium text-gray-900">
                         {item.nickname}
                         <span className="flex items-center text-xs font-medium bg-gray-200 py-0 px-0.5 text-black rounded-md">
-                          ({item.discord_id})
+                          (
+                          <span className="max-w-[36px] overflow-ellipsis overflow-hidden">
+                            {item.discord_id}
+                          </span>
+                          )
                         </span>
                       </div>
                     </Badge>
@@ -135,8 +139,9 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
               </PopoverTrigger>
 
               <PopoverContent
-                className="w-auto px-8 py-4 shadow-lg rounded-lg bg-white"
+                className="w-auto p-4 shadow-lg rounded-lg bg-white"
                 side="right"
+                sideOffset={-150}
                 align="end"
               >
                 <div className="flex flex-col items-center gap-2">
@@ -147,6 +152,9 @@ export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
                   />
                   <p className="text-center font-medium text-gray-900">
                     {item.item_name}
+                  </p>
+                  <p className="text-sm text-gray-500 max-w-[80px]">
+                    판매자: {item.nickname}({item.discord_id})
                   </p>
                 </div>
               </PopoverContent>
