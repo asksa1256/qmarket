@@ -2,10 +2,15 @@ import { Badge } from "@/shared/ui/badge";
 import Image from "next/image";
 import { Item } from "../model/types";
 import MyItemActions from "@/widgets/my-item-actions/ui/MyItemActions";
+import { cn } from "@/shared/lib/utils";
 
 const ItemCard = ({ item }: { item: Item }) => {
   return (
-    <div className="relative flex p-4 border rounded-lg shadow-sm">
+    <div
+      className={cn("relative flex p-4 border rounded-lg shadow-sm", {
+        "opacity-50": item.is_sold,
+      })}
+    >
       <figure className="overflow-hidden rounded-2xl mr-4">
         <Image
           src={item.image ?? "/images/empty.png"}

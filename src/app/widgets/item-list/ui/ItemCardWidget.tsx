@@ -142,11 +142,31 @@ export default function ItemCardWidget({ userId }: Props) {
         <DailyLimitDisplay remaining={limitStatus.remaining} />
       </div>
 
-      <ol className="grid grid-cols-2 gap-6 mt-8">
-        {filteredItems.map((item) => (
-          <ItemCard key={item.id} item={item} />
-        ))}
-      </ol>
+      <div className="mt-8 grid gap-6">
+        {/* 판매 중인 아이템 */}
+        <div className="mt-8">
+          <h2 className="text-lg font-semibold mb-4">판매 중</h2>
+          <div className="grid grid-cols-2 gap-6">
+            {filteredItems
+              .filter((item) => item.is_sold === false)
+              .map((item) => (
+                <ItemCard key={item.id} item={item} />
+              ))}
+          </div>
+        </div>
+
+        {/* 판매 완료된 아이템 */}
+        <div className="mt-8">
+          <h2 className="text-lg font-semibold mb-4">판매 완료</h2>
+          <div className="grid grid-cols-2 gap-6">
+            {filteredItems
+              .filter((item) => item.is_sold === true)
+              .map((item) => (
+                <ItemCard key={item.id} item={item} />
+              ))}
+          </div>
+        </div>
+      </div>
 
       {/* 무한 스크롤 */}
       <div ref={loadMoreRef} className="h-10">

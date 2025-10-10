@@ -7,7 +7,7 @@ import { useUser } from "@/shared/hooks/useUser";
 
 interface MyItemActionsProps {
   item: Item;
-  isSold: string;
+  isSold: boolean;
 }
 
 export default function MyItemActions({ item, isSold }: MyItemActionsProps) {
@@ -15,8 +15,12 @@ export default function MyItemActions({ item, isSold }: MyItemActionsProps) {
 
   return (
     <div className="absolute right-4 top-4 flex gap-2">
-      {!isSold && <ItemEditModal item={item} />}
-      {user?.id && <ItemDeleteModal itemId={item.id} userId={user.id} />}
+      {!isSold && (
+        <>
+          <ItemEditModal item={item} />
+          {user?.id && <ItemDeleteModal itemId={item.id} userId={user.id} />}
+        </>
+      )}
     </div>
   );
 }

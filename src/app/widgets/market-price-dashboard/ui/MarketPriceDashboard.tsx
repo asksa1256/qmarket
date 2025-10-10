@@ -67,7 +67,14 @@ export default function MarketPriceDashboard() {
   }, [itemGender, handleSearch, searchQuery]);
 
   return (
-    <section className="max-w-4xl mx-auto">
+    <section className="max-w-5xl mx-auto">
+      <div className="rounded-xl border p-4 mt-4">
+        <p className="text-sm text-gray-500">
+          * 아이템 이름을 입력하고 아이템 성별을 선택한 후, 검색 버튼을
+          눌러주세요.
+        </p>
+      </div>
+
       {/* 검색창 */}
       <div className="flex flex-1 items-center justify-center mt-8 gap-8">
         {/* 성별 선택 */}

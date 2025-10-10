@@ -57,7 +57,7 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
     defaultValues: {
       item_name: item.item_name,
       price: item.price,
-      is_sold: item.is_sold ? "sold" : "selling",
+      is_sold: item.is_sold,
       // is_online: item.is_online ? "online" : "offline",
       item_source: Object.keys(ITEM_SOURCES_MAP).find(
         (key) =>
@@ -88,7 +88,7 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
       const dataToUpdate = {
         item_name: sanitize(values.item_name),
         price: values.price,
-        is_sold: values.is_sold === "sold",
+        is_sold: values.is_sold,
         // is_online: values.is_online === "online",
         item_source: ITEM_SOURCES_MAP[values.item_source],
         item_gender: ITEM_GENDER_MAP[values.item_gender],
@@ -307,15 +307,20 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
                   control={control}
                   render={({ field }) => (
                     <RadioGroup
-                      onValueChange={field.onChange}
-                      value={field.value}
+                      // onValueChange={field.onChange}
+                      // value={field.value}
+                      onValueChange={(value) => {
+                        const booleanValue = value === "true";
+                        field.onChange(booleanValue);
+                      }}
+                      value={String(field.value)}
                     >
                       <div className="flex items-center gap-3">
-                        <RadioGroupItem value="selling" id="selling" />
+                        <RadioGroupItem value="false" id="selling" />
                         <Label htmlFor="selling">판매중</Label>
                       </div>
                       <div className="flex items-center gap-3">
-                        <RadioGroupItem value="sold" id="sold" />
+                        <RadioGroupItem value="true" id="sold" />
                         <Label htmlFor="sold">판매완료</Label>
                       </div>
                     </RadioGroup>

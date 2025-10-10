@@ -5,18 +5,18 @@ import ItemGenderFilter, {
   ItemGenderKey,
 } from "@/features/item-search/ui/ItemGenderFilter";
 import ItemSoldFilter, {
-  ItemSaleStatusKey,
+  ItemIsSoldKey,
 } from "@/features/item-search/ui/ItemSoldFilter";
 import { Label } from "@/shared/ui/label";
 
 interface ItemMultiFilterProps {
   category: string | null;
   gender: ItemGenderKey | null;
-  saleStatus: ItemSaleStatusKey | null;
+  saleStatus: ItemIsSoldKey | null;
   onChange: (filters: {
     category: string | null;
     gender: ItemGenderKey | null;
-    saleStatus: ItemSaleStatusKey | null;
+    saleStatus: ItemIsSoldKey | null;
   }) => void;
 }
 
@@ -32,7 +32,7 @@ export default function ItemMultiFilter({
   const handleGenderChange = (value: ItemGenderKey | null) =>
     onChange({ category, gender: value, saleStatus });
 
-  const handleSaleStatusChange = (value: ItemSaleStatusKey | null) =>
+  const handleSaleStatusChange = (value: ItemIsSoldKey | null) =>
     onChange({ category, gender, saleStatus: value });
 
   return (

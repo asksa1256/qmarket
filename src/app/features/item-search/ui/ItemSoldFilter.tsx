@@ -1,27 +1,27 @@
 "use client";
 
-import { ITEM_SALE_STATUS_MAP } from "@/shared/config/constants";
+import { ITEM_IS_SOLD_MAP } from "@/shared/config/constants";
 import React from "react";
 import { Button } from "@/shared/ui/button";
 
-export type ItemSaleStatusKey = keyof typeof ITEM_SALE_STATUS_MAP;
+export type ItemIsSoldKey = keyof typeof ITEM_IS_SOLD_MAP;
 
 type Props = {
   value?: string | null;
-  onChange: (key: ItemSaleStatusKey | null) => void;
+  onChange: (key: ItemIsSoldKey | null) => void;
 };
 
 function ItemSoldFilter({ value, onChange }: Props) {
-  const handleClick = (key: ItemSaleStatusKey) => {
+  const handleClick = (key: ItemIsSoldKey) => {
     onChange(value === key ? null : key);
   };
 
   return (
     <div className="flex gap-2">
-      {Object.entries(ITEM_SALE_STATUS_MAP).map(([key, label]) => (
+      {Object.entries(ITEM_IS_SOLD_MAP).map(([key, label]) => (
         <Button
           key={key}
-          onClick={() => handleClick(key as ItemSaleStatusKey)}
+          onClick={() => handleClick(key as ItemIsSoldKey)}
           className={`px-3 py-1 rounded-md border text-sm transition ${
             value === key
               ? "font-bold"

@@ -86,9 +86,9 @@ export default function ItemUploadModal({ onSuccess }: ItemUploadModalProps) {
     defaultValues: {
       item_name: "",
       price: 0,
-      is_sold: "selling",
       item_source: "gatcha",
       item_gender: "m",
+      is_sold: false,
     },
   });
 
