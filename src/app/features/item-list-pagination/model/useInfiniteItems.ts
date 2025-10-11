@@ -50,9 +50,9 @@ export function useInfiniteItems({
   return useInfiniteQuery({
     queryKey: ["items", search, sort, category, gender, sold],
     queryFn: ({ pageParam = 0 }) =>
-      fetchClientItems(10, pageParam, search, sort, category, gender, sold),
+      fetchClientItems(20, pageParam, search, sort, category, gender, sold),
     getNextPageParam: (lastPage, allPages) =>
-      lastPage.length === 10 ? allPages.length * 10 : undefined,
+      lastPage.length === 20 ? allPages.length * 20 : undefined,
     initialData: {
       pages: [initialItems],
       pageParams: [0],

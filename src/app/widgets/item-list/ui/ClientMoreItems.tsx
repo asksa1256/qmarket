@@ -2,7 +2,7 @@
 
 import { useInfiniteItems } from "@/features/item-list-pagination/model/useInfiniteItems";
 import { Item } from "@/entities/item/model/types";
-import { useRef, useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { ItemListWidget } from "@/widgets/item-list/ui/ItemListWidget";
 import { useState } from "react";
 import SearchInput from "@/features/item-search/ui/SearchInput";
