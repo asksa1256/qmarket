@@ -149,7 +149,7 @@ export default function ItemCardWidget({ userId }: Props) {
         </div>
       </div>
 
-      {/* 일일 등록 가능 횟수 */}
+      {/* 아이템 등록 가능 횟수 */}
       <div className="flex justify-end mb-4">
         <DailyLimitDisplay remaining={limitStatus.remaining} />
       </div>

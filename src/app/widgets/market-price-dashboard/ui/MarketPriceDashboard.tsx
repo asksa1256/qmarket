@@ -73,6 +73,10 @@ export default function MarketPriceDashboard() {
           * 아이템 이름을 입력하고 아이템 성별을 선택한 후, 검색 버튼을
           눌러주세요.
         </p>
+        <p className="text-gray-500 text-sm">
+          * 거래 시세 조작이 의심될 경우, 우측 상단의 신고 버튼을 눌러
+          제보해주세요.
+        </p>
       </div>
 
       {/* 검색창 */}
