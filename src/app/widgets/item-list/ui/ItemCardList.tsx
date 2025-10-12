@@ -17,6 +17,7 @@ import { DAILY_LIMIT } from "@/shared/lib/redis";
 import DailyLimitDisplay from "@/features/item-upload-modal/ui/DailyLimitDisplay";
 import useInfiniteScroll from "@/shared/hooks/useInfiniteScroll";
 import ItemSoldFilter from "@/features/item-search/ui/ItemSoldFilter";
+import LoadingSpinner from "@/shared/ui/LoadingSpinner";
 
 interface Props {
   userId: string;
@@ -62,10 +63,10 @@ export default function ItemCardList({ userId }: Props) {
 
   const {
     data,
-    isPending,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    isLoading,
     refetch,
   } = useInfiniteQuery({
     queryKey: ["my-items", userId, searchQuery, soldFilter],
@@ -94,7 +95,7 @@ export default function ItemCardList({ userId }: Props) {
     isFetchingNextPage,
   });
 
-  const isEmpty = !isPending && items.length === 0;
+  const isEmpty = !isLoading && items.length === 0;
 
   if (isEmpty) {
     return (
@@ -115,13 +116,6 @@ export default function ItemCardList({ userId }: Props) {
       </>
     );
   }
-
-  if (isPending)
-    return (
-      <div className="flex flex-col gap-4 items-center justify-center text-sm text-gray-500">
-        아이템 목록 불러오는 중...
-      </div>
-    );
 
   return (
     <div className="pb-10">
@@ -155,11 +149,20 @@ export default function ItemCardList({ userId }: Props) {
       </div>
 
       {/* 아이템 리스트 */}
-      <div className="grid grid-cols-2 gap-6 mt-4">
-        {filteredItems.map((item) => (
-          <ItemCard key={item.id} item={item} />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="text-center">
+          <LoadingSpinner />
+          <p className="text-center mt-4 text-gray-500 text-sm">
+            아이템 로드 중...
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-6 mt-4">
+          {filteredItems.map((item) => (
+            <ItemCard key={item.id} item={item} />
+          ))}
+        </div>
+      )}
 
       {/* 무한 스크롤 */}
       <div ref={loadMoreRef} className="h-10">
@@ -167,10 +170,13 @@ export default function ItemCardList({ userId }: Props) {
           <p className="text-center mt-4 text-gray-500 text-sm">
             아이템 로드 중...
           </p>
-        ) : hasNextPage ? null : (
-          <p className="text-center mt-4 text-gray-500 text-sm">
-            아이템을 모두 불러왔습니다.
-          </p>
+        ) : (
+          !isLoading &&
+          !hasNextPage && (
+            <p className="text-center mt-4 text-gray-500 text-sm">
+              마지막 페이지입니다.
+            </p>
+          )
         )}
       </div>
     </div>
