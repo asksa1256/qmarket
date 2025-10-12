@@ -13,11 +13,14 @@ import getItemSaleHistory, {
 } from "@/shared/lib/getItemSaleHistory";
 import SaleHistoryChart from "@/widgets/sale-history-chart/ui/SaleHistoryChart";
 import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
+import ItemImage from "@/shared/ui/ItemImage";
+import getItemImage from "@/shared/lib/getItemImage";
 
 export default function MarketPriceDashboard() {
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [itemGender, setItemGender] = useState("남");
+  const [itemImageUrl, setItemImageUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   // 시세 상태
@@ -34,6 +37,7 @@ export default function MarketPriceDashboard() {
       setTradedPrice({ price: "", count: 0 });
       setSaleHistory([]);
       setSearchQuery(""); // 검색어도 초기화
+      setItemImageUrl("");
       return;
     }
 
@@ -41,15 +45,17 @@ export default function MarketPriceDashboard() {
     setSearchQuery(trimmedInput);
 
     try {
-      const [market, traded, history] = await Promise.all([
+      const [market, traded, history, itemImage] = await Promise.all([
         getItemMarketPrice(trimmedInput, itemGender),
         getTradedMarketPrice(trimmedInput, itemGender),
         getItemSaleHistory(trimmedInput, itemGender),
+        getItemImage(trimmedInput, itemGender),
       ]);
 
       setMarketPrice({ price: market.price, count: market.count });
       setTradedPrice({ price: traded.price, count: traded.count });
       setSaleHistory(history);
+      setItemImageUrl(itemImage);
     } catch (error) {
       console.error("시세 조회 오류:", error);
     } finally {
@@ -122,7 +128,16 @@ export default function MarketPriceDashboard() {
 
       {hasMarketPrice && (
         <div className="border-t mt-10 pb-10">
-          <h2 className="text-2xl font-bold pt-8 mb-4">
+          <div className="inline-block mt-8 p-2 bg-gradient-to-b from-[#53A0DA] to-[#2359B6] border-1 border-[#002656] rounded-sm">
+            <ItemImage
+              name={searchInput}
+              imgUrl={itemImageUrl || "/images/empty.png"}
+              size="lg"
+              className="border-1 border-[#002656] rounded-none"
+            />
+          </div>
+
+          <h2 className="text-2xl font-bold mt-4 mb-4">
             💰{" "}
             <span className="text-blue-600 mr-1">
               {searchQuery}({itemGender})

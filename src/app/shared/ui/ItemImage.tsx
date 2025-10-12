@@ -1,14 +1,26 @@
 import Image from "next/image";
+import { cn } from "../lib/utils";
 
-interface ItemImageProps {
+export interface ItemImageProps {
   name: string;
   imgUrl: string | null;
   size: "sm" | "lg";
+  className?: string;
 }
 
-export default function ItemImage({ name, imgUrl, size }: ItemImageProps) {
+export default function ItemImage({
+  name,
+  imgUrl,
+  size,
+  className,
+}: ItemImageProps) {
   return (
-    <figure className="relative flex-shrink-0 rounded-md overflow-hidden">
+    <figure
+      className={cn(
+        "relative flex-shrink-0 rounded-md overflow-hidden",
+        className
+      )}
+    >
       <Image
         src={imgUrl ?? "/images/empty.png"}
         alt={name}
