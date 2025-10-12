@@ -46,10 +46,6 @@ export default function Header() {
 
   return (
     <header className="py-8 max-w-5xl mx-auto flex items-center justify-between">
-      <Link href="/" className="text-3xl text-blue-600 font-bold">
-        Q-Market
-      </Link>
-
       <div className="ml-auto flex gap-2">
         {user ? (
           <DropdownMenu>
