@@ -158,6 +158,9 @@ export default function MarketPriceDashboard() {
           <p className="text-sm text-gray-500">
             * <b>거래 시세</b>: <b>판매 완료</b>된 가격 기준 (실거래가)
           </p>
+          <p className="text-sm text-gray-500">
+            * 극단값은 시세에서 제외됩니다.
+          </p>
 
           {/* 시세 */}
           <ul className="mt-4">
