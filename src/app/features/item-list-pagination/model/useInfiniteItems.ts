@@ -47,16 +47,20 @@ export function useInfiniteItems({
   gender,
   sold,
 }: useInfiniteItemsProps) {
+  const placeholder = initialItems
+    ? {
+        pages: [initialItems],
+        pageParams: [0], // 초기 pageParam (첫 페이지)
+      }
+    : undefined;
+
   return useInfiniteQuery({
     queryKey: ["items", search, sort, category, gender, sold],
     queryFn: ({ pageParam = 0 }) =>
       fetchClientItems(20, pageParam, search, sort, category, gender, sold),
     getNextPageParam: (lastPage, allPages) =>
       lastPage.length === 20 ? allPages.length * 20 : undefined,
-    initialData: {
-      pages: [initialItems],
-      pageParams: [0],
-    },
+    placeholderData: placeholder,
     initialPageParam: 0,
   });
 }
