@@ -2,15 +2,11 @@ import { supabase } from "@/shared/api/supabase-client";
 
 /**
  * 아이템 현재 판매가 시세 계산 함수
- * - 등록 10건 이상: 상하위 5% 트림 평균
- * - 등록 10건 미만: 중앙값(Median)
  */
 export async function getItemMarketPrice(itemName: string, itemGender: string) {
   if (!itemName || itemName.trim().length === 0) {
     return { price: "0", count: 0 };
   }
-
-  const TRIM_RATE = 0.05; // 상하위 5% (계산 제외)
 
   const { data: listings, error } = await supabase
     .from("items")
@@ -34,16 +30,7 @@ export async function getItemMarketPrice(itemName: string, itemGender: string) {
     .sort((a, b) => a - b);
   const count = prices.length;
 
-  // 10건 이상 → 트림 평균
-  if (count >= 10) {
-    const trimCount = Math.floor(count * TRIM_RATE);
-    const trimmed = prices.slice(trimCount, count - trimCount);
-    const mean =
-      trimmed.reduce((sum, val) => sum + val, 0) / (trimmed.length || 1);
-    return { price: mean.toFixed(0), count: listings.length };
-  }
-
-  // 10건 미만 → 중앙값
+  // 중앙값 적용
   if (count % 2 === 1) {
     return {
       price: prices[Math.floor(count / 2)].toFixed(0),
@@ -94,16 +81,7 @@ export async function getTradedMarketPrice(
     .sort((a, b) => a - b);
   const count = prices.length;
 
-  // 10건 이상 → 트림 평균
-  if (count >= 10) {
-    const trimCount = Math.floor(count * TRIM_RATE);
-    const trimmed = prices.slice(trimCount, count - trimCount);
-    const mean =
-      trimmed.reduce((sum, val) => sum + val, 0) / (trimmed.length || 1);
-    return { price: mean.toFixed(0), count: soldListings.length };
-  }
-
-  // 10건 미만 → 중앙값
+  // 중앙값 적용
   if (count % 2 === 1) {
     return {
       price: prices[Math.floor(count / 2)].toFixed(0),
