@@ -6,8 +6,8 @@ import { Toaster } from "sonner";
 import Header from "@/widgets/header/ui/Header";
 
 export const metadata: Metadata = {
-  title: "QPGG",
-  description: "큐플레이 아이템 판매 현황, 시세 조회",
+  title: "Q-Market",
+  description: "큐플레이 아이템 시세/판매 현황 조회",
 };
 
 export default async function RootLayout({
