@@ -97,26 +97,6 @@ export default function ItemCardList({ userId }: Props) {
 
   const isEmpty = !isLoading && items.length === 0;
 
-  if (isEmpty) {
-    return (
-      <>
-        <div className="flex w-full mb-8 justify-between">
-          <ButtonToMain />
-          <ItemUploadModal
-            onSuccess={() => {
-              refetchLimitInfo();
-              refetch();
-            }}
-          />
-        </div>
-
-        <div className="flex flex-col gap-4 items-center justify-center text-sm text-gray-500">
-          등록한 아이템이 없습니다.
-        </div>
-      </>
-    );
-  }
-
   return (
     <div className="pb-10">
       {/* 상단 컨트롤 영역 */}
@@ -156,6 +136,12 @@ export default function ItemCardList({ userId }: Props) {
         </p>
       </div>
 
+      {isEmpty && (
+        <div className="flex flex-col gap-4 pt-8 items-center justify-center text-sm text-gray-500">
+          등록된 아이템이 없습니다. 판매중인 아이템을 등록해주세요.
+        </div>
+      )}
+
       {/* 아이템 리스트 */}
       {isLoading ? (
         <div className="text-center">
@@ -180,8 +166,9 @@ export default function ItemCardList({ userId }: Props) {
           </p>
         ) : (
           !isLoading &&
+          !isEmpty &&
           !hasNextPage && (
-            <p className="text-center mt-4 text-gray-500 text-sm">
+            <p className="text-center mt-4 text-gray-500 text-sm pt-4 pb-20">
               마지막 페이지입니다.
             </p>
           )

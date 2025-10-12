@@ -167,12 +167,13 @@ export default function ClientMoreItems({
 
       {/* 무한 스크롤 */}
       <div ref={loadMoreRef} className="h-10">
-        {isFetching ? (
+        {isFetchingNextPage && (
           <p className="text-center mt-4 text-gray-500 text-sm">
             아이템 로드 중...
           </p>
-        ) : hasNextPage ? null : (
-          <p className="text-center mt-4 text-gray-500 text-sm">
+        )}
+        {!isFetching && allItems.length > 0 && !hasNextPage && (
+          <p className="text-center mt-4 text-gray-500 text-sm pb-20">
             마지막 페이지입니다.
           </p>
         )}
