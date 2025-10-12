@@ -2,7 +2,7 @@
 
 import { useInfiniteItems } from "@/features/item-list-pagination/model/useInfiniteItems";
 import { Item } from "@/entities/item/model/types";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { ItemTable } from "@/widgets/item-list/ui/ItemTable";
 import { useState } from "react";
 import SearchInput from "@/features/item-search/ui/SearchInput";
@@ -19,7 +19,6 @@ import { ItemGenderKey } from "@/features/item-search/ui/ItemGenderFilter";
 import { Label } from "@/shared/ui/label";
 import useInfiniteScroll from "@/shared/hooks/useInfiniteScroll";
 import { useUser } from "@/shared/hooks/useUser";
-import LoadingSpinner from "@/shared/ui/LoadingSpinner";
 
 interface ClientMoreItemsProps {
   initialItems: Item[];
@@ -48,7 +47,6 @@ export default function ClientMoreItems({
     hasNextPage,
     isFetchingNextPage,
     error,
-    refetch,
     isFetching,
   } = useInfiniteItems({
     initialItems,
@@ -63,10 +61,6 @@ export default function ClientMoreItems({
     if (!data) return [];
     return data.pages.flatMap((page) => page);
   }, [data]);
-
-  useEffect(() => {
-    refetch();
-  }, [sort, searchQuery, filters, refetch]);
 
   const { loadMoreRef } = useInfiniteScroll({
     fetchNextPage,
@@ -162,12 +156,14 @@ export default function ClientMoreItems({
       </div>
 
       {/* 아이템 목록 */}
-      <ItemTable items={allItems} isLoading={isFetchingNextPage} />
+      <ItemTable items={allItems} isLoading={isFetching} />
 
       {/* 무한 스크롤 */}
       <div ref={loadMoreRef} className="h-10">
         {isFetching ? (
-          <LoadingSpinner />
+          <p className="text-center mt-4 text-gray-500 text-sm">
+            아이템 로드 중...
+          </p>
         ) : hasNextPage ? null : (
           <p className="text-center mt-4 text-gray-500 text-sm">
             마지막 페이지입니다.
