@@ -49,7 +49,7 @@ const fetchMyItems = async (
   return data as Item[];
 };
 
-export default function ItemCardWidget({ userId }: Props) {
+export default function ItemCardList({ userId }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
   const [soldFilter, setSoldFilter] = useState<boolean | null>(null); // 판매 상태 필터
 

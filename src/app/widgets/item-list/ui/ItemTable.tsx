@@ -14,12 +14,12 @@ import { useState } from "react";
 import ItemImage from "@/shared/ui/ItemImage";
 import { formatDate } from "@/shared/lib/formatters";
 
-interface ItemListWidgetProps {
+interface ItemTableProps {
   items: Item[];
   isLoading: boolean;
 }
 
-export const ItemListWidget = ({ items, isLoading }: ItemListWidgetProps) => {
+export const ItemTable = ({ items, isLoading }: ItemTableProps) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (

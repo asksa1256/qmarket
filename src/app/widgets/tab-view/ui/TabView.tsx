@@ -1,6 +1,6 @@
 "use client";
 
-import ClientMoreItems from "@/widgets/item-list/ui/ClientMoreItems";
+import SalesStatusWidget from "@/widgets/item-list/ui/SalesStatusWidget";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Item } from "@/entities/item/model/types";
 import MarketPriceDashboard from "@/widgets/market-price-dashboard/ui/MarketPriceDashboard";
@@ -22,7 +22,7 @@ export default function TabView({ initialItems }: Props) {
       </TabsList>
 
       <TabsContent value="items">
-        <ClientMoreItems initialItems={initialItems} />
+        <SalesStatusWidget initialItems={initialItems} />
       </TabsContent>
 
       <TabsContent value="marketPrices">

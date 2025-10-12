@@ -58,7 +58,6 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
       item_name: item.item_name,
       price: item.price,
       is_sold: item.is_sold,
-      // is_online: item.is_online ? "online" : "offline",
       item_source: Object.keys(ITEM_SOURCES_MAP).find(
         (key) =>
           ITEM_SOURCES_MAP[key as keyof typeof ITEM_SOURCES_MAP] ===
@@ -89,7 +88,6 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
         item_name: sanitize(values.item_name),
         price: values.price,
         is_sold: values.is_sold,
-        // is_online: values.is_online === "online",
         item_source: ITEM_SOURCES_MAP[values.item_source],
         item_gender: ITEM_GENDER_MAP[values.item_gender],
         category: ITEM_CATEGORY_MAP[values.category],
@@ -114,7 +112,7 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
       setOpen(false);
 
       // 캐시 업데이트 (UI 즉시 반영)
-      queryClient.setQueryData<InfiniteData<Item[]> | undefined>(
+      queryClient.setQueryData<InfiniteData<Item[]>>(
         ["my-items", item.user_id],
         (oldData) => {
           if (!oldData) return oldData;

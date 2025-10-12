@@ -3,7 +3,7 @@
 import { useInfiniteItems } from "@/features/item-list-pagination/model/useInfiniteItems";
 import { Item } from "@/entities/item/model/types";
 import { useEffect, useMemo } from "react";
-import { ItemListWidget } from "@/widgets/item-list/ui/ItemListWidget";
+import { ItemTable } from "@/widgets/item-list/ui/ItemTable";
 import { useState } from "react";
 import SearchInput from "@/features/item-search/ui/SearchInput";
 import ItemUploadModal from "@/features/item-upload-modal/ui/ItemUploadModal";
@@ -160,7 +160,7 @@ export default function ClientMoreItems({
       </div>
 
       {/* 아이템 목록 */}
-      <ItemListWidget items={allItems} isLoading={isFetchingNextPage} />
+      <ItemTable items={allItems} isLoading={isFetchingNextPage} />
 
       {/* 무한 스크롤 */}
       <div ref={loadMoreRef} className="h-10">

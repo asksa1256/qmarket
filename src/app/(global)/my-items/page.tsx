@@ -1,4 +1,4 @@
-import ItemCardWidget from "@/widgets/item-list/ui/ItemCardWidget";
+import ItemCardList from "@/widgets/item-list/ui/ItemCardList";
 import { createClient } from "@/shared/api/supabase-server-cookie";
 
 export default async function MyItemsPage() {
@@ -32,7 +32,7 @@ export default async function MyItemsPage() {
         </p>
       </div>
 
-      <ItemCardWidget userId={user.id} />
+      <ItemCardList userId={user.id} />
     </section>
   );
 }
