@@ -38,7 +38,7 @@ export async function GET(req: Request) {
   const code = url.searchParams.get("code");
 
   if (!code)
-    return NextResponse.redirect(toAbsoluteUrl(req, "/login?error=no_code"));
+    return NextResponse.redirect(toAbsoluteUrl(req, "/signin?error=no_code"));
 
   let supabaseAdmin;
   try {
@@ -48,7 +48,7 @@ export async function GET(req: Request) {
     return NextResponse.redirect(
       toAbsoluteUrl(
         req,
-        `/login?error=admin_client_fail&msg=${encodeURIComponent(String(e))}`
+        `/signin?error=admin_client_fail&msg=${encodeURIComponent(String(e))}`
       )
     );
   }
@@ -64,7 +64,7 @@ export async function GET(req: Request) {
       return NextResponse.redirect(
         toAbsoluteUrl(
           req,
-          `/login?error=oauth_failed&msg=${encodeURIComponent(
+          `/signin?error=oauth_failed&msg=${encodeURIComponent(
             error?.message || "unknown"
           )}`
         )
@@ -85,7 +85,9 @@ export async function GET(req: Request) {
 
       // 브라우저 세션 제거
       await supabase.auth.signOut();
-      return NextResponse.redirect(toAbsoluteUrl(req, "/login?error=no_token"));
+      return NextResponse.redirect(
+        toAbsoluteUrl(req, "/signin?error=no_token")
+      );
     }
 
     // 3. Discord 길드 멤버 확인
@@ -106,7 +108,7 @@ export async function GET(req: Request) {
       }
       await supabase.auth.signOut();
       return NextResponse.redirect(
-        toAbsoluteUrl(req, "/login?error=guild_fetch_failed")
+        toAbsoluteUrl(req, "/signin?error=guild_fetch_failed")
       );
     }
 
@@ -135,7 +137,7 @@ export async function GET(req: Request) {
     return NextResponse.redirect(
       toAbsoluteUrl(
         req,
-        `/login?error=critical_error&msg=${encodeURIComponent(String(e))}`
+        `/signin?error=critical_error&msg=${encodeURIComponent(String(e))}`
       )
     );
   }
