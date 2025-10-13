@@ -16,6 +16,8 @@ import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
 import ItemImage from "@/shared/ui/ItemImage";
 import getItemImage from "@/shared/lib/getItemImage";
 import Image from "next/image";
+import CreateReportModal from "@/features/report/ui/CreateReportModal";
+import { useUser } from "@/shared/hooks/useUser";
 
 export default function MarketPriceDashboard() {
   const [searchInput, setSearchInput] = useState("");
@@ -30,6 +32,8 @@ export default function MarketPriceDashboard() {
 
   // 거래 내역 상태
   const [saleHistory, setSaleHistory] = useState<SaleHistory[]>([]);
+
+  const { data: user } = useUser();
 
   const handleSearch = useCallback(async () => {
     const trimmedInput = searchInput.trim();
@@ -81,7 +85,7 @@ export default function MarketPriceDashboard() {
         </p>
         <p className="text-gray-500 text-sm">
           * 시세 조작이 의심될 경우, 우측 상단의 신고 버튼을 눌러 제보해주세요.
-          (회원 기능)
+          (허위 신고를 방지하기 위해 로그인 후 신고 가능합니다.)
         </p>
       </div>
 
@@ -149,6 +153,11 @@ export default function MarketPriceDashboard() {
               {searchQuery}({itemGender})
             </span>
             시세 조회
+            {user && (
+              <span className="ml-2">
+                <CreateReportModal />
+              </span>
+            )}
           </h2>
 
           <p className="text-sm text-gray-500">

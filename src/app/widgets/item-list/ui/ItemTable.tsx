@@ -15,6 +15,8 @@ import ItemImage from "@/shared/ui/ItemImage";
 import { formatDate } from "@/shared/lib/formatters";
 import { copyToClipboard } from "@/shared/lib/copyToClipboard";
 import LoadingSpinner from "@/shared/ui/LoadingSpinner";
+import CreateReportModal from "@/features/report/ui/CreateReportModal";
+import { useUser } from "@/shared/hooks/useUser";
 
 interface ItemTableProps {
   items: Item[];
@@ -23,6 +25,7 @@ interface ItemTableProps {
 
 export const ItemTable = ({ items, isLoading }: ItemTableProps) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const { data: user } = useUser();
 
   return (
     <div className="space-y-4">
@@ -54,6 +57,11 @@ export const ItemTable = ({ items, isLoading }: ItemTableProps) => {
               <TableHead className="text-center font-medium text-sm text-gray-700">
                 등록일
               </TableHead>
+              {user && (
+                <TableHead className="text-center font-medium text-sm text-gray-700">
+                  신고
+                </TableHead>
+              )}
             </TableRow>
           </TableHeader>
 
@@ -146,6 +154,11 @@ export const ItemTable = ({ items, isLoading }: ItemTableProps) => {
                     <TableCell className="text-center text-sm text-gray-500">
                       {formatDate(item.created_at)}
                     </TableCell>
+                    {user && (
+                      <TableCell className="text-center text-sm text-gray-500">
+                        <CreateReportModal />
+                      </TableCell>
+                    )}
                   </TableRow>
                 </PopoverTrigger>
 

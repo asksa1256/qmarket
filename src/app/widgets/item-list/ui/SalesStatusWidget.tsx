@@ -85,19 +85,23 @@ export default function ClientMoreItems({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-xl border p-4 mt-4 flex justify-between">
+      <div className="rounded-xl border p-4 mt-4 flex flex-col gap-1">
         <p className="text-sm text-gray-500">
           * 판매 아이템 등록은
           <b className="mx-1">&apos;내 아이템&apos;</b>
           에서 할 수 있습니다.
+          <Link
+            href="/my-items"
+            className="text-sm ml-1 underline underline-offset-4 text-gray-500 font-medium hover:text-blue-600 hover:font-bold"
+          >
+            바로가기
+          </Link>
         </p>
 
-        <Link
-          href="/my-items"
-          className="text-sm ml-1 underline underline-offset-4 text-gray-500 font-medium hover:text-blue-600 hover:font-bold"
-        >
-          바로가기
-        </Link>
+        <p className="text-sm text-gray-500">
+          * 시세 조작이 의심되는 아이템은 신고해주세요. (허위 신고를 방지하기
+          위해 로그인 후 신고 가능합니다.)
+        </p>
       </div>
 
       <div className="flex gap-4 items-center p-4 rounded-xl border border-gray-200 shadow-sm bg-white">
