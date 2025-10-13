@@ -131,10 +131,7 @@ const CreateReportModal = () => {
             </div>
 
             <div className="flex flex-col justify-center gap-2">
-              <label
-                htmlFor="discord_id"
-                className="text-right text-sm font-medium"
-              >
+              <label htmlFor="discord_id" className="text-sm font-medium">
                 신고 대상 디스코드 아이디
               </label>
               <Input
