@@ -8,15 +8,13 @@ export interface SaleHistory {
   transactions: Transaction[];
 }
 
-// items 테이블 쿼리 결과 타입
 interface ItemRow {
   item_name: string;
   price: number;
-  updated_at: string; // ISO 문자열
+  updated_at: string;
   is_sold?: boolean;
 }
 
-// RPC 결과 타입 정의
 interface DailySaleHistoryRow {
   sale_date: string;
   avg_price: number;

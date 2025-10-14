@@ -15,8 +15,6 @@ export default async function getItemImage(
     return "";
   }
 
-  console.log(data);
-
   if (data && data.length > 0) {
     return data[0].image;
   }
