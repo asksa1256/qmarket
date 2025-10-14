@@ -4,6 +4,7 @@ import { QueryProvider } from "@/shared/providers/QueryProvider";
 import { pretendard } from "@/shared/config/fonts";
 import { Toaster } from "sonner";
 import Header from "@/widgets/header/ui/Header";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: "Q-Market",
@@ -29,6 +30,7 @@ export default async function RootLayout({
             }}
           />
         </QueryProvider>
+        <Analytics />
       </body>
     </html>
   );
