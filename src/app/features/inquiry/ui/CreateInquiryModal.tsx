@@ -72,9 +72,9 @@ const CreateInquiryModal = () => {
 
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader className="mb-4">
-          <DialogTitle>문의하기</DialogTitle>
+          <DialogTitle className="text-left">문의하기</DialogTitle>
           {!user && (
-            <DialogDescription>
+            <DialogDescription className="text-left">
               * 신고 기능은 로그인 후 이용할 수 있습니다.
             </DialogDescription>
           )}
