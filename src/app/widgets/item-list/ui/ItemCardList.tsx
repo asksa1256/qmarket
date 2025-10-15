@@ -100,20 +100,23 @@ export default function ItemCardList({ userId }: Props) {
   return (
     <div className="pb-10">
       {/* 상단 컨트롤 영역 */}
-      <div className="flex w-full mb-4 justify-between">
+      <div className="flex flex-wrap md:flex-row gap-4 md:gap-0 w-full mb-4 justify-between">
         <ButtonToMain />
 
-        <div className="flex gap-2">
-          <div className="mb-4">
+        <div className="flex flex-wrap md:flex-row justify-end md:justify-start gap-2 w-full md:w-auto">
+          <div className="md:mb-4">
             <ItemSoldFilter value={soldFilter} onChange={setSoldFilter} />
           </div>
 
-          <SearchInput
-            value={searchQuery}
-            className="border border-gray-300 rounded-lg shadow-sm text-sm w-auto"
-            onSearch={(value: string) => setSearchQuery(value)}
-          />
-
+          <div className="w-full text-right md:w-auto md:text-left">
+            <SearchInput
+              value={searchQuery}
+              className="border border-gray-300 rounded-lg shadow-sm text-sm w-auto"
+              onSearch={(value: string) => setSearchQuery(value)}
+            />
+          </div>
+        </div>
+        <div className="w-full text-right">
           <ItemUploadModal
             onSuccess={() => {
               refetchLimitInfo();
@@ -151,7 +154,7 @@ export default function ItemCardList({ userId }: Props) {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-6 mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4">
           {filteredItems.map((item) => (
             <ItemCard key={item.id} item={item} />
           ))}
