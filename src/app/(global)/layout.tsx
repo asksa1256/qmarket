@@ -5,6 +5,7 @@ import { pretendard } from "@/shared/config/fonts";
 import { Toaster } from "sonner";
 import Header from "@/widgets/header/ui/Header";
 import { Analytics } from "@vercel/analytics/next";
+import Footer from "@/shared/ui/Footer";
 
 export const metadata: Metadata = {
   title: "Q-Market",
@@ -22,6 +23,7 @@ export default async function RootLayout({
         <QueryProvider>
           <Header />
           {children}
+          <Footer />
           <Toaster
             position="bottom-center"
             richColors
