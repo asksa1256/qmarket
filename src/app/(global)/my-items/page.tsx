@@ -10,8 +10,7 @@ export default async function MyItemsPage() {
 
   return (
     <section className="max-w-5xl mx-auto">
-      {/* {!user ? <LoginRequiredMessage /> : <MyItemsContent userId={user.id} />} */}
-      <MyItemsContent userId="76507b38-6db4-4ddf-bae3-eb9f4a4f82c0" />
+      {!user ? <LoginRequiredMessage /> : <MyItemsContent userId={user.id} />}
     </section>
   );
 }
