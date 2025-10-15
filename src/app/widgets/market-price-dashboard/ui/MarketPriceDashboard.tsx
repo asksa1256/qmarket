@@ -101,7 +101,7 @@ export default function MarketPriceDashboard() {
       </div>
 
       {/* 검색창 */}
-      <div className="flex flex-1 items-center justify-center mt-8 gap-8">
+      <div className="flex flex-wrap flex-1 items-center justify-center mt-8 gap-4 md:gap-8">
         {/* 성별 선택 */}
         <div className="flex items-center justify-center">
           <RadioGroup
