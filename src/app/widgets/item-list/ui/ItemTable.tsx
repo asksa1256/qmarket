@@ -30,7 +30,10 @@ export const ItemTable = ({ items, isLoading }: ItemTableProps) => {
   return (
     <div className="space-y-4">
       {isLoading ? (
-        <LoadingSpinner />
+        <>
+          <LoadingSpinner />
+          <p className="text-gray-500 mt-4 text-center text-sm">로딩중...</p>
+        </>
       ) : (
         <Table className="min-w-full border border-gray-200 rounded-lg shadow-sm overflow-hidden">
           <TableCaption className="sr-only">아이템 목록</TableCaption>

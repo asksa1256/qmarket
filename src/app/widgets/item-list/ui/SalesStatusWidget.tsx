@@ -166,7 +166,10 @@ export default function ClientMoreItems({
 
       {/* 아이템 목록 */}
       <div className="mt-4">
-        <ItemTable items={allItems} isLoading={isFetching} />
+        <ItemTable
+          items={allItems}
+          isLoading={isFetching && !isFetchingNextPage}
+        />
       </div>
 
       {/* 무한 스크롤 */}

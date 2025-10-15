@@ -36,8 +36,7 @@ const useInfiniteScroll = <TData = unknown, TError = unknown>({
           fetchNextPage();
         }
       },
-      // 뷰포트에 요소가 100% (1.0) 들어왔을 때 콜백 실행
-      { threshold: 1.0 }
+      { threshold: 0.3 }
     );
 
     observer.observe(loadMoreRef.current);
