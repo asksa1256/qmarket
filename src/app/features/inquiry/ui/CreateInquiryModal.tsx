@@ -10,15 +10,15 @@ import {
   DialogTrigger,
 } from "@/shared/ui/dialog";
 import { Textarea } from "@/shared/ui/textarea";
-import { useState, type FormEvent } from "react";
+import { ReactNode, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/shared/api/supabase-client";
 import { sanitize } from "@/shared/lib/sanitize";
 import { Input } from "@/shared/ui/input";
-import { BadgeQuestionMark } from "lucide-react";
+import { MailQuestionMark } from "lucide-react";
 import { useUser } from "@/shared/hooks/useUser";
 
-const CreateInquiryModal = () => {
+const CreateInquiryModal = ({ trigger }: { trigger?: ReactNode }) => {
   const [contact, setContact] = useState("");
   const [inquiry, setInquiry] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -65,9 +65,11 @@ const CreateInquiryModal = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="icon">
-          <BadgeQuestionMark />
-        </Button>
+        {trigger || (
+          <Button variant="outline" size="icon">
+            <MailQuestionMark />
+          </Button>
+        )}
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[425px]">
