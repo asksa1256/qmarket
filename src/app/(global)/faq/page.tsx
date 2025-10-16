@@ -35,7 +35,8 @@ export default function FAQPage() {
 
         <AccordionItem value="faq-2" className="border-b">
           <AccordionTrigger className="text-lg font-semibold text-left hover:no-underline py-4 text-gray-700">
-            판매자가 직접 '판매 완료'로 수정하는데, 시세 조작 방지가 가능한가요?
+            판매자가 직접 &apos;판매 완료&apos;로 수정하는데, 시세 조작 방지가
+            가능한가요?
           </AccordionTrigger>
 
           <AccordionContent className="text-gray-600 p-4 bg-gray-50 border-t">
