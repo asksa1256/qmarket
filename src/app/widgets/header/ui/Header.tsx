@@ -4,7 +4,6 @@ import { Button } from "@/shared/ui/button";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/shared/hooks/useUser";
 import { toast } from "sonner";
-import Link from "next/link";
 import CreateInquiryModal from "@/features/inquiry/ui/CreateInquiryModal";
 import CreateReportModal from "@/features/report/ui/CreateReportModal";
 import { login, logout } from "@/features/sign-in-form/model/actions";
@@ -18,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
 import { useQueryClient } from "@tanstack/react-query";
+import { BadgeQuestionMark } from "lucide-react";
 
 export default function Header() {
   const router = useRouter();
@@ -79,6 +79,14 @@ export default function Header() {
             <DiscordIcon className="w-6 h-6 text-white" /> 로그인
           </Button>
         )}
+
+        <Button
+          size="icon"
+          variant="outline"
+          onClick={() => router.push("/faq")}
+        >
+          <BadgeQuestionMark />
+        </Button>
 
         <CreateInquiryModal />
 
