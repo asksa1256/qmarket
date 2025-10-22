@@ -23,6 +23,7 @@ export default function MarketPriceDashboard() {
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [itemGender, setItemGender] = useState("남");
+  const [displayGender, setDisplayGender] = useState("남"); // 성별 선택 시 검색 결과 리렌더링 방지 (검색 버튼 클릭 시에만 리렌더링 용도)
   const [itemImageUrl, setItemImageUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -50,6 +51,7 @@ export default function MarketPriceDashboard() {
 
     setIsLoading(true);
     setSearchQuery(trimmedInput);
+    setDisplayGender(itemGender); // 검색 시에만 성별 표시 업데이트
 
     try {
       const [market, traded, history, itemImage] = await Promise.all([
@@ -82,13 +84,6 @@ export default function MarketPriceDashboard() {
   }, [searchInput, itemGender]);
 
   const hasMarketPrice = marketPrice.price !== "" && tradedPrice.price !== "";
-
-  // itemGender 변경 후, searchQuery가 존재하면 자동 재조회
-  useEffect(() => {
-    if (searchQuery.trim()) {
-      handleSearch();
-    }
-  }, [itemGender, handleSearch, searchQuery]);
 
   return (
     <section className="max-w-5xl mx-auto">
@@ -167,7 +162,7 @@ export default function MarketPriceDashboard() {
               className="inline-block mr-1"
             />
             <span className="text-blue-600 mr-1">
-              {searchQuery}({itemGender})
+              {searchQuery}({displayGender})
             </span>
             시세 조회
             {user && (
