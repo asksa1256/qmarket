@@ -197,11 +197,11 @@ export default function MarketPriceDashboard() {
                   원
                 </span>
               )}
-              {marketPrice.count > 0 && marketPrice.count < 10 && (
+              {/* {marketPrice.count > 0 && marketPrice.count < 10 && (
                 <p className="inline-block ml-1 text-sm text-gray-500">
                   (판매중인 아이템이 10개 미만이므로 정확하지 않을 수 있습니다.)
                 </p>
-              )}
+              )} */}
             </li>
             <li>
               - 거래 시세:
@@ -224,11 +224,11 @@ export default function MarketPriceDashboard() {
                   </b>
                 </>
               )}
-              {tradedPrice.count > 0 && tradedPrice.count < 10 && (
+              {/* {tradedPrice.count > 0 && tradedPrice.count < 10 && (
                 <p className="inline-block ml-1 text-sm text-gray-500">
                   (거래 내역이 10개 미만이므로 정확하지 않을 수 있습니다.)
                 </p>
-              )}
+              )} */}
             </li>
           </ul>
 
