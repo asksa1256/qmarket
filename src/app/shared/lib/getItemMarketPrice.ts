@@ -14,6 +14,7 @@ export async function getItemMarketPrice(itemName: string, itemGender: string) {
     .eq("item_name", itemName)
     .eq("item_gender", itemGender)
     .order("price", { ascending: true }) // 최신순
+    .eq("is_sold", false) // 판매중인 레코드만 선택
     .limit(50); // 최신순 상위 50개 조회 제한
 
   if (error) {
