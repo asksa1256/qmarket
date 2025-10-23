@@ -2,11 +2,23 @@ import ItemRankingTable from "@/features/item-ranking/ui/ItemRankingTable";
 import { supabase } from "@/shared/api/supabase-client";
 import { useState, useEffect } from "react";
 import { RankItem } from "@/entities/item/model/types";
+import ItemMultiFilter from "@/widgets/item-multi-filter/ui/ItemMultiFilter";
+import { ItemGenderKey } from "@/features/item-search/ui/ItemGenderFilter";
 
 export default function ItemRankingView() {
   const [items, setItems] = useState<RankItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const [filters, setFilters] = useState<{
+    category: string | null;
+    gender: ItemGenderKey | null;
+    isSold: boolean | null;
+  }>({
+    category: null,
+    gender: null,
+    isSold: null,
+  });
 
   useEffect(() => {
     const fetchSoldItems = async () => {
@@ -51,6 +63,13 @@ export default function ItemRankingView() {
   return (
     <>
       <h3 className="font-bold text-xl mb-4">시세 랭킹</h3>
+      <ItemMultiFilter
+        category={filters.category}
+        gender={filters.gender}
+        isSold={filters.isSold}
+        onChange={setFilters}
+        className="mb-4"
+      />
       <ItemRankingTable items={items} />;
     </>
   );

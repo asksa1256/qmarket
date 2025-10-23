@@ -10,7 +10,8 @@ import { Label } from "@/shared/ui/label";
 interface ItemMultiFilterProps {
   category: string | null;
   gender: ItemGenderKey | null;
-  isSold: boolean | null;
+  isSold?: boolean | null;
+  className?: string;
   onChange: (filters: {
     category: string | null;
     gender: ItemGenderKey | null;
@@ -23,18 +24,19 @@ export default function ItemMultiFilter({
   gender,
   isSold,
   onChange,
+  className,
 }: ItemMultiFilterProps) {
   const handleCategoryChange = (value: string | null) =>
-    onChange({ category: value, gender, isSold });
+    onChange({ category: value, gender, isSold: isSold || null });
 
   const handleGenderChange = (value: ItemGenderKey | null) =>
-    onChange({ category, gender: value, isSold });
+    onChange({ category, gender: value, isSold: isSold || null });
 
   const handleisSoldChange = (value: boolean | null) =>
     onChange({ category, gender, isSold: value });
 
   return (
-    <>
+    <div className={className}>
       {/* 카테고리 */}
       <div className="flex flex-wrap gap-4">
         <div className="flex flex-col gap-1">
@@ -52,11 +54,15 @@ export default function ItemMultiFilter({
         </div>
 
         {/* 판매 상태 */}
-        <div className="flex flex-col gap-1">
-          <Label className="text-sm text-gray-600 font-medium">판매 상태</Label>
-          <ItemSoldFilter value={isSold} onChange={handleisSoldChange} />
-        </div>
+        {isSold && (
+          <div className="flex flex-col gap-1">
+            <Label className="text-sm text-gray-600 font-medium">
+              판매 상태
+            </Label>
+            <ItemSoldFilter value={isSold} onChange={handleisSoldChange} />
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 }
