@@ -16,6 +16,7 @@ import CreateReportModal from "@/features/report/ui/CreateReportModal";
 import { RankItem } from "@/entities/item/model/types";
 import { useUser } from "@/shared/hooks/useUser";
 import { useState } from "react";
+import { cn } from "@/shared/lib/utils";
 
 interface ItemRankingTableProps {
   items: RankItem[];
@@ -45,13 +46,16 @@ export default function ItemRankingTable({
               <TableHeader className="bg-gray-100">
                 <TableRow>
                   <TableHead className="text-center font-medium text-sm text-gray-700">
-                    상품명
+                    순위
+                  </TableHead>
+                  <TableHead className="font-medium text-center text-sm text-gray-700">
+                    아이템명
                   </TableHead>
                   <TableHead className="text-center font-medium text-sm text-gray-700">
                     가격 (사이버머니)
                   </TableHead>
                   <TableHead className="text-center font-medium text-sm text-gray-700">
-                    거래일자
+                    최근 거래일자
                   </TableHead>
                   {user && (
                     <TableHead className="text-center font-medium text-sm text-gray-700">
@@ -76,6 +80,14 @@ export default function ItemRankingTable({
                         onMouseEnter={() => setOpenIndex(idx)}
                         onMouseLeave={() => setOpenIndex(null)}
                       >
+                        <TableCell
+                          className={cn(
+                            "text-center text-gray-800",
+                            idx + 1 < 11 && "font-bold"
+                          )}
+                        >
+                          {idx + 1}
+                        </TableCell>
                         <TableCell className="text-center font-bold text-gray-800">
                           <div className="flex items-center gap-4 mx-auto w-[65%]">
                             <ItemImage
