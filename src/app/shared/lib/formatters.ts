@@ -21,3 +21,16 @@ export const formatDate = (targetDate: string) => {
 
   return finalFormatted;
 };
+
+export const formatDateYMD = (targetDate: string) => {
+  if (!targetDate) return "";
+
+  const date = new Date(targetDate);
+  const koreaDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+
+  const year = String(koreaDate.getFullYear()).slice(2);
+  const month = String(koreaDate.getMonth() + 1).padStart(2, "0");
+  const day = String(koreaDate.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};

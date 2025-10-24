@@ -10,7 +10,7 @@ import {
 import { Badge } from "@/shared/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import ItemImage from "@/shared/ui/ItemImage";
-import { formatDate } from "@/shared/lib/formatters";
+import { formatDateYMD } from "@/shared/lib/formatters";
 import LoadingSpinner from "@/shared/ui/LoadingSpinner";
 import CreateReportModal from "@/features/report/ui/CreateReportModal";
 import { RankItem } from "@/entities/item/model/types";
@@ -51,7 +51,7 @@ export default function ItemRankingTable({
                     가격 (사이버머니)
                   </TableHead>
                   <TableHead className="text-center font-medium text-sm text-gray-700">
-                    거래일
+                    거래일자
                   </TableHead>
                   {user && (
                     <TableHead className="text-center font-medium text-sm text-gray-700">
@@ -71,8 +71,6 @@ export default function ItemRankingTable({
                     <PopoverTrigger asChild>
                       <TableRow
                         className={`cursor-default ${
-                          item.is_sold ? "opacity-40" : "opacity-100"
-                        } ${
                           idx % 2 === 0 ? "bg-white" : "bg-gray-50"
                         } hover:bg-gray-100 transition-colors`}
                         onMouseEnter={() => setOpenIndex(idx)}
@@ -92,7 +90,7 @@ export default function ItemRankingTable({
                           {item.price.toLocaleString()}
                         </TableCell>
                         <TableCell className="text-center text-sm text-gray-500">
-                          {formatDate(item.updated_at)}
+                          {formatDateYMD(item.updated_at)}
                         </TableCell>
                         {user && (
                           <TableCell className="text-center text-sm text-gray-500">
@@ -168,7 +166,7 @@ export default function ItemRankingTable({
                   </div>
 
                   <span className="text-gray-400 col-span-2">
-                    - 거래일자: {formatDate(item.updated_at)}
+                    - 거래일자: {formatDateYMD(item.updated_at)}
                   </span>
                 </div>
 

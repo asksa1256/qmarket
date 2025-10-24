@@ -2,7 +2,7 @@
 
 import ItemRankingTable from "@/features/item-ranking/ui/ItemRankingTable";
 import { supabase } from "@/shared/api/supabase-client";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import ItemMultiFilter from "@/widgets/item-multi-filter/ui/ItemMultiFilter";
 import { ItemGenderKey } from "@/features/item-search/ui/ItemGenderFilter";
 import { useInfiniteQuery } from "@tanstack/react-query";
