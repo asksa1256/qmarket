@@ -253,11 +253,6 @@ export default function MarketPriceDashboard() {
           </div>
         </div>
       )}
-
-      {/* 시세 랭킹 */}
-      <article className="mt-8">
-        <ItemRankingView />
-      </article>
     </section>
   );
 }
