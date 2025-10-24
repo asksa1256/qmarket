@@ -5,14 +5,21 @@ import { supabase } from "@/shared/api/supabase-client";
 import { useState } from "react";
 import ItemMultiFilter from "@/widgets/item-multi-filter/ui/ItemMultiFilter";
 import { ItemGenderKey } from "@/features/item-search/ui/ItemGenderFilter";
+import { ItemCategoryKey } from "@/features/item-search/ui/ItemCategoryFilter";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import useInfiniteScroll from "@/shared/hooks/useInfiniteScroll";
+import SearchInput from "@/features/item-search/ui/SearchInput";
+import { ITEM_CATEGORY_MAP, ITEM_GENDER_MAP } from "@/shared/config/constants";
+import { RefreshCcw } from "lucide-react";
+import { Button } from "@/shared/ui/button";
 
 const ITEMS_PER_PAGE = 20;
 
 export default function ItemRankingView() {
+  const [searchInput, setSearchInput] = useState("");
+
   const [filters, setFilters] = useState<{
-    category: string | null;
+    category: ItemCategoryKey | null;
     gender: ItemGenderKey | null;
   }>({
     category: null,
@@ -29,15 +36,15 @@ export default function ItemRankingView() {
       .eq("is_sold", true);
 
     if (filters.category) {
-      query = query.eq("category", filters.category);
+      query = query.eq("category", ITEM_CATEGORY_MAP[filters.category]);
     }
 
     if (filters.gender) {
-      const genderMap: Record<ItemGenderKey, string> = {
-        w: "여",
-        m: "남",
-      };
-      query = query.eq("item_gender", genderMap[filters.gender]);
+      query = query.eq("item_gender", ITEM_GENDER_MAP[filters.gender]);
+    }
+
+    if (searchInput.trim()) {
+      query = query.ilike("item_name", `%${searchInput.trim()}%`);
     }
 
     const { data, error } = await query
@@ -61,7 +68,7 @@ export default function ItemRankingView() {
     isLoading,
     error,
   } = useInfiniteQuery({
-    queryKey: ["ranked-items", filters],
+    queryKey: ["ranked-items", filters, searchInput],
     queryFn: fetchItems,
     getNextPageParam: (lastPage) => lastPage.nextPage,
     initialPageParam: 0,
@@ -83,6 +90,11 @@ export default function ItemRankingView() {
 
   const allItems = data?.pages.flatMap((page) => page.items) || [];
 
+  const handleResetFilter = () => {
+    setSearchInput("");
+    setFilters({ category: null, gender: null });
+  };
+
   return (
     <section className="mt-4">
       <div className="rounded-xl border p-4 mt-4 mb-8">
@@ -95,12 +107,32 @@ export default function ItemRankingView() {
         </p>
       </div>
 
+      {/* 필터 */}
       <ItemMultiFilter
         category={filters.category}
         gender={filters.gender}
         onChange={setFilters}
         className="mb-4"
       />
+
+      {/* 검색바 */}
+      <div className="flex gap-2">
+        <SearchInput
+          value={searchInput}
+          className="text-sm w-auto"
+          onSearch={(e: string) => setSearchInput(e)}
+        />
+      </div>
+
+      {/* 초기화 버튼 */}
+      <Button
+        variant="outline"
+        className="self-end ml-auto"
+        onClick={handleResetFilter}
+      >
+        <RefreshCcw />
+        초기화
+      </Button>
 
       <ItemRankingTable items={allItems} />
 
