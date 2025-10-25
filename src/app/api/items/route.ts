@@ -25,7 +25,7 @@ export const GET = async (req: Request) => {
     const sold = searchParams.get("sold");
 
     let query = supabaseServer
-      .from("items")
+      .from(ITEMS_TABLE_NAME)
       .select(SELECT_ITEM_COLUMNS)
       .neq("nickname", "관리자")
       .range(offset, offset + limit - 1);

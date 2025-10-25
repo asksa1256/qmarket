@@ -57,8 +57,6 @@ export async function getTradedMarketPrice(
     return { price: "0", count: 0 };
   }
 
-  const TRIM_RATE = 0.05;
-
   const { data: soldListings, error } = await supabase
     .from("items")
     .select("price")

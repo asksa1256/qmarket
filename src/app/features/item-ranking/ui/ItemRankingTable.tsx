@@ -1,4 +1,3 @@
-import { Item } from "@/entities/item/model/types";
 import {
   Table,
   TableBody,
@@ -10,20 +9,24 @@ import {
 } from "@/shared/ui/table";
 import { Badge } from "@/shared/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
-import { useState } from "react";
 import ItemImage from "@/shared/ui/ItemImage";
-import { formatDate } from "@/shared/lib/formatters";
-import { copyToClipboard } from "@/shared/lib/copyToClipboard";
+import { formatDateYMD } from "@/shared/lib/formatters";
 import LoadingSpinner from "@/shared/ui/LoadingSpinner";
 import CreateReportModal from "@/features/report/ui/CreateReportModal";
+import { RankItem } from "@/entities/item/model/types";
 import { useUser } from "@/shared/hooks/useUser";
+import { useState } from "react";
+import { cn } from "@/shared/lib/utils";
 
-interface ItemTableProps {
-  items: Item[];
+interface ItemRankingTableProps {
+  items: RankItem[];
   isLoading?: boolean;
 }
 
-export const ItemTable = ({ items, isLoading }: ItemTableProps) => {
+export default function ItemRankingTable({
+  items,
+  isLoading,
+}: ItemRankingTableProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const { data: user } = useUser();
 
@@ -43,22 +46,16 @@ export const ItemTable = ({ items, isLoading }: ItemTableProps) => {
               <TableHeader className="bg-gray-100">
                 <TableRow>
                   <TableHead className="text-center font-medium text-sm text-gray-700">
-                    상품명
+                    순위
+                  </TableHead>
+                  <TableHead className="font-medium text-center text-sm text-gray-700">
+                    아이템명
                   </TableHead>
                   <TableHead className="text-center font-medium text-sm text-gray-700">
                     가격 (사이버머니)
                   </TableHead>
                   <TableHead className="text-center font-medium text-sm text-gray-700">
-                    판매상태
-                  </TableHead>
-                  <TableHead className="text-center font-medium text-sm text-gray-700">
-                    뽑기/상점/복권
-                  </TableHead>
-                  <TableHead className="text-center font-medium text-sm text-gray-700">
-                    판매자
-                  </TableHead>
-                  <TableHead className="text-center font-medium text-sm text-gray-700">
-                    등록일
+                    최근 거래일자
                   </TableHead>
                   {user && (
                     <TableHead className="text-center font-medium text-sm text-gray-700">
@@ -78,13 +75,19 @@ export const ItemTable = ({ items, isLoading }: ItemTableProps) => {
                     <PopoverTrigger asChild>
                       <TableRow
                         className={`cursor-default ${
-                          item.is_sold ? "opacity-40" : "opacity-100"
-                        } ${
                           idx % 2 === 0 ? "bg-white" : "bg-gray-50"
                         } hover:bg-gray-100 transition-colors`}
                         onMouseEnter={() => setOpenIndex(idx)}
                         onMouseLeave={() => setOpenIndex(null)}
                       >
+                        <TableCell
+                          className={cn(
+                            "text-center text-gray-800",
+                            item.rank < 11 && "font-bold text-[#2359B6]"
+                          )}
+                        >
+                          {item.rank}
+                        </TableCell>
                         <TableCell className="text-center font-bold text-gray-800">
                           <div className="flex items-center gap-4 mx-auto w-[65%]">
                             <ItemImage
@@ -98,52 +101,8 @@ export const ItemTable = ({ items, isLoading }: ItemTableProps) => {
                         <TableCell className="text-center font-bold text-gray-700">
                           {item.price.toLocaleString()}
                         </TableCell>
-                        <TableCell className="text-center">
-                          <Badge
-                            variant="secondary"
-                            className={`${
-                              item.is_sold
-                                ? "bg-red-100 text-red-700"
-                                : "bg-blue-600 text-white"
-                            } px-2 py-1 rounded-full`}
-                          >
-                            {item.is_sold ? "판매완료" : "판매중"}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <Badge
-                            variant="outline"
-                            className="bg-yellow-100 text-yellow-800 border-yellow-200 px-2 py-1 rounded-full"
-                          >
-                            {item.item_source}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <Badge
-                            variant="secondary"
-                            className="text-gray-700 truncate px-2 py-1 rounded cursor-pointer"
-                            title={`디스코드 아이디: ${item.discord_id}`}
-                            onClick={() =>
-                              copyToClipboard(
-                                item.discord_id,
-                                "디스코드 아이디를 복사했습니다."
-                              )
-                            }
-                          >
-                            <div className="flex items-center font-medium text-gray-900">
-                              {item.nickname}
-                              <span className="flex items-center text-xs font-medium bg-gray-200 py-0 px-0.5 text-black rounded-md">
-                                (
-                                <span className="max-w-[36px] overflow-ellipsis overflow-hidden">
-                                  {item.discord_id}
-                                </span>
-                                )
-                              </span>
-                            </div>
-                          </Badge>
-                        </TableCell>
                         <TableCell className="text-center text-sm text-gray-500">
-                          {formatDate(item.created_at)}
+                          {formatDateYMD(item.updated_at)}
                         </TableCell>
                         {user && (
                           <TableCell className="text-center text-sm text-gray-500">
@@ -166,9 +125,6 @@ export const ItemTable = ({ items, isLoading }: ItemTableProps) => {
                         />
                         <p className="text-center font-medium text-gray-900">
                           {item.item_name}
-                        </p>
-                        <p className="text-sm text-gray-500 max-w-[80px] break-words">
-                          판매자: {item.nickname}({item.discord_id})
                         </p>
                       </div>
                     </PopoverContent>
@@ -219,24 +175,10 @@ export const ItemTable = ({ items, isLoading }: ItemTableProps) => {
                     >
                       {item.is_sold ? "판매완료" : "판매중"}
                     </Badge>
-                    <Badge className="bg-yellow-100 text-yellow-800">
-                      {item.item_source}
-                    </Badge>
                   </div>
 
-                  <span
-                    className="text-gray-600 cursor-pointer col-span-2 flex items-center gap-1"
-                    onClick={() =>
-                      copyToClipboard(
-                        item.discord_id,
-                        "디스코드 아이디를 복사했습니다."
-                      )
-                    }
-                  >
-                    - 판매자: {item.nickname}({item.discord_id})
-                  </span>
                   <span className="text-gray-400 col-span-2">
-                    - 등록일: {formatDate(item.created_at)}
+                    - 거래일자: {formatDateYMD(item.updated_at)}
                   </span>
                 </div>
 
@@ -258,4 +200,4 @@ export const ItemTable = ({ items, isLoading }: ItemTableProps) => {
       )}
     </div>
   );
-};
+}

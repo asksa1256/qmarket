@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import ItemMultiFilter from "@/widgets/item-multi-filter/ui/ItemMultiFilter";
 import { ItemGenderKey } from "@/features/item-search/ui/ItemGenderFilter";
+import { ItemCategoryKey } from "@/features/item-search/ui/ItemCategoryFilter";
 import { Label } from "@/shared/ui/label";
 import useInfiniteScroll from "@/shared/hooks/useInfiniteScroll";
 import Link from "next/link";
@@ -35,7 +36,7 @@ export default function ClientMoreItems({
   const [searchQuery, setSearchQuery] = useState("");
   const [sort, setSort] = useState<"price_asc" | "price_desc" | null>(null);
   const [filters, setFilters] = useState<{
-    category: string | null;
+    category: ItemCategoryKey | null;
     gender: ItemGenderKey | null;
     isSold: boolean | null;
   }>({
@@ -156,7 +157,7 @@ export default function ClientMoreItems({
               {/* 검색 */}
               <div className="flex flex-col gap-1">
                 <Label className="text-sm text-gray-600 font-medium">
-                  검색어
+                  검색
                 </Label>
                 <SearchInput
                   value={searchQuery}

@@ -31,3 +31,14 @@ export interface Item {
   category: ItemCategory; // 아이템 카테고리
   created_at: string; // 아이템 등록일
 }
+
+export interface RankItem extends RankItemT {
+  id: string;
+  item_name: string;
+  rank: number;
+  price: number;
+  image: string;
+  item_gender: ItemGender;
+  is_sold: boolean; // 판매 완료 여부 (true만 받음)
+  updated_at: string; // 판매 완료일
+}
