@@ -21,7 +21,7 @@ export default function TabView({ initialItems }: Props) {
           판매 현황
         </TabsTrigger>
         <TabsTrigger value="marketPriceRanking" className="cursor-pointer py-2">
-          시세 랭킹
+          시세 TOP100
         </TabsTrigger>
       </TabsList>
 
