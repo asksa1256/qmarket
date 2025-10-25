@@ -40,7 +40,8 @@ export default function ItemRankingView() {
     let query = supabase
       .from("unique_ranked_items")
       .select("*")
-      .eq("is_sold", true);
+      .eq("is_sold", true)
+      .limit(100);
 
     if (filters.category) {
       query = query.eq("category", ITEM_CATEGORY_MAP[filters.category]);
