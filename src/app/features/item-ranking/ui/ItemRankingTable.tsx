@@ -192,6 +192,12 @@ export default function ItemRankingTable({
           </div>
         </>
       )}
+
+      {!isLoading && items.length === 0 && (
+        <p className="text-center text-sm p-8 text-gray-500 pb-20">
+          등록된 아이템이 없습니다.
+        </p>
+      )}
     </div>
   );
 }

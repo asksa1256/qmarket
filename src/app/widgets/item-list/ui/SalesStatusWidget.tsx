@@ -157,7 +157,7 @@ export default function ClientMoreItems({
               {/* 검색 */}
               <div className="flex flex-col gap-1">
                 <Label className="text-sm text-gray-600 font-medium">
-                  검색어
+                  검색
                 </Label>
                 <SearchInput
                   value={searchQuery}

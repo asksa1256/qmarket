@@ -12,6 +12,13 @@ import SearchInput from "@/features/item-search/ui/SearchInput";
 import { ITEM_CATEGORY_MAP, ITEM_GENDER_MAP } from "@/shared/config/constants";
 import { RefreshCcw } from "lucide-react";
 import { Button } from "@/shared/ui/button";
+import { Label } from "@/shared/ui/label";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/shared/ui/accordion";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -80,10 +87,6 @@ export default function ItemRankingView() {
     isFetchingNextPage,
   });
 
-  if (isLoading) {
-    return <div>로딩 중...</div>;
-  }
-
   if (error) {
     return <div>오류: {error.message}</div>;
   }
@@ -107,34 +110,47 @@ export default function ItemRankingView() {
         </p>
       </div>
 
-      {/* 필터 */}
-      <ItemMultiFilter
-        category={filters.category}
-        gender={filters.gender}
-        onChange={setFilters}
-        className="mb-4"
-      />
+      <Accordion type="single" collapsible className="w-full">
+        <AccordionItem value="item-filter-sort">
+          <AccordionTrigger className="text-sm justify-end gap-2 font-medium pt-0 pb-4 text-gray-500">
+            🔍 필터 열기/닫기
+          </AccordionTrigger>
+          <AccordionContent>
+            <div className="flex flex-wrap gap-4 items-center mb-8 p-4 rounded-xl border border-gray-200 shadow-sm bg-white">
+              {/* 필터 */}
+              <ItemMultiFilter
+                category={filters.category}
+                gender={filters.gender}
+                onChange={setFilters}
+              />
 
-      {/* 검색바 */}
-      <div className="flex gap-2">
-        <SearchInput
-          value={searchInput}
-          className="text-sm w-auto"
-          onSearch={(e: string) => setSearchInput(e)}
-        />
-      </div>
+              {/* 검색바 */}
+              <div className="flex flex-col gap-1">
+                <Label className="text-sm text-gray-600 font-medium">
+                  검색
+                </Label>
+                <SearchInput
+                  value={searchInput}
+                  className="text-sm w-auto"
+                  onSearch={(e: string) => setSearchInput(e)}
+                />
+              </div>
 
-      {/* 초기화 버튼 */}
-      <Button
-        variant="outline"
-        className="self-end ml-auto"
-        onClick={handleResetFilter}
-      >
-        <RefreshCcw />
-        초기화
-      </Button>
+              {/* 초기화 버튼 */}
+              <Button
+                variant="outline"
+                className="self-end ml-auto"
+                onClick={handleResetFilter}
+              >
+                <RefreshCcw />
+                초기화
+              </Button>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
 
-      <ItemRankingTable items={allItems} />
+      <ItemRankingTable items={allItems} isLoading={isLoading} />
 
       <div ref={loadMoreRef} className="h-10 flex items-center justify-center">
         {isFetchingNextPage && <div>더 불러오는 중...</div>}

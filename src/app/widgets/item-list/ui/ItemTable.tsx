@@ -253,7 +253,7 @@ export const ItemTable = ({ items, isLoading }: ItemTableProps) => {
 
       {!isLoading && items.length === 0 && (
         <p className="text-center text-sm p-8 text-gray-500 pb-20">
-          등록된 상품이 없습니다.
+          등록된 아이템이 없습니다.
         </p>
       )}
     </div>
