@@ -35,6 +35,7 @@ export interface Item {
 export interface RankItem extends RankItemT {
   id: string;
   item_name: string;
+  rank: number;
   price: number;
   image: string;
   item_gender: ItemGender;

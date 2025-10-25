@@ -83,10 +83,10 @@ export default function ItemRankingTable({
                         <TableCell
                           className={cn(
                             "text-center text-gray-800",
-                            idx + 1 < 11 && "font-bold"
+                            item.rank < 11 && "font-bold"
                           )}
                         >
-                          {idx + 1}
+                          {item.rank}
                         </TableCell>
                         <TableCell className="text-center font-bold text-gray-800">
                           <div className="flex items-center gap-4 mx-auto w-[65%]">
