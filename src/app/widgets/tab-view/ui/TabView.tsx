@@ -17,11 +17,11 @@ export default function TabView({ initialItems }: Props) {
         <TabsTrigger value="marketPrices" className="cursor-pointer py-2">
           시세 조회
         </TabsTrigger>
-        {/* <TabsTrigger value="items" className="cursor-pointer py-2">
-          판매 현황
-        </TabsTrigger> */}
+        <TabsTrigger value="items" className="cursor-pointer py-2">
+          매물 목록
+        </TabsTrigger>
         <TabsTrigger value="marketPriceRanking" className="cursor-pointer py-2">
-          시세 TOP100
+          시세 랭킹
         </TabsTrigger>
       </TabsList>
 
@@ -29,9 +29,9 @@ export default function TabView({ initialItems }: Props) {
         <MarketPriceDashboard />
       </TabsContent>
 
-      {/* <TabsContent value="items">
+      <TabsContent value="items">
         <SalesStatusWidget initialItems={initialItems} />
-      </TabsContent> */}
+      </TabsContent>
 
       <TabsContent value="marketPriceRanking">
         <ItemRankingView />

@@ -33,7 +33,6 @@ import { insertItem } from "../model/actions";
 import { getDailyItemCountAction } from "../model/actions";
 import { DAILY_LIMIT } from "@/shared/lib/redis";
 import SearchInput from "@/features/item-search/ui/SearchInput";
-import { ItemCategory } from "@/entities/item/model/types";
 
 interface ItemUploadModalProps {
   onSuccess?: () => void;
