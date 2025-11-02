@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   getItemMarketPrice,
   getTradedMarketPrice,
@@ -67,7 +67,7 @@ export default function MarketPriceDashboard() {
       setItemImageUrl(itemImage);
 
       if (history && history.length > 0) {
-        const recentDate = new Date(history[0].date);
+        const recentDate = new Date(history[history.length - 1].date);
         recentDate.setDate(recentDate.getDate());
         const recentKstDate = recentDate.toISOString().slice(0, 10);
         setRecentSoldDate(recentKstDate);
@@ -217,7 +217,7 @@ export default function MarketPriceDashboard() {
                   <b className="block md:inline-block ml-2 text-blue-500 text-sm">
                     *최근 거래 가격:{" "}
                     {Number(
-                      saleHistory[0].transactions[0].price
+                      saleHistory[saleHistory.length - 1].transactions[0].price
                     ).toLocaleString()}
                     원 ({recentSoldDate})
                   </b>
