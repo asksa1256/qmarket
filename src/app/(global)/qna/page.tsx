@@ -4,7 +4,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/shared/ui/accordion";
-import CreateInquiryModal from "@/features/inquiry/ui/CreateInquiryModal";
 import { Button } from "@/shared/ui/button";
 
 export type QnADocument = {

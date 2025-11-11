@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { Button } from "@/shared/ui/button";
 import { login } from "@/features/sign-in-form/model/actions";
 
