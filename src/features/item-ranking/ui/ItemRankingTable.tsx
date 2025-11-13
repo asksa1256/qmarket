@@ -67,7 +67,7 @@ export default function ItemRankingTable({
               <TableBody>
                 {items.map((item, idx) => (
                   <Popover
-                    key={item.id}
+                    key={`${item.item_name}-${item.item_gender}`}
                     open={openIndex === idx}
                     onOpenChange={(isOpen) => setOpenIndex(isOpen ? idx : null)}
                   >
@@ -137,7 +137,7 @@ export default function ItemRankingTable({
           <div className="md:hidden space-y-3">
             {items.map((item) => (
               <div
-                key={item.id}
+                key={`${item.item_name}-${item.item_gender}`}
                 className="relative border rounded-lg p-3 shadow-sm bg-white"
               >
                 <div className="flex items-center gap-3">

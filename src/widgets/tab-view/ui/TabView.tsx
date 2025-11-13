@@ -20,9 +20,9 @@ export default function TabView({ initialItems }: Props) {
         <TabsTrigger value="items" className="cursor-pointer py-2">
           매물 목록
         </TabsTrigger>
-        {/* <TabsTrigger value="marketPriceRanking" className="cursor-pointer py-2">
+        <TabsTrigger value="marketPriceRanking" className="cursor-pointer py-2">
           시세 랭킹
-        </TabsTrigger> */}
+        </TabsTrigger>
       </TabsList>
 
       <TabsContent value="marketPrices">
