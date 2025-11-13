@@ -98,12 +98,8 @@ export default function ItemRankingView() {
   return (
     <section className="mt-4">
       <div className="rounded-xl border p-4 mt-4 mb-8">
-        <p className="text-sm text-gray-500">
-          * 거래 완료 아이템 기준으로 100위까지 집계됩니다.
-        </p>
         <p className="text-gray-500 text-sm">
-          * 시세 조작이 의심되거나 잘못 집계되었을 경우 신고해주세요. (로그인 후
-          가능)
+          * 거래 완료 아이템 순위가 집계됩니다.
         </p>
       </div>
 
