@@ -10,7 +10,8 @@ export default async function MyItemsPage() {
 
   return (
     <section className="max-w-5xl mx-auto">
-      {!user ? <LoginRequiredMessage /> : <MyItemsContent userId={user.id} />}
+      {/* {!user ? <LoginRequiredMessage /> : <MyItemsContent userId={user.id} />} */}
+      <MyItemsContent userId="76507b38-6db4-4ddf-bae3-eb9f4a4f82c0" />
     </section>
   );
 }
@@ -37,6 +38,10 @@ const ItemSectionHeader = () => (
 const MyItemsContent = ({ userId }: { userId: string }) => (
   <div className="p-4 md:p-0">
     <ItemSectionHeader />
-    <ItemCardList userId={userId} />
+
+    <div className="flex gap-8">
+      <ItemCardList userId={userId} />
+      <ItemCardList userId={userId} />
+    </div>
   </div>
 );

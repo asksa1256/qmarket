@@ -98,9 +98,9 @@ export default function ItemCardList({ userId }: Props) {
   const isEmpty = !isLoading && items.length === 0;
 
   return (
-    <div className="pb-10">
+    <div className="pb-10 grow">
       {/* 상단 컨트롤 영역 */}
-      <div className="flex flex-wrap md:flex-row gap-4 md:gap-0 w-full mb-4 justify-between">
+      {/* <div className="flex flex-wrap md:flex-row gap-4 md:gap-0 w-full mb-4 justify-between">
         <ButtonToMain />
 
         <div className="flex flex-wrap md:flex-row justify-end md:justify-start gap-2 w-full md:w-auto">
@@ -124,29 +124,28 @@ export default function ItemCardList({ userId }: Props) {
             }}
           />
         </div>
-      </div>
+      </div> */}
 
       {/* 아이템 등록 가능 횟수 */}
-      <div className="flex justify-end mb-4">
+      {/* <div className="flex justify-end mb-4">
         <DailyLimitDisplay remaining={limitStatus.remaining} />
       </div>
-
-      <div className="rounded-xl border p-4 mt-4">
+      
+      {/* 안내 문구 */}
+      {/* <div className="rounded-xl border p-4 mt-4">
         <p className="text-gray-500 text-sm">
-          * 보다 정확한 시세 반영을 위해, 판매된 아이템은{" "}
-          <b>&apos;수정하기&apos;</b>
-          에서 <b>&apos;판매완료&apos;</b> 상태로 변경해주세요.
+          * <b>판매완료</b> 처리는 <b>아이템 수정</b>을 이용해주세요.
         </p>
-      </div>
+      </div> */}
 
       {isEmpty && (
-        <div className="flex flex-col gap-4 pt-8 items-center justify-center text-sm text-gray-500">
+        <div className="pt-8 items-center justify-center text-sm text-gray-500">
           등록된 아이템이 없습니다. 판매중인 아이템을 등록해주세요.
         </div>
       )}
 
       {/* 아이템 리스트 */}
-      {isLoading ? (
+      {/* {isLoading ? (
         <div className="text-center">
           <LoadingSpinner />
           <p className="text-center mt-4 text-gray-500 text-sm">
@@ -155,6 +154,20 @@ export default function ItemCardList({ userId }: Props) {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4">
+          {filteredItems.map((item) => (
+            <ItemCard key={item.id} item={item} />
+          ))}
+        </div>
+      )} */}
+      {isLoading ? (
+        <div className="text-center">
+          <LoadingSpinner />
+          <p className="text-center mt-4 text-gray-500 text-sm">
+            아이템 로드 중...
+          </p>
+        </div>
+      ) : (
+        <div className="flex flex-col mt-4 max-h-[480px] overflow-auto">
           {filteredItems.map((item) => (
             <ItemCard key={item.id} item={item} />
           ))}
