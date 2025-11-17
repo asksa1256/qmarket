@@ -1,5 +1,31 @@
 # Q-Market
 
+## 페이지 구조
+```
+src/app/
+├── (core) # 핵심 기능 그룹
+│ ├── item/
+│ │ ├── [item_id]/
+│ │ │ └── page.tsx # 아이템 상세 (SSG + Revalidate)
+│ │ └── layout.tsx
+│ ├── users/
+│ │ ├── [user_id]/
+│ │ └──── page.tsx # 유저 상세 (SSR)
+│ ├── mypage/
+│ │ └── page.tsx # 내 아이템/찜 목록 (SSR, Auth)
+│ ├── register/
+│ └──── page.tsx # 구매/판매 아이템 등록 (CSR)
+├── (static) # 부가/정적 기능 그룹
+│ ├── faq/
+│ │ └── page.tsx # FAQ (SSG)
+│ ├── notice/
+│ │ └── page.tsx # 공지사항 (SSG)
+│ ├── contact/
+│ └──── page.tsx # 문의하기 (SSG + Client Form)
+├── layout.tsx # 메인 레이아웃 (Nav, Header, Footer)
+└── page.tsx # 홈 화면
+```
+
 ## Getting Started
 
 First, run the development server:
