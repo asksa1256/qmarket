@@ -1,7 +1,7 @@
 # Q-Market
 
 ## 페이지 구조
-
+```
 src/app/
 ├── (core) # 핵심 기능 그룹
 │ ├── item/
@@ -24,6 +24,7 @@ src/app/
 │ └──── page.tsx # 문의하기 (SSG + Client Form)
 ├── layout.tsx # 메인 레이아웃 (Nav, Header, Footer)
 └── page.tsx # 홈 화면
+```
 
 ## Getting Started
 
