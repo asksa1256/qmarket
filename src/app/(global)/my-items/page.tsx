@@ -11,6 +11,7 @@ export default async function MyItemsPage() {
 
   return (
     <section className="max-w-5xl mx-auto">
+      <h2 className="font-bold text-3xl mb-2 text-center">내 정보</h2>
       {/* {!user ? <LoginRequiredMessage /> : <MyItemsContent userId={user.id} />} */}
       <MyItemsContent userId="76507b38-6db4-4ddf-bae3-eb9f4a4f82c0" />
     </section>
@@ -19,7 +20,6 @@ export default async function MyItemsPage() {
 
 const LoginRequiredMessage = () => (
   <>
-    <h2 className="font-bold text-3xl mb-2">내 아이템</h2>
     <p className="text-gray-500 text-sm mb-4">
       로그인 후 내 아이템을 확인할 수 있습니다.
     </p>
@@ -31,7 +31,6 @@ const LoadingFallback = <div>아이템 목록을 로드하고 있습니다...</d
 
 const ItemSectionHeader = () => (
   <div className="mb-10 text-center">
-    <h2 className="font-bold text-3xl mb-2">내 아이템</h2>
     <p className="text-gray-500 text-sm">
       판매/구매중인 아이템을 조회/수정할 수 있습니다.
     </p>

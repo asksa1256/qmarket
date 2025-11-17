@@ -30,7 +30,11 @@ export default async function ItemCardList({
   try {
     items = await fetchFilteredItems({ userId, isForSale, isSold });
   } catch (error) {
-    return <div>데이터를 불러오는 데 실패했습니다.</div>; // 해당 컴포넌트만 대체
+    return (
+      <div className="text-sm text-gray-500">
+        데이터를 불러오는 데 실패했습니다.
+      </div>
+    ); // 해당 컴포넌트만 대체
   }
 
   return (
@@ -47,17 +51,19 @@ export default async function ItemCardList({
         </p>
       </div> */}
 
-      {items.length === 0 && (
-        <div className="pt-8 items-center justify-center text-sm text-gray-500">
-          등록된 아이템이 없습니다.
-        </div>
-      )}
-
       {/* 아이템 리스트 */}
-      <div className="flex flex-col mt-4 max-h-[480px] overflow-auto">
-        {items.map((item) => (
-          <ItemCard key={item.id} item={item} />
-        ))}
+      <div className="flex flex-col h-[400px] overflow-auto rounded-2xl border border-border">
+        {items.length === 0 ? (
+          <div className="flex items-center justify-center h-full text-sm text-gray-500">
+            등록된 아이템이 없습니다.
+          </div>
+        ) : (
+          <>
+            {items.map((item) => (
+              <ItemCard key={item.id} item={item} />
+            ))}
+          </>
+        )}
       </div>
     </div>
   );
