@@ -18,6 +18,7 @@ import {
   CommandList,
 } from "@/shared/ui/command";
 import { ItemCategory } from "@/entities/item/model/types";
+import { cn } from "@/shared/lib/utils";
 
 interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
@@ -27,9 +28,9 @@ interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 interface Suggestion {
+  id: number;
   name: string;
   item_gender: string | null;
-  category: ItemCategory;
 }
 
 export default function SearchInput({
@@ -47,24 +48,29 @@ export default function SearchInput({
   useEffect(() => {
     // 전체 아이템 초기 로드
     const fetchItems = async () => {
-      const { data, error } = await supabase.rpc("get_distinct_items");
+      const { data, error } = await supabase
+        .from("items_info")
+        .select("id, name, item_gender");
+
       if (!error && data) {
         setAllItems(data);
       } else {
         console.error(error);
       }
     };
+
     fetchItems();
   }, []);
 
   useEffect(() => {
     setInputValue(value);
 
-    // 기존 값이 이미 있을 경우 (아이템 수정 모달)
     if (value) {
-      const matched = allItems.find((item) => item.name === value);
+      const matched = allItems.find(
+        (item) => item.name === value && item.item_gender === value
+      );
       if (matched) {
-        setSuggestions([matched]); // 기존 값도 검색 결과에 포함
+        setSuggestions([matched]);
       }
     }
   }, [value, allItems]);
@@ -115,7 +121,7 @@ export default function SearchInput({
   };
 
   return (
-    <div className="relative w-full">
+    <div className={cn("relative w-full", className)}>
       <Input
         type="text"
         placeholder="아이템명 입력"
@@ -123,7 +129,6 @@ export default function SearchInput({
         onChange={handleChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        className={className}
         {...rest}
       />
 
@@ -140,10 +145,10 @@ export default function SearchInput({
                   {suggestions.map((s, idx) => (
                     <CommandItem
                       key={idx}
-                      value={s.name}
+                      value={s.id.toString()}
                       onSelect={() => handleSelect(s)}
                     >
-                      {s.name}
+                      {s.name} ({s.item_gender})
                     </CommandItem>
                   ))}
                 </CommandGroup>

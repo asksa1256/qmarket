@@ -18,8 +18,12 @@ import {
 } from "@/shared/ui/dropdown-menu";
 import { useQueryClient } from "@tanstack/react-query";
 import { BadgeQuestionMark } from "lucide-react";
+import SearchInput from "@/features/item-search/ui/SearchInput";
+import { useState } from "react";
 
 export default function Header() {
+  const [value, setValue] = useState("");
+
   const router = useRouter();
   const { data: user } = useUser();
   const queryClient = useQueryClient();
@@ -45,8 +49,12 @@ export default function Header() {
   };
 
   return (
-    <header className="py-8 px-4 md:px-0 max-w-5xl mx-auto flex items-center justify-between">
-      <div className="ml-auto flex gap-2">
+    <header className="relative py-8 px-4 md:px-0 max-w-5xl mx-auto flex items-center justify-between gap-4">
+      {/* 로고 */}
+      <div className="h-8 basis-[30%]"></div>
+
+      {/* 메뉴 */}
+      <div className="ml-auto flex gap-2 basis-[30%]">
         {user ? (
           <DropdownMenu>
             <DropdownMenuTrigger className="bg-discord hover:bg-discord-hover flex gap-1 px-3 rounded-md items-center border-discord text-white text-sm">
