@@ -17,8 +17,9 @@ import {
   CommandItem,
   CommandList,
 } from "@/shared/ui/command";
-import { ItemCategory } from "@/entities/item/model/types";
 import { cn } from "@/shared/lib/utils";
+import { useItemsQuery } from "../model/useItemsQuery";
+import { useSearchItemQuery } from "../model/useSearchItemQuery";
 
 interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
@@ -41,61 +42,27 @@ export default function SearchInput({
   ...rest
 }: SearchInputProps) {
   const [inputValue, setInputValue] = useState(value);
-  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  // const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [suggestionOpen, setSuggestionOpen] = useState(false);
-  const [allItems, setAllItems] = useState<Suggestion[]>([]);
+  // const [allItems, setAllItems] = useState<Suggestion[]>([]);
 
-  useEffect(() => {
-    // 전체 아이템 초기 로드
-    const fetchItems = async () => {
-      const { data, error } = await supabase
-        .from("items_info")
-        .select("id, name, item_gender");
+  // 전체 아이템: React Query 캐싱
+  const { data: allItems = [] } = useItemsQuery();
 
-      if (!error && data) {
-        setAllItems(data);
-      } else {
-        console.error(error);
-      }
-    };
-
-    fetchItems();
-  }, []);
-
-  useEffect(() => {
-    setInputValue(value);
-
-    if (value) {
-      const matched = allItems.find(
-        (item) => item.name === value && item.item_gender === value
-      );
-      if (matched) {
-        setSuggestions([matched]);
-      }
-    }
-  }, [value, allItems]);
+  // 검색(캐싱)
+  const { data: suggestions = [], refetch } = useSearchItemQuery(
+    inputValue,
+    allItems
+  );
 
   const debouncedSearch = useMemo(
     () =>
       debounce((val: string) => {
+        setInputValue(val);
         onSearch(val);
-
-        if (!val.trim()) {
-          setSuggestions([]);
-          return;
-        }
-
-        const results = allItems.filter((item) => {
-          if (item.name === val) return true; // 완전 일치할 경우, true 리턴
-          const nameChars = item.name.split(""); // 아이템 이름 글자 배열
-          const inputChars = val.split(""); // 입력값 글자 배열
-
-          return inputChars.every((c) => nameChars.includes(c));
-        });
-
-        setSuggestions(results);
+        refetch(); // React Query 검색 수행
       }, 300),
-    [allItems, onSearch]
+    [refetch, onSearch]
   );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
