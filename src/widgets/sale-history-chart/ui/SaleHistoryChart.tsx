@@ -14,19 +14,13 @@ import CustomChartTooltip from "@/shared/ui/CustomChartToolTip";
 
 interface SaleHistoryChartProps {
   data: SaleHistory[];
-  itemName: string;
-  itemGender: string;
 }
 
-export default function SaleHistoryChart({
-  data,
-  itemName,
-  itemGender,
-}: SaleHistoryChartProps) {
+export default function SaleHistoryChart({ data }: SaleHistoryChartProps) {
   if (!data || data.length === 0) {
     return (
       <div className="text-center py-10 text-gray-500">
-        {itemName}({itemGender})의 판매 완료 내역이 없습니다.
+        판매 완료 내역이 없습니다.
       </div>
     );
   }

@@ -13,6 +13,7 @@ import {
 import { cn } from "@/shared/lib/utils";
 import { useItemsQuery } from "../model/useItemsQuery";
 import { useSearchItemQuery } from "../model/useSearchItemQuery";
+import { Button } from "@/shared/ui/button";
 
 interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
@@ -110,6 +111,15 @@ export default function SearchInput({
                   ))}
                 </CommandGroup>
               )}
+
+              <div className="flex flex-col gap-2 items-center py-4">
+                <p className="text-center text-gray-500 text-xs">
+                  찾는 아이템이 없다면?
+                </p>
+                <Button variant="outline" size="sm">
+                  아이템 등록 요청
+                </Button>
+              </div>
             </CommandList>
           </Command>
         </div>

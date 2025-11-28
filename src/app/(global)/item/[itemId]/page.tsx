@@ -1,11 +1,26 @@
-export default function ItemDetailPage({
+import ItemDetailClient from "@/features/item-search/ui/ItemDetailClient";
+import { supabaseServer } from "@/shared/api/supabase-server";
+
+export default async function ItemDetailPage({
   params,
 }: {
-  params: { itemId: string };
+  params: Promise<{ itemId: string }>;
 }) {
+  const { itemId } = await params;
+
+  const { data: item, error } = await supabaseServer
+    .from("items_info")
+    .select("id, name, item_gender, image, category, item_source")
+    .eq("id", itemId)
+    .single();
+
+  if (error || !item) {
+    return <div>존재하지 않는 아이템입니다.</div>;
+  }
+
   return (
     <section>
-      <h1>Item Detail Page - {params.itemId}</h1>
+      <ItemDetailClient item={item} />
     </section>
   );
 }
