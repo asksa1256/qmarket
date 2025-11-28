@@ -1,15 +1,8 @@
 "use client";
 
 import { Input } from "@/shared/ui/input";
-import {
-  ChangeEvent,
-  useEffect,
-  useState,
-  useMemo,
-  InputHTMLAttributes,
-} from "react";
+import { ChangeEvent, useState, useMemo, InputHTMLAttributes } from "react";
 import debounce from "@/shared/lib/debounce";
-import { supabase } from "@/shared/api/supabase-client";
 import {
   Command,
   CommandEmpty,
@@ -28,7 +21,7 @@ interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   onSelectSuggestion?: (suggestion: Suggestion) => void;
 }
 
-interface Suggestion {
+export interface Suggestion {
   id: number;
   name: string;
   item_gender: string | null;
@@ -42,14 +35,12 @@ export default function SearchInput({
   ...rest
 }: SearchInputProps) {
   const [inputValue, setInputValue] = useState(value);
-  // const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [suggestionOpen, setSuggestionOpen] = useState(false);
-  // const [allItems, setAllItems] = useState<Suggestion[]>([]);
 
-  // 전체 아이템: React Query 캐싱
+  // 전체 아이템 캐싱
   const { data: allItems = [] } = useItemsQuery();
 
-  // 검색(캐싱)
+  // 검색 캐싱
   const { data: suggestions = [], refetch } = useSearchItemQuery(
     inputValue,
     allItems
@@ -59,7 +50,6 @@ export default function SearchInput({
     () =>
       debounce((val: string) => {
         setInputValue(val);
-        onSearch(val);
         refetch(); // React Query 검색 수행
       }, 300),
     [refetch, onSearch]
