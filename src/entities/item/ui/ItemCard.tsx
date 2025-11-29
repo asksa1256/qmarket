@@ -3,8 +3,14 @@ import Image from "next/image";
 import { Item } from "../model/types";
 import MyItemActions from "@/widgets/my-item-actions/ui/MyItemActions";
 import { cn } from "@/shared/lib/utils";
+import SoldButton from "@/features/sell/ui/SoldButton";
 
-const ItemCard = ({ item }: { item: Item }) => {
+interface ItemCardProps {
+  item: Item;
+  userId: string;
+}
+
+const ItemCard = ({ item, userId }: ItemCardProps) => {
   return (
     <div
       className={cn(
@@ -33,28 +39,6 @@ const ItemCard = ({ item }: { item: Item }) => {
             <span className="ml-1 text-gray-500 text-xs">
               ({item.item_gender})
             </span>
-          </h3>
-
-          <h4 className="text-base font-semibold text-blue-700 flex items-center gap-0.5">
-            {item.price.toLocaleString()}
-            <span className="text-[10px] mt-0.5">원</span>
-          </h4>
-        </div>
-
-        <div className="flex items-center justify-between mt-1">
-          <div className="flex flex-wrap gap-1">
-            {item.is_for_sale && (
-              <Badge
-                className={cn(
-                  "text-[10px] px-1.5 py-0",
-                  item.is_sold
-                    ? "bg-gray-700 text-white"
-                    : "bg-green-600 text-white"
-                )}
-              >
-                {item.is_sold ? "판매완료" : "판매중"}
-              </Badge>
-            )}
             {item.item_source && (
               <Badge
                 variant="outline"
@@ -63,7 +47,18 @@ const ItemCard = ({ item }: { item: Item }) => {
                 {item.item_source}
               </Badge>
             )}
-          </div>
+          </h3>
+
+          <h4 className="text-base font-semibold text-blue-700 flex items-center gap-0.5">
+            {item.price.toLocaleString()}
+            <span className="text-[10px] mt-0.5">원</span>
+          </h4>
+        </div>
+
+        <div className="flex items-center justify-between mt-1 gap-1">
+          {item.is_for_sale && !item.is_sold && (
+            <SoldButton itemId={item.id} userId={userId} />
+          )}
 
           {/* 액션 버튼 (수정/삭제) */}
           <MyItemActions item={item} isSold={item.is_sold} />

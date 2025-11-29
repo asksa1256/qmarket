@@ -14,7 +14,7 @@ export default function MyItemActions({ item, isSold }: MyItemActionsProps) {
   const { data: user } = useUser();
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-1">
       {!isSold && (
         <>
           <ItemUpdateModal item={item} />

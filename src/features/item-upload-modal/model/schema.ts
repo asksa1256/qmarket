@@ -21,6 +21,8 @@ export const ItemFormSchema = z.object({
     "board",
     "game",
   ]),
+  image: z.string().nullable(),
+  message: z.string().optional(),
 });
 
 export type ItemFormValues = z.infer<typeof ItemFormSchema>;
@@ -45,6 +47,7 @@ export const PurchaseItemUpdateFormSchema = z.object({
     "board",
     "game",
   ]),
+  image: z.string().nullable(),
   message: z.string().optional(),
 });
 

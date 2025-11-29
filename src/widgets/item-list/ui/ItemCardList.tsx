@@ -32,14 +32,14 @@ export default function ItemCardList({ userId, isForSale, isSold }: Props) {
     <div className="pb-10 grow">
       {/* 아이템 리스트 */}
       <div className="flex flex-col h-[400px] overflow-auto rounded-2xl border border-border">
-        {allItems?.length === 0 ? (
+        {filteredItems?.length === 0 ? (
           <div className="flex items-center justify-center h-full text-sm text-gray-500">
             등록된 아이템이 없습니다.
           </div>
         ) : (
           <>
             {filteredItems?.map((item) => (
-              <ItemCard key={item.id} item={item} />
+              <ItemCard key={item.id} item={item} userId={userId} />
             ))}
           </>
         )}

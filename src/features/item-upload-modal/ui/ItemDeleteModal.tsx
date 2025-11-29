@@ -42,7 +42,8 @@ export function ItemDeleteModal({ itemId, userId }: Props) {
       }
 
       const { error } = await supabase
-        .from("items")
+        // .from("items")
+        .from("items_test")
         .delete()
         .eq("id", itemId)
         .eq("user_id", user.id);
@@ -65,8 +66,14 @@ export function ItemDeleteModal({ itemId, userId }: Props) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-1.5 text-xs">
-          <Trash /> 삭제하기
+        <Button
+          variant="outline"
+          size="icon"
+          className="gap-1.5 text-xs"
+          aria-label="아이템 삭제"
+          title="아이템 삭제"
+        >
+          <Trash />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

@@ -32,10 +32,10 @@ export default function UserItemListHeader({ userId }: { userId: string }) {
 
       <div className="mt-2 w-full text-right flex gap-2 justify-end">
         <SellingItemCreateModal
-          onSuccess={() => {
-            // refetchLimitInfo();
-            // refetch();
-          }}
+        // onSuccess={() => {
+        // refetchLimitInfo();
+        // refetch();
+        // }}
         />
         <PurchaseItemCreateModal />
       </div>

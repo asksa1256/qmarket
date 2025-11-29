@@ -13,6 +13,7 @@ import { getRemainingTime } from "@/shared/lib/redis";
 interface InsertItemValues {
   item_name: string;
   price: number;
+  image: string | null;
   item_source: string;
   item_gender: string;
   category: string;
@@ -20,6 +21,7 @@ interface InsertItemValues {
   discord_id: string;
   user_id: string;
   is_sold: boolean;
+  is_for_sale: boolean;
 }
 
 interface InsertPurchaseItemValues {
@@ -44,18 +46,19 @@ export async function insertItem(values: InsertItemValues) {
   if (!user) throw new Error("로그인이 필요합니다.");
 
   const { data, error } = await supabase
-    .from(ITEMS_TABLE_NAME)
+    // .from(ITEMS_TABLE_NAME)
+    .from("items_test")
     .insert([{ ...values, user_id: user.id }])
     .select();
 
   if (error) throw new Error(error.message);
 
   // 아이템 등록 성공 후 Redis 카운트 증가 (등록 실패 시 횟수 차감 방지)
-  const currentCount = await checkAndIncrementDailyItemLimit(user.id);
-  const remaining = DAILY_LIMIT - currentCount;
+  // const currentCount = await checkAndIncrementDailyItemLimit(user.id);
+  // const remaining = DAILY_LIMIT - currentCount;
 
   // return { data, currentCount, remaining };
-  return { data, currentCount, remaining };
+  return { data };
 }
 
 export async function insertPurchaseItem(values: InsertPurchaseItemValues) {
@@ -66,7 +69,8 @@ export async function insertPurchaseItem(values: InsertPurchaseItemValues) {
   if (!user) throw new Error("로그인이 필요합니다.");
 
   const { data, error } = await supabase
-    .from(ITEMS_TABLE_NAME)
+    // .from(ITEMS_TABLE_NAME)
+    .from("items_test")
     .insert([{ ...values, user_id: user.id }])
     .select();
 

@@ -14,8 +14,6 @@ import { Input } from "@/shared/ui/input";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { sanitize } from "@/shared/lib/sanitize";
-import { Label } from "@/shared/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
 import { ScrollArea } from "@/shared/ui/scroll-area";
 import { ItemFormValues, ItemFormSchema } from "../model/schema";
 import { useForm, Controller } from "react-hook-form";
@@ -28,21 +26,12 @@ import {
 import { Lock, Plus } from "lucide-react";
 import { useUser } from "@/shared/hooks/useUser";
 import { useEffect, useState } from "react";
-import { cn } from "@/shared/lib/utils";
 import { insertItem } from "../model/actions";
-import { getDailyItemCountAction } from "../model/actions";
-import { DAILY_LIMIT } from "@/shared/lib/redis";
 import SearchInput from "@/features/item-search/ui/SearchInput";
+import { Textarea } from "@/shared/ui/textarea";
 
-interface ItemUploadModalProps {
-  onSuccess?: () => void;
-}
-
-export default function SellingItemCreateModal({
-  onSuccess,
-}: ItemUploadModalProps) {
+export default function SellingItemCreateModal() {
   const [open, setOpen] = useState(false);
-  // const [remaining, setRemaining] = useState(DAILY_LIMIT);
   const queryClient = useQueryClient();
   const { data: user } = useUser();
 
@@ -50,17 +39,12 @@ export default function SellingItemCreateModal({
     mutationFn: async (values: ItemFormValues) => {
       if (!user) throw new Error("로그인이 필요합니다.");
 
-      // const { remaining } = await getDailyItemCountAction();
-      // if (remaining <= 0) {
-      //   throw new Error(
-      //     "일일 등록 횟수를 모두 사용했습니다. 내일 다시 시도해주세요."
-      //   );
-      // }
-
       return insertItem({
         item_name: sanitize(values.item_name),
         price: values.price,
+        image: values.image,
         is_sold: false,
+        is_for_sale: true,
         item_source: ITEM_SOURCES_MAP[values.item_source],
         nickname: user?.user_metadata.custom_claims.global_name, // 디스코드 닉네임
         discord_id: user?.user_metadata.full_name, // 디스코드 아이디
@@ -70,14 +54,12 @@ export default function SellingItemCreateModal({
       });
     },
     onSuccess: async () => {
-      const { remaining } = await getDailyItemCountAction();
-      toast.success(`상품이 등록되었습니다! (잔여 횟수: ${remaining}회)`);
+      toast.success(`판매 아이템을 등록했습니다.`);
       queryClient.invalidateQueries({ queryKey: ["items"] });
       queryClient.invalidateQueries({ queryKey: ["my-items", user?.id] });
       queryClient.invalidateQueries({
         queryKey: ["filtered-items", user?.id],
       });
-      if (onSuccess) onSuccess(); // 남은 아이템 등록 횟수 갱신
       setOpen(false);
     },
     onError: (err) => {
@@ -94,6 +76,9 @@ export default function SellingItemCreateModal({
       item_source: "gatcha",
       item_gender: "m",
       is_sold: false,
+      category: "clothes",
+      image: "",
+      message: "",
     },
   });
 
@@ -121,20 +106,11 @@ export default function SellingItemCreateModal({
     }
   };
 
-  // useEffect(() => {
-  //   const getRemaining = async () => {
-  //     const { remaining } = await getDailyItemCountAction();
-  //     setRemaining(remaining);
-  //   };
-  //   getRemaining();
-  // }, []);
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <Button
         variant="default"
         className="w-auto font-bold bg-blue-600 hover:bg-blue-700"
-        // disabled={remaining === 0 || !user}
         disabled={!user}
         onClick={handleItemUploadOpen}
       >
@@ -177,6 +153,8 @@ export default function SellingItemCreateModal({
                         if (categoryKey) {
                           form.setValue("category", categoryKey); // 카테고리 자동 선택
                         }
+
+                        form.setValue("image", s.image);
                       }}
                     />
                   )}
@@ -223,6 +201,28 @@ export default function SellingItemCreateModal({
                   </p>
                 )}
               </div>
+
+              <div className="grid gap-3">
+                <label htmlFor="price" className="text-sm">
+                  메시지
+                </label>
+                <Textarea
+                  id="message"
+                  placeholder="메시지를 입력해주세요. (e.g. DM 주세요!)"
+                  {...form.register("message")}
+                />
+                {errors.price && (
+                  <p className="text-red-600 text-sm mt-1">
+                    {errors.price.message}
+                  </p>
+                )}
+              </div>
+
+              {Object.keys(errors).length > 0 && (
+                <div className="text-red-600 text-sm">
+                  {JSON.stringify(errors)}
+                </div>
+              )}
             </div>
 
             <DialogFooter className="mt-6">

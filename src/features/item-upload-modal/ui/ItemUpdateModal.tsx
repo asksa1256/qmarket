@@ -120,12 +120,13 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <Button
         variant="outline"
-        size="sm"
+        size="icon"
         className="gap-1.5 text-xs"
+        aria-label="아이템 수정"
+        title="아이템 수정"
         onClick={() => setOpen(true)}
       >
         <Pencil />
-        수정하기
       </Button>
 
       <DialogContent className="sm:max-w-[425px]">
