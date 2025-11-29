@@ -73,6 +73,10 @@ export default function SellingItemCreateModal({
       const { remaining } = await getDailyItemCountAction();
       toast.success(`상품이 등록되었습니다! (잔여 횟수: ${remaining}회)`);
       queryClient.invalidateQueries({ queryKey: ["items"] });
+      queryClient.invalidateQueries({ queryKey: ["my-items", user?.id] });
+      queryClient.invalidateQueries({
+        queryKey: ["filtered-items", user?.id],
+      });
       if (onSuccess) onSuccess(); // 남은 아이템 등록 횟수 갱신
       setOpen(false);
     },

@@ -95,6 +95,10 @@ export default function ItemEditModal({ item }: ItemEditModalProps) {
       setOpen(false);
 
       queryClient.invalidateQueries({
+        queryKey: ["items"],
+      });
+
+      queryClient.invalidateQueries({
         queryKey: ["my-items", user?.id],
       });
 

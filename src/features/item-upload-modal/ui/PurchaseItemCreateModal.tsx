@@ -64,6 +64,10 @@ export default function PurchaseItemCreateModal() {
     onSuccess: async () => {
       toast.success("아이템 구매 요청을 등록했습니다.");
       queryClient.invalidateQueries({ queryKey: ["items"] });
+      queryClient.invalidateQueries({ queryKey: ["my-items", user?.id] });
+      queryClient.invalidateQueries({
+        queryKey: ["filtered-items", user?.id],
+      });
       setOpen(false);
     },
     onError: (err) => {
