@@ -14,6 +14,7 @@ import { cn } from "@/shared/lib/utils";
 import { useItemsQuery } from "../model/useItemsQuery";
 import { useSearchItemQuery } from "../model/useSearchItemQuery";
 import { Button } from "@/shared/ui/button";
+import Image from "next/image";
 
 interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
@@ -23,10 +24,11 @@ interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export interface Suggestion {
-  category: string;
   id: number;
   name: string;
   item_gender: string | null;
+  category: string;
+  image: string | null;
 }
 
 export default function SearchInput({
@@ -107,6 +109,7 @@ export default function SearchInput({
                       value={s.id.toString()}
                       onSelect={() => handleSelect(s)}
                     >
+                      <Image src={s.image} alt="" width={40} height={48} />
                       {s.name} ({s.item_gender})
                     </CommandItem>
                   ))}
