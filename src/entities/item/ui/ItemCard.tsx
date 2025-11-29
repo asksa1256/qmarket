@@ -26,8 +26,8 @@ const ItemCard = ({ item }: { item: Item }) => {
       </figure>
 
       {/* 아이템 정보 */}
-      <div className="flex flex-col flex-1 min-w-0">
-        <div className="flex items-center justify-between">
+      <div className="flex justify-between w-full">
+        <div className="flex flex-col">
           <h3 className="text-sm font-medium truncate">
             {item.item_name}
             <span className="ml-1 text-gray-500 text-xs">
@@ -35,30 +35,34 @@ const ItemCard = ({ item }: { item: Item }) => {
             </span>
           </h3>
 
-          <p className="text-base font-semibold text-blue-700 flex items-center gap-0.5">
+          <h4 className="text-base font-semibold text-blue-700 flex items-center gap-0.5">
             {item.price.toLocaleString()}
             <span className="text-[10px] mt-0.5">원</span>
-          </p>
+          </h4>
         </div>
 
         <div className="flex items-center justify-between mt-1">
           <div className="flex flex-wrap gap-1">
-            <Badge
-              className={cn(
-                "text-[10px] px-1.5 py-0",
-                item.is_sold
-                  ? "bg-gray-700 text-white"
-                  : "bg-green-600 text-white"
-              )}
-            >
-              {item.is_sold ? "판매완료" : "판매중"}
-            </Badge>
-            <Badge
-              variant="outline"
-              className="text-[10px] bg-yellow-100 text-yellow-800 border-yellow-200 px-1.5 py-0"
-            >
-              {item.item_source}
-            </Badge>
+            {item.is_for_sale && (
+              <Badge
+                className={cn(
+                  "text-[10px] px-1.5 py-0",
+                  item.is_sold
+                    ? "bg-gray-700 text-white"
+                    : "bg-green-600 text-white"
+                )}
+              >
+                {item.is_sold ? "판매완료" : "판매중"}
+              </Badge>
+            )}
+            {item.item_source && (
+              <Badge
+                variant="outline"
+                className="text-[10px] bg-yellow-100 text-yellow-800 border-yellow-200 px-1.5 py-0"
+              >
+                {item.item_source}
+              </Badge>
+            )}
           </div>
 
           {/* 액션 버튼 (수정/삭제) */}

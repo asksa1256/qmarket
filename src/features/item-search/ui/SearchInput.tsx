@@ -23,6 +23,7 @@ interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export interface Suggestion {
+  category: string;
   id: number;
   name: string;
   item_gender: string | null;
