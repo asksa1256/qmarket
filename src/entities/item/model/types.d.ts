@@ -32,6 +32,14 @@ export interface Item {
   is_for_sale: boolean; // 판매/구매 아이템 여부 (true: 판매 아이템, false: 구매 아이템)
 }
 
+export interface SearchItemInfo {
+  id: string;
+  name: string;
+  item_gender: string;
+  image: string;
+  category: string;
+}
+
 export interface RankItem extends RankItemT {
   id: string;
   item_name: string;

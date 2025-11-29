@@ -1,6 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
+import { SearchItemInfo } from "@/entities/item/model/types";
 
-export const useSearchItemQuery = (keyword: string, items: any[]) => {
+export const useSearchItemQuery = (
+  keyword: string,
+  items: SearchItemInfo[]
+) => {
   return useQuery({
     queryKey: ["items", "search", keyword],
     queryFn: () => {

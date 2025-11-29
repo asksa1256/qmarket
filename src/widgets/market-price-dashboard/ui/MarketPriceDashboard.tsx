@@ -234,11 +234,7 @@ export default function MarketPriceDashboard() {
               표시됩니다.
             </p>
             <div className="p-4 border border-gray-200 rounded-lg shadow-inner bg-white">
-              <SaleHistoryChart
-                data={saleHistory}
-                itemName={searchQuery}
-                itemGender={itemGender}
-              />
+              <SaleHistoryChart data={saleHistory} />
             </div>
           </div>
         </div>

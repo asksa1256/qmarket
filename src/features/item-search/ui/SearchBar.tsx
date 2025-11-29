@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import SearchInput from "./SearchInput";
-import type { Suggestion } from "@/features/item-search/ui/SearchInput";
+import { SearchItemInfo } from "@/entities/item/model/types";
 import { useRouter } from "next/navigation";
 
 const SearchBar = () => {
   const [value, setValue] = useState("");
   const router = useRouter();
 
-  const handleSelectSuggestion = (s: Suggestion) => {
+  const handleSelectSuggestion = (s: SearchItemInfo) => {
     router.push(`/item/${s.id}`);
   };
 

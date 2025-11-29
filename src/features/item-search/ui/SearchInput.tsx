@@ -15,20 +15,13 @@ import { useItemsQuery } from "../model/useItemsQuery";
 import { useSearchItemQuery } from "../model/useSearchItemQuery";
 import { Button } from "@/shared/ui/button";
 import Image from "next/image";
+import { SearchItemInfo } from "@/entities/item/model/types";
 
 interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
   className?: string;
   onSearch: (value: string) => void;
-  onSelectSuggestion?: (suggestion: Suggestion) => void;
-}
-
-export interface Suggestion {
-  id: number;
-  name: string;
-  item_gender: string | null;
-  category: string;
-  image: string | null;
+  onSelectSuggestion?: (suggestion: SearchItemInfo) => void;
 }
 
 export default function SearchInput({
@@ -56,17 +49,17 @@ export default function SearchInput({
         setInputValue(val);
         refetch(); // React Query 검색 수행
       }, 300),
-    [refetch, onSearch]
+    [refetch]
   );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setInputValue(val);
     debouncedSearch(val);
-    if (!open && inputValue.length > 0) setSuggestionOpen(true);
+    if (!suggestionOpen && val.length > 0) setSuggestionOpen(true);
   };
 
-  const handleSelect = (s: Suggestion) => {
+  const handleSelect = (s: SearchItemInfo) => {
     setInputValue(s.name);
     onSearch(s.name);
     if (onSelectSuggestion) onSelectSuggestion(s);
@@ -103,10 +96,10 @@ export default function SearchInput({
                 </CommandEmpty>
               ) : (
                 <CommandGroup heading="검색 결과">
-                  {suggestions.map((s, idx) => (
+                  {suggestions.map((s) => (
                     <CommandItem
-                      key={idx}
-                      value={s.id.toString()}
+                      key={s.id}
+                      value={s.id}
                       onSelect={() => handleSelect(s)}
                     >
                       <Image
