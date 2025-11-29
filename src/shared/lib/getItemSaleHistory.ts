@@ -44,7 +44,7 @@ export default async function getItemSaleHistory(
       .select("item_name, price, updated_at")
       .eq("item_name", itemName)
       .eq("item_gender", itemGender)
-      .not("is_sold", "is", false) // 판매 완료된 내역만 필터링
+      .eq("is_sold", true) // 판매 완료된 내역만 필터링
       .order("updated_at", { ascending: false }),
   ]);
 

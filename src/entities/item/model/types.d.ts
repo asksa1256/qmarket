@@ -1,4 +1,3 @@
-export type IsOnline = "online" | "offline";
 export type ItemSource = "gatcha" | "shop" | "lottery" | "magic";
 export type ItemGender = "w" | "m";
 export type ItemCategory =
@@ -21,7 +20,7 @@ export interface Item {
   item_name: string; // 상품명
   price: number; // 가격
   image: string; // 이미지 URL (컬럼명 변경)
-  is_online: IsOnline; // 온라인/미접속
+  is_for_sale: boolean; // 판매/구매 아이템 구분 (true: 판매 아이템, false: 구매 아이템)
   item_source: ItemSource; // 뽑기/상점/복권/기타 아이템
   nickname: string; // 판매자 닉네임 (디스코드 닉네임)
   discord_id: string; // 판매자 아이디 (디스코드 아이디)
