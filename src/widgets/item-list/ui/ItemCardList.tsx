@@ -1,7 +1,11 @@
+"use client";
+
 import ItemCard from "@/entities/item/ui/ItemCard";
 import { getDailyItemCountAction } from "@/features/item-upload-modal/model/actions";
 import { DAILY_LIMIT } from "@/shared/lib/redis";
 import fetchFilteredItems from "@/entities/item/api/itemApi";
+import { getMyItems } from "@/widgets/item-list/model/getMyItems";
+import { useQuery } from "@tanstack/react-query";
 
 interface Props {
   userId: string;
@@ -9,33 +13,32 @@ interface Props {
   isSold: boolean; // 거래 완료 여부
 }
 
-export default async function ItemCardList({
-  userId,
-  isForSale,
-  isSold,
-}: Props) {
-  let items;
-  try {
-    items = await fetchFilteredItems({ userId, isForSale, isSold });
-  } catch (error) {
-    return (
-      <div className="text-sm text-gray-500">
-        데이터를 불러오는 데 실패했습니다.
-      </div>
-    );
-  }
+export default function ItemCardList({ userId, isForSale, isSold }: Props) {
+  const { data: allItems, isPending: isLoadingItems } = useQuery({
+    queryKey: ["my-items", userId],
+    queryFn: () => getMyItems(userId),
+  });
+
+  const { data: filteredItems, isPending: isLoadingFiltered } = useQuery({
+    queryKey: ["filtered-items", userId, isForSale, isSold],
+    queryFn: () => fetchFilteredItems({ userId, isForSale, isSold }),
+    enabled: !!allItems, // allItems가 있을 때만 실행
+  });
+
+  if (isLoadingItems) return <div>전체 아이템 로딩 중...</div>;
+  if (isLoadingFiltered) return <div>필터링 중...</div>;
 
   return (
     <div className="pb-10 grow">
       {/* 아이템 리스트 */}
       <div className="flex flex-col h-[400px] overflow-auto rounded-2xl border border-border">
-        {items.length === 0 ? (
+        {allItems?.length === 0 ? (
           <div className="flex items-center justify-center h-full text-sm text-gray-500">
             등록된 아이템이 없습니다.
           </div>
         ) : (
           <>
-            {items.map((item) => (
+            {filteredItems?.map((item) => (
               <ItemCard key={item.id} item={item} />
             ))}
           </>

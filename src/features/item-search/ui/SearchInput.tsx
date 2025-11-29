@@ -109,7 +109,12 @@ export default function SearchInput({
                       value={s.id.toString()}
                       onSelect={() => handleSelect(s)}
                     >
-                      <Image src={s.image} alt="" width={40} height={48} />
+                      <Image
+                        src={s.image || "/images/empty.png"}
+                        alt=""
+                        width={40}
+                        height={48}
+                      />
                       {s.name} ({s.item_gender})
                     </CommandItem>
                   ))}

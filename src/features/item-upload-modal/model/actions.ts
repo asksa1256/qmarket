@@ -22,6 +22,20 @@ interface InsertItemValues {
   is_sold: boolean;
 }
 
+interface InsertPurchaseItemValues {
+  item_name: string;
+  price: number;
+  item_source: string;
+  item_gender: string;
+  category: string;
+  nickname: string;
+  discord_id: string;
+  user_id: string;
+  is_sold: boolean;
+  is_for_sale: boolean;
+  message: string;
+}
+
 export async function insertItem(values: InsertItemValues) {
   const supabase = await getSupabaseCookie();
   const {
@@ -40,7 +54,24 @@ export async function insertItem(values: InsertItemValues) {
   const currentCount = await checkAndIncrementDailyItemLimit(user.id);
   const remaining = DAILY_LIMIT - currentCount;
 
+  // return { data, currentCount, remaining };
   return { data, currentCount, remaining };
+}
+
+export async function insertPurchaseItem(values: InsertPurchaseItemValues) {
+  const supabase = await getSupabaseCookie();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error("로그인이 필요합니다.");
+
+  const { data, error } = await supabase
+    .from(ITEMS_TABLE_NAME)
+    .insert([{ ...values, user_id: user.id }])
+    .select();
+
+  if (error) throw new Error(error.message);
+  return { data };
 }
 
 // 클라이언트에 일일 등록 카운트 표시해주는 함수
