@@ -4,7 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/shared/ui/accordion";
-import LinkToOpenInquiryModal from "@/entities/faq/ui/LinkToOpenInquiryModal";
+import LinkToOpenInquiryModal from "@/features/inquiry/ui/LinkToOpenInquiryModal";
 import ButtonToMain from "@/shared/ui/LinkButton/ButtonToMain";
 
 export default function FAQPage() {

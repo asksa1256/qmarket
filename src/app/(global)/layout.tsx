@@ -3,7 +3,7 @@ import "@/globals.css";
 import { QueryProvider } from "@/shared/providers/QueryProvider";
 import { pretendard } from "@/shared/config/fonts";
 import { Toaster } from "sonner";
-import Header from "@/widgets/header/ui/Header";
+import Header from "@/shared/ui/Header";
 import { Analytics } from "@vercel/analytics/next";
 import Footer from "@/shared/ui/Footer";
 

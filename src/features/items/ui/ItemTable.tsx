@@ -1,3 +1,4 @@
+import { Item } from "@/features/item/model/itemTypes";
 import {
   Table,
   TableBody,
@@ -7,25 +8,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/ui/table";
+import { Badge } from "@/shared/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
+import { useState } from "react";
 import ItemImage from "@/shared/ui/ItemImage";
-import { formatDateYMD } from "@/shared/lib/formatters";
+import { formatDate } from "@/shared/lib/formatters";
+import { copyToClipboard } from "@/shared/lib/copyToClipboard";
 import LoadingSpinner from "@/shared/ui/LoadingSpinner";
 import CreateReportModal from "@/features/report/ui/CreateReportModal";
-import { RankItem } from "@/features/item/model/itemTypes";
 import { useUser } from "@/shared/hooks/useUser";
-import { useState } from "react";
-import { cn } from "@/shared/lib/utils";
 
-interface ItemRankingTableProps {
-  items: RankItem[];
+interface ItemTableProps {
+  items: Item[];
   isLoading?: boolean;
 }
 
-export default function ItemRankingTable({
-  items,
-  isLoading,
-}: ItemRankingTableProps) {
+export const ItemTable = ({ items, isLoading }: ItemTableProps) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const { data: user } = useUser();
 
@@ -45,16 +43,22 @@ export default function ItemRankingTable({
               <TableHeader className="bg-gray-100">
                 <TableRow>
                   <TableHead className="text-center font-medium text-sm text-gray-700">
-                    순위
-                  </TableHead>
-                  <TableHead className="font-medium text-center text-sm text-gray-700">
-                    아이템명
+                    상품명
                   </TableHead>
                   <TableHead className="text-center font-medium text-sm text-gray-700">
                     가격 (사이버머니)
                   </TableHead>
                   <TableHead className="text-center font-medium text-sm text-gray-700">
-                    최근 거래일자
+                    판매상태
+                  </TableHead>
+                  <TableHead className="text-center font-medium text-sm text-gray-700">
+                    뽑기/상점/복권
+                  </TableHead>
+                  <TableHead className="text-center font-medium text-sm text-gray-700">
+                    판매자
+                  </TableHead>
+                  <TableHead className="text-center font-medium text-sm text-gray-700">
+                    등록일
                   </TableHead>
                   {user && (
                     <TableHead className="text-center font-medium text-sm text-gray-700">
@@ -67,26 +71,20 @@ export default function ItemRankingTable({
               <TableBody>
                 {items.map((item, idx) => (
                   <Popover
-                    key={`${item.item_name}-${item.item_gender}`}
+                    key={item.id}
                     open={openIndex === idx}
                     onOpenChange={(isOpen) => setOpenIndex(isOpen ? idx : null)}
                   >
                     <PopoverTrigger asChild>
                       <TableRow
                         className={`cursor-default ${
+                          item.is_sold ? "opacity-40" : "opacity-100"
+                        } ${
                           idx % 2 === 0 ? "bg-white" : "bg-gray-50"
                         } hover:bg-gray-100 transition-colors`}
                         onMouseEnter={() => setOpenIndex(idx)}
                         onMouseLeave={() => setOpenIndex(null)}
                       >
-                        <TableCell
-                          className={cn(
-                            "text-center text-gray-800",
-                            item.rank < 11 && "font-bold text-[#2359B6]"
-                          )}
-                        >
-                          {item.rank}
-                        </TableCell>
                         <TableCell className="text-center font-bold text-gray-800">
                           <div className="flex items-center gap-4 mx-auto w-[65%]">
                             <ItemImage
@@ -100,8 +98,52 @@ export default function ItemRankingTable({
                         <TableCell className="text-center font-bold text-gray-700">
                           {item.price.toLocaleString()}
                         </TableCell>
+                        <TableCell className="text-center">
+                          <Badge
+                            variant="secondary"
+                            className={`${
+                              item.is_sold
+                                ? "bg-red-100 text-red-700"
+                                : "bg-blue-600 text-white"
+                            } px-2 py-1 rounded-full`}
+                          >
+                            {item.is_sold ? "판매완료" : "판매중"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <Badge
+                            variant="outline"
+                            className="bg-yellow-100 text-yellow-800 border-yellow-200 px-2 py-1 rounded-full"
+                          >
+                            {item.item_source}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <Badge
+                            variant="secondary"
+                            className="text-gray-700 truncate px-2 py-1 rounded cursor-pointer"
+                            title={`디스코드 아이디: ${item.discord_id}`}
+                            onClick={() =>
+                              copyToClipboard(
+                                item.discord_id,
+                                "디스코드 아이디를 복사했습니다."
+                              )
+                            }
+                          >
+                            <div className="flex items-center font-medium text-gray-900">
+                              {item.nickname}
+                              <span className="flex items-center text-xs font-medium bg-gray-200 py-0 px-0.5 text-black rounded-md">
+                                (
+                                <span className="max-w-[36px] overflow-ellipsis overflow-hidden">
+                                  {item.discord_id}
+                                </span>
+                                )
+                              </span>
+                            </div>
+                          </Badge>
+                        </TableCell>
                         <TableCell className="text-center text-sm text-gray-500">
-                          {formatDateYMD(item.updated_at)}
+                          {formatDate(item.created_at)}
                         </TableCell>
                         {user && (
                           <TableCell className="text-center text-sm text-gray-500">
@@ -125,6 +167,9 @@ export default function ItemRankingTable({
                         <p className="text-center font-medium text-gray-900">
                           {item.item_name}
                         </p>
+                        <p className="text-sm text-gray-500 max-w-[80px] break-words">
+                          판매자: {item.nickname}({item.discord_id})
+                        </p>
                       </div>
                     </PopoverContent>
                   </Popover>
@@ -137,7 +182,7 @@ export default function ItemRankingTable({
           <div className="md:hidden space-y-3">
             {items.map((item) => (
               <div
-                key={`${item.item_name}-${item.item_gender}`}
+                key={item.id}
                 className="relative border rounded-lg p-3 shadow-sm bg-white"
               >
                 <div className="flex items-center gap-3">
@@ -164,8 +209,34 @@ export default function ItemRankingTable({
                 </div>
 
                 <div className="mt-3 block md:grid md:grid-cols-2 gap-2 text-sm">
+                  <div className="flex gap-1 mb-2">
+                    <Badge
+                      className={`${
+                        item.is_sold
+                          ? "bg-red-100 text-red-700"
+                          : "bg-blue-600 text-white"
+                      }`}
+                    >
+                      {item.is_sold ? "판매완료" : "판매중"}
+                    </Badge>
+                    <Badge className="bg-yellow-100 text-yellow-800">
+                      {item.item_source}
+                    </Badge>
+                  </div>
+
+                  <span
+                    className="text-gray-600 cursor-pointer col-span-2 flex items-center gap-1"
+                    onClick={() =>
+                      copyToClipboard(
+                        item.discord_id,
+                        "디스코드 아이디를 복사했습니다."
+                      )
+                    }
+                  >
+                    - 판매자: {item.nickname}({item.discord_id})
+                  </span>
                   <span className="text-gray-400 col-span-2">
-                    - 거래일자: {formatDateYMD(item.updated_at)}
+                    - 등록일: {formatDate(item.created_at)}
                   </span>
                 </div>
 
@@ -187,4 +258,4 @@ export default function ItemRankingTable({
       )}
     </div>
   );
-}
+};

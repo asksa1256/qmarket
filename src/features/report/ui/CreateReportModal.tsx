@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/ui/dialog";
-import { Input } from "@/shared/ui/input"; // 새롭게 추가된 Input 컴포넌트
+import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";

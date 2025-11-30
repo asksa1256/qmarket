@@ -1,5 +1,5 @@
-import SignInForm from "@/features/sign-in-form/ui/SignInForm";
-import SignInErrorBox from "@/widgets/auth/ui/SignInErrorBox";
+import SignInForm from "@/features/auth/signin/ui/SignInForm";
+import SignInErrorBox from "@/features/auth/ui/SignInErrorBox";
 
 type SearchParams = { [key: string]: string | string[] | undefined };
 

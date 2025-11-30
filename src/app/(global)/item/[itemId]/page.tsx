@@ -1,4 +1,4 @@
-import ItemDetailClient from "@/features/item-search/ui/ItemDetailClient";
+import ItemDetailClient from "@/features/item/ui/ItemDetailClient";
 import { supabaseServer } from "@/shared/api/supabase-server";
 
 export default async function ItemDetailPage({

@@ -1,8 +1,8 @@
-import ItemCardList from "@/widgets/item-list/ui/ItemCardList";
+import ItemCardList from "@/features/items/ui/ItemCardList";
 import { createClient } from "@/shared/api/supabase-server-cookie";
 import ButtonToMain from "@/shared/ui/LinkButton/ButtonToMain";
 import { Suspense } from "react";
-import UserItemListHeader from "@/widgets/item-list/ui/UserItemListHeader";
+import UserItemListHeader from "@/features/items/ui/UserItemListHeader";
 
 export default async function MyItemsPage() {
   const supabase = await createClient();
