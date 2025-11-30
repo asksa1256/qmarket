@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import SearchInput from "./SearchInput";
-import { SearchItemInfo } from "@/entities/item/model/types";
+import { SearchItemInfo } from "@/features/item/model/itemTypes";
 import { useRouter } from "next/navigation";
 
 const SearchBar = () => {

@@ -11,11 +11,11 @@ import {
   CommandList,
 } from "@/shared/ui/command";
 import { cn } from "@/shared/lib/utils";
-import { useItemsQuery } from "../model/useItemsQuery";
-import { useSearchItemQuery } from "../model/useSearchItemQuery";
+import { useItemsQuery } from "@/shared/hooks/useItemsQuery";
+import { useSearchItemQuery } from "@/shared/hooks/useSearchItemQuery";
 import { Button } from "@/shared/ui/button";
 import Image from "next/image";
-import { SearchItemInfo } from "@/entities/item/model/types";
+import { SearchItemInfo } from "@/features/item/model/itemTypes";
 
 interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   value: string;

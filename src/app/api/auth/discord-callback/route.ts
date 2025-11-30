@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/shared/api/supabase-server-cookie";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js"; // 관리자 클라이언트 생성용
-import { DiscordGuild } from "@/features/sign-in-form/model/discord";
+import { DiscordGuild } from "@/features/auth/signin/model/discord";
 
 const TARGET_GUILD_ID = "1303996406268428288";
 

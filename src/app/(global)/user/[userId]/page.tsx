@@ -1,5 +1,5 @@
 import { supabaseServer } from "@/shared/api/supabase-server";
-import UserDetailClient from "@/features/user-detail/ui/UserDetailClient";
+import UserDetailClient from "@/features/user/ui/UserDetailClient";
 
 export default async function UserDetailPage({
   params,

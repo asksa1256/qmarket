@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/shared/ui/button";
-import { login } from "@/features/sign-in-form/model/actions";
+import { login } from "@/features/auth/signin/model/actions";
 
 const invite = "https://discord.com/invite/UKE4xj5pVN";
 
