@@ -1,6 +1,6 @@
 "use client";
 
-import ItemEditModal from "@/features/item-upload-modal/ui/ItemEditModal";
+import ItemUpdateModal from "@/features/item-upload-modal/ui/ItemUpdateModal";
 import { ItemDeleteModal } from "@/features/item-upload-modal/ui/ItemDeleteModal";
 import { Item } from "@/entities/item/model/types";
 import { useUser } from "@/shared/hooks/useUser";
@@ -14,10 +14,10 @@ export default function MyItemActions({ item, isSold }: MyItemActionsProps) {
   const { data: user } = useUser();
 
   return (
-    <div className="absolute right-4 top-4 flex gap-2">
+    <div className="flex gap-1">
       {!isSold && (
         <>
-          <ItemEditModal item={item} />
+          <ItemUpdateModal item={item} />
           {user?.id && <ItemDeleteModal itemId={item.id} userId={user.id} />}
         </>
       )}

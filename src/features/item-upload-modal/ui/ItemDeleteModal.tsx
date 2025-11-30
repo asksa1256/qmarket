@@ -42,7 +42,8 @@ export function ItemDeleteModal({ itemId, userId }: Props) {
       }
 
       const { error } = await supabase
-        .from("items")
+        // .from("items")
+        .from("items_test")
         .delete()
         .eq("id", itemId)
         .eq("user_id", user.id);
@@ -51,22 +52,9 @@ export function ItemDeleteModal({ itemId, userId }: Props) {
       return itemId;
     },
 
-    // 성공 시 캐시 동기화 (UI 즉시 반영)
-    onSuccess: (deletedId) => {
+    onSuccess: () => {
       toast.success("아이템을 삭제했습니다.");
-
-      queryClient.setQueryData<InfiniteData<Item[]>>(
-        ["my-items", userId],
-        (oldData) => {
-          if (!oldData) return oldData;
-          return {
-            ...oldData,
-            pages: oldData.pages.map((page) =>
-              page.filter((i) => i.id !== deletedId)
-            ),
-          };
-        }
-      );
+      queryClient.invalidateQueries({ queryKey: ["my-items", userId] });
     },
 
     onError: (err) => {
@@ -78,7 +66,13 @@ export function ItemDeleteModal({ itemId, userId }: Props) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="outline" size="icon" title="삭제하기">
+        <Button
+          variant="outline"
+          size="icon"
+          className="gap-1.5 text-xs"
+          aria-label="아이템 삭제"
+          title="아이템 삭제"
+        >
           <Trash />
         </Button>
       </AlertDialogTrigger>

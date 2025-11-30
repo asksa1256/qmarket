@@ -17,7 +17,10 @@ import { sanitize } from "@/shared/lib/sanitize";
 import { Label } from "@/shared/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
 import { ScrollArea } from "@/shared/ui/scroll-area";
-import { ItemFormValues, ItemFormSchema } from "../model/schema";
+import {
+  PurchaseItemUpdateFormSchema,
+  PurchaseItemUpdateFormType,
+} from "../model/schema";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -29,49 +32,42 @@ import { Lock, Plus } from "lucide-react";
 import { useUser } from "@/shared/hooks/useUser";
 import { useEffect, useState } from "react";
 import { cn } from "@/shared/lib/utils";
-import { insertItem } from "../model/actions";
+import { insertPurchaseItem } from "../model/actions";
 import { getDailyItemCountAction } from "../model/actions";
 import { DAILY_LIMIT } from "@/shared/lib/redis";
 import SearchInput from "@/features/item-search/ui/SearchInput";
+import { Textarea } from "@/shared/ui/textarea";
 
-interface ItemUploadModalProps {
-  onSuccess?: () => void;
-}
-
-export default function ItemUploadModal({ onSuccess }: ItemUploadModalProps) {
+export default function PurchaseItemCreateModal() {
   const [open, setOpen] = useState(false);
-  const [remaining, setRemaining] = useState(DAILY_LIMIT);
   const queryClient = useQueryClient();
   const { data: user } = useUser();
 
-  const createItemMutation = useMutation({
-    mutationFn: async (values: ItemFormValues) => {
+  const createPurchaseItemMutation = useMutation({
+    mutationFn: async (values: PurchaseItemUpdateFormType) => {
       if (!user) throw new Error("로그인이 필요합니다.");
 
-      const { remaining } = await getDailyItemCountAction();
-      if (remaining <= 0) {
-        throw new Error(
-          "일일 등록 횟수를 모두 사용했습니다. 내일 다시 시도해주세요."
-        );
-      }
-
-      return insertItem({
+      return insertPurchaseItem({
         item_name: sanitize(values.item_name),
         price: values.price,
         is_sold: false,
+        is_for_sale: false,
         item_source: ITEM_SOURCES_MAP[values.item_source],
         nickname: user?.user_metadata.custom_claims.global_name, // 디스코드 닉네임
         discord_id: user?.user_metadata.full_name, // 디스코드 아이디
         item_gender: ITEM_GENDER_MAP[values.item_gender],
         user_id: user?.id,
+        message: values.message || "",
         category: ITEM_CATEGORY_MAP[values.category],
       });
     },
     onSuccess: async () => {
-      const { remaining } = await getDailyItemCountAction();
-      toast.success(`상품이 등록되었습니다! (잔여 횟수: ${remaining}회)`);
+      toast.success("아이템 구매 요청을 등록했습니다.");
       queryClient.invalidateQueries({ queryKey: ["items"] });
-      if (onSuccess) onSuccess(); // 남은 아이템 등록 횟수 갱신
+      queryClient.invalidateQueries({ queryKey: ["my-items", user?.id] });
+      queryClient.invalidateQueries({
+        queryKey: ["filtered-items", user?.id],
+      });
       setOpen(false);
     },
     onError: (err) => {
@@ -80,14 +76,15 @@ export default function ItemUploadModal({ onSuccess }: ItemUploadModalProps) {
     },
   });
 
-  const form = useForm<ItemFormValues>({
-    resolver: zodResolver(ItemFormSchema),
+  const form = useForm<PurchaseItemUpdateFormType>({
+    resolver: zodResolver(PurchaseItemUpdateFormSchema),
     defaultValues: {
       item_name: "",
       price: 0,
-      item_source: "gatcha",
-      item_gender: "m",
-      is_sold: false,
+      message: "",
+      item_source: "gatcha", // 필수 필드 추가
+      item_gender: "w", // 필수 필드 추가
+      category: "clothes", // 필수 필드 추가
     },
   });
 
@@ -98,8 +95,8 @@ export default function ItemUploadModal({ onSuccess }: ItemUploadModalProps) {
     formState: { errors },
   } = form;
 
-  const onSubmit = (values: ItemFormValues) => {
-    createItemMutation.mutate(values, {
+  const onSubmit = (values: PurchaseItemUpdateFormType) => {
+    createPurchaseItemMutation.mutate(values, {
       onSuccess: () => {
         reset(); // 폼 초기화
       },
@@ -115,30 +112,22 @@ export default function ItemUploadModal({ onSuccess }: ItemUploadModalProps) {
     }
   };
 
-  useEffect(() => {
-    const getRemaining = async () => {
-      const { remaining } = await getDailyItemCountAction();
-      setRemaining(remaining);
-    };
-    getRemaining();
-  }, []);
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <Button
         variant="default"
         className="w-auto font-bold bg-blue-600 hover:bg-blue-700"
-        disabled={remaining === 0 || !user}
+        disabled={!user}
         onClick={handleItemUploadOpen}
       >
-        {user ? <Plus /> : <Lock />} 아이템 등록
+        {user ? <Plus /> : <Lock />} 구매 아이템 등록
       </Button>
 
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader className="mb-4">
-          <DialogTitle>아이템 등록하기</DialogTitle>
+          <DialogTitle>구매 아이템 등록</DialogTitle>
           <DialogDescription className="flex flex-col">
-            <span>판매중인 아이템 정보를 등록해주세요.</span>
+            <span>구매할 아이템을 등록해주세요.</span>
           </DialogDescription>
         </DialogHeader>
 
@@ -170,6 +159,14 @@ export default function ItemUploadModal({ onSuccess }: ItemUploadModalProps) {
                         if (categoryKey) {
                           form.setValue("category", categoryKey); // 카테고리 자동 선택
                         }
+
+                        const genderKey = Object.entries(ITEM_GENDER_MAP).find(
+                          ([_key, label]) => label === s.item_gender
+                        )?.[0] as keyof typeof ITEM_GENDER_MAP;
+
+                        if (genderKey) {
+                          form.setValue("item_gender", genderKey);
+                        }
                       }}
                     />
                   )}
@@ -179,46 +176,6 @@ export default function ItemUploadModal({ onSuccess }: ItemUploadModalProps) {
                     {errors.item_name.message}
                   </p>
                 )}
-              </div>
-
-              {/* 아이템 카테고리 */}
-              <div className="grid gap-3">
-                <label htmlFor="category" className="text-sm">
-                  카테고리
-                </label>
-                <Controller
-                  name="category"
-                  control={control}
-                  render={({ field }) => (
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      value={field.value}
-                      className="flex flex-wrap gap-2"
-                    >
-                      {Object.entries(ITEM_CATEGORY_MAP).map(
-                        ([key, label], idx) => (
-                          <div key={key} className="relative">
-                            <RadioGroupItem
-                              value={key}
-                              id={`category${idx + 1}`}
-                              className="peer sr-only"
-                            />
-                            <Label
-                              htmlFor={`category${idx + 1}`}
-                              className={cn(
-                                "cursor-pointer rounded-full border px-4 py-2 text-sm transition",
-                                "text-gray-700 hover:bg-blue-50",
-                                "peer-data-[state=checked]:bg-blue-600 peer-data-[state=checked]:text-white peer-data-[state=checked]:border-blue-600 peer-data-[state=checked]:hover:bg-blue-600"
-                              )}
-                            >
-                              {label}
-                            </Label>
-                          </div>
-                        )
-                      )}
-                    </RadioGroup>
-                  )}
-                />
               </div>
 
               <div className="grid gap-3">
@@ -257,71 +214,40 @@ export default function ItemUploadModal({ onSuccess }: ItemUploadModalProps) {
                 )}
               </div>
 
-              {/* 아이템 성별 */}
               <div className="grid gap-3">
-                <label htmlFor="item_gender1" className="text-sm">
-                  아이템 성별
+                <label htmlFor="price" className="text-sm">
+                  메시지
                 </label>
-                <Controller
-                  name="item_gender"
-                  control={control}
-                  render={({ field }) => (
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      value={field.value}
-                    >
-                      {Object.entries(ITEM_GENDER_MAP).map(
-                        ([key, label], idx) => (
-                          <div
-                            className="flex items-center gap-3"
-                            key={`${key}-${idx}`}
-                          >
-                            <RadioGroupItem value={key} id={key} />
-                            <Label htmlFor={key}>{label}</Label>
-                          </div>
-                        )
-                      )}
-                    </RadioGroup>
-                  )}
+                <Textarea
+                  id="message"
+                  placeholder="메시지를 입력해주세요. (e.g. DM 주세요!)"
+                  {...form.register("message")}
                 />
+                {errors.price && (
+                  <p className="text-red-600 text-sm mt-1">
+                    {errors.price.message}
+                  </p>
+                )}
               </div>
 
-              {/* 아이템 출처 */}
-              <div className="grid gap-3">
-                <label htmlFor="source1" className="text-sm">
-                  아이템 출처
-                </label>
-                <Controller
-                  name="item_source"
-                  control={control}
-                  render={({ field }) => (
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      value={field.value}
-                    >
-                      {Object.entries(ITEM_SOURCES_MAP).map(
-                        ([key, label], idx) => (
-                          <div
-                            className="flex items-center gap-3"
-                            key={`${key}=${idx}`}
-                          >
-                            <RadioGroupItem value={key} id={key} />
-                            <Label htmlFor={key}>{label}</Label>
-                          </div>
-                        )
-                      )}
-                    </RadioGroup>
-                  )}
-                />
-              </div>
+              {Object.keys(errors).length > 0 && (
+                <div className="text-red-600 text-sm">
+                  {JSON.stringify(errors)}
+                </div>
+              )}
             </div>
 
             <DialogFooter className="mt-6">
               <DialogClose asChild>
                 <Button variant="outline">닫기</Button>
               </DialogClose>
-              <Button type="submit" disabled={createItemMutation.isPending}>
-                {createItemMutation.isPending ? "등록 중..." : "등록하기"}
+              <Button
+                type="submit"
+                disabled={createPurchaseItemMutation.isPending}
+              >
+                {createPurchaseItemMutation.isPending
+                  ? "등록 중..."
+                  : "등록하기"}
               </Button>
             </DialogFooter>
           </form>

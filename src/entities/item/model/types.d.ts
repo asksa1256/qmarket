@@ -29,6 +29,15 @@ export interface Item {
   user_id: string; // 아이템 등록 유저 uuid (디스코드 uuid)
   category: ItemCategory; // 아이템 카테고리
   created_at: string; // 아이템 등록일
+  is_for_sale: boolean; // 판매/구매 아이템 여부 (true: 판매 아이템, false: 구매 아이템)
+}
+
+export interface SearchItemInfo {
+  id: string;
+  name: string;
+  item_gender: string;
+  image: string;
+  category: string;
 }
 
 export interface RankItem extends RankItemT {

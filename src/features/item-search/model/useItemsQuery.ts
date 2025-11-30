@@ -3,11 +3,11 @@ import { supabase } from "@/shared/api/supabase-client";
 
 export const useItemsQuery = () => {
   return useQuery({
-    queryKey: ["items"],
+    queryKey: ["items_info"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("items_info")
-        .select("id, name, item_gender");
+        .select("id, name, item_gender, image, category");
 
       if (error) throw error;
       return data;

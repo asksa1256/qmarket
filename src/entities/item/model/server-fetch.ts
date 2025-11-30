@@ -1,9 +1,9 @@
-import { supabaseServer } from "../../../shared/api/supabase-server";
+import { supabaseServer } from "@/shared/api/supabase-server";
 import { Item } from "../model/types";
 import {
   ITEMS_TABLE_NAME,
   SELECT_ITEM_COLUMNS,
-} from "../../../shared/config/constants";
+} from "@/shared/config/constants";
 
 /**
  * 서버에서 초기 상품 목록 10개를 가져오는 함수
