@@ -15,7 +15,7 @@ import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { sanitize } from "@/shared/lib/sanitize";
 import { ScrollArea } from "@/shared/ui/scroll-area";
-import { ItemFormValues, ItemFormSchema } from "../model/schema";
+import { ItemFormType, ItemFormSchema } from "../model/schema";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -29,7 +29,6 @@ import { useState } from "react";
 import { createSellingItem } from "../model/actions";
 import SearchInput from "@/features/item-search/ui/SearchInput";
 import { Textarea } from "@/shared/ui/textarea";
-import { ItemGender } from "../model/itemTypes";
 
 export default function SellingItemCreateModal() {
   const [open, setOpen] = useState(false);
@@ -37,12 +36,12 @@ export default function SellingItemCreateModal() {
   const { data: user } = useUser();
 
   const createItemMutation = useMutation({
-    mutationFn: async (values: ItemFormValues) => {
+    mutationFn: async (values: ItemFormType) => {
       if (!user) throw new Error("로그인이 필요합니다.");
       console.log(values);
 
       return createSellingItem({
-        item_name: sanitize(values.item_name),
+        item_name: values.item_name,
         price: values.price,
         image: values.image,
         is_sold: false,
@@ -71,7 +70,7 @@ export default function SellingItemCreateModal() {
     },
   });
 
-  const form = useForm<ItemFormValues>({
+  const form = useForm<ItemFormType>({
     resolver: zodResolver(ItemFormSchema),
     defaultValues: {
       item_name: "",
@@ -92,7 +91,7 @@ export default function SellingItemCreateModal() {
     formState: { errors },
   } = form;
 
-  const onSubmit = (values: ItemFormValues) => {
+  const onSubmit = (values: ItemFormType) => {
     createItemMutation.mutate(values, {
       onSuccess: () => {
         reset(); // 폼 초기화

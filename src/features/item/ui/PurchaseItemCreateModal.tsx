@@ -13,9 +13,8 @@ import {
 import { Input } from "@/shared/ui/input";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { sanitize } from "@/shared/lib/sanitize";
 import { ScrollArea } from "@/shared/ui/scroll-area";
-import { PurchaseItemFormSchema, PurchaseItemFormType } from "../model/schema";
+import { ItemFormSchema, ItemFormType } from "../model/schema";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -38,11 +37,11 @@ export default function PurchaseItemCreateModal() {
   const { data: user } = useUser();
 
   const createPurchaseItemMutation = useMutation({
-    mutationFn: async (values: PurchaseItemFormType) => {
+    mutationFn: async (values: ItemFormType) => {
       if (!user) throw new Error("로그인이 필요합니다.");
 
       return createPurchaseItem({
-        item_name: sanitize(values.item_name),
+        item_name: values.item_name,
         price: values.price,
         image: values.image,
         is_sold: false,
@@ -52,8 +51,8 @@ export default function PurchaseItemCreateModal() {
         discord_id: user?.user_metadata.full_name, // 디스코드 아이디
         item_gender: ITEM_GENDER_MAP[values.item_gender],
         user_id: user?.id,
-        message: values.message || "",
         category: ITEM_CATEGORY_MAP[values.category],
+        message: values.message || "",
       });
     },
     onSuccess: async () => {
@@ -71,8 +70,8 @@ export default function PurchaseItemCreateModal() {
     },
   });
 
-  const form = useForm<PurchaseItemFormType>({
-    resolver: zodResolver(PurchaseItemFormSchema),
+  const form = useForm<ItemFormType>({
+    resolver: zodResolver(ItemFormSchema),
     defaultValues: {
       item_name: "",
       image: "/images/empty.png",
@@ -92,7 +91,7 @@ export default function PurchaseItemCreateModal() {
     formState: { errors },
   } = form;
 
-  const onSubmit = (values: PurchaseItemFormType) => {
+  const onSubmit = (values: ItemFormType) => {
     createPurchaseItemMutation.mutate(values, {
       onSuccess: () => {
         reset(); // 폼 초기화
