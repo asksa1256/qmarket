@@ -131,24 +131,84 @@ export default function CreateItemForm({
               name="price"
               control={control}
               render={({ field: { value, onChange, onBlur } }) => (
-                <Input
-                  id="price"
-                  inputMode="numeric"
-                  placeholder="가격"
-                  value={value === 0 ? "0" : value.toLocaleString()}
-                  onFocus={(e) => {
-                    if (value === 0) e.target.value = "";
-                  }}
-                  onChange={(e) => {
-                    const raw = e.target.value.replace(/,/g, "");
-                    if (/^\d*$/.test(raw)) {
-                      const num = raw === "" ? 0 : Number(raw);
-                      onChange(num);
-                    }
-                  }}
-                  onBlur={onBlur}
-                  autoComplete="off"
-                />
+                <div className="space-y-3">
+                  <Input
+                    id="price"
+                    inputMode="numeric"
+                    placeholder="가격"
+                    value={value === 0 ? "0" : value.toLocaleString()}
+                    onFocus={(e) => {
+                      if (value === 0) e.target.value = "";
+                    }}
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/,/g, "");
+                      if (/^\d*$/.test(raw)) {
+                        const num = raw === "" ? 0 : Number(raw);
+                        onChange(num);
+                      }
+                    }}
+                    onBlur={onBlur}
+                    autoComplete="off"
+                  />
+
+                  {/* 가격 단위 버튼 */}
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onChange(value + 10)}
+                      className="text-xs"
+                    >
+                      + 십원
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onChange(value + 1000)}
+                      className="text-xs"
+                    >
+                      + 천원
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onChange(value + 10000)}
+                      className="text-xs"
+                    >
+                      + 만원
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onChange(value + 100000)}
+                      className="text-xs"
+                    >
+                      + 십만원
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onChange(value + 1000000)}
+                      className="text-xs"
+                    >
+                      + 백만원
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onChange(value + 10000000)}
+                      className="text-xs"
+                    >
+                      + 천만원
+                    </Button>
+                  </div>
+                </div>
               )}
             />
             {errors.price && (
