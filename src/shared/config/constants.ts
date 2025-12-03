@@ -27,7 +27,6 @@ export const ITEM_CATEGORY_MAP = {
   acc: "소품",
   face: "가면",
   slime: "슬라임",
-  qmon: "큐피몬",
   board: "정답판",
   game: "게임 아이템",
 };

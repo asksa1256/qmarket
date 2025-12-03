@@ -11,7 +11,6 @@ export type ItemCategory =
   | "acc"
   | "bg"
   | "slime"
-  | "qmon"
   | "board"
   | "game";
 
