@@ -1,6 +1,7 @@
 import ItemList from "@/features/items/ui/ItemList";
 import { ItemCategory } from "@/features/item/model/itemTypes";
 import { ITEM_CATEGORY_MAP } from "@/shared/config/constants";
+import SectionTitle from "@/shared/ui/SectionTitle";
 
 export default async function ItemCategoryPage({
   params,
@@ -10,12 +11,12 @@ export default async function ItemCategoryPage({
   const { category } = await params;
   return (
     <section className="w-full lg:max-w-6xl mx-auto">
-      <h2 className="text-2xl font-bold px-4 py-3 rounded-md bg-secondary mb-8">
+      <SectionTitle>
         <b className="text-blue-600 inline-block mr-2">
           {ITEM_CATEGORY_MAP[category]}
         </b>
         아이템 판매/구매 목록
-      </h2>
+      </SectionTitle>
 
       <div className="flex gap-4">
         {/* 팝니다 */}

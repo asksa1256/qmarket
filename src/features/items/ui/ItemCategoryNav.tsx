@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function ItemCategoryNav() {
   return (
-    <ol className="grid grid-cols-3 md:grid-cols-4 gap-2 mx-auto">
+    <ol className="grid grid-cols-3 md:grid-cols-6 gap-2 mx-auto">
       {ITEM_CATEGORY_NAV.map((n) => (
         <li
           key={n.key}
