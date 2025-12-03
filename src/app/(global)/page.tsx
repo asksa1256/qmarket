@@ -1,4 +1,3 @@
-import SearchBar from "@/features/item-search/ui/SearchBar";
 import ItemCategoryNav from "@/features/items/ui/ItemCategoryNav";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
@@ -13,9 +12,6 @@ export default async function Home() {
             큐플레이 아이템 시세/판매 현황 조회, 판매 아이템 등록
           </p>
         </div>
-
-        {/* 검색바 */}
-        {/* <SearchBar /> */}
 
         {/* 아이템 카테고리 메뉴 */}
         <div className="mt-4">

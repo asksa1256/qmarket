@@ -57,6 +57,7 @@ export default function SearchInput({
     setInputValue(val);
     debouncedSearch(val);
     if (!suggestionOpen && val.length > 0) setSuggestionOpen(true);
+    if (suggestionOpen && val.length === 0) setSuggestionOpen(false);
   };
 
   const handleSelect = (s: SearchItemInfo) => {
@@ -66,8 +67,9 @@ export default function SearchInput({
     setSuggestionOpen(false);
   };
 
-  const handleFocus = () => {
-    setSuggestionOpen(true);
+  const handleFocus = (e: ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    val.length > 0 ? setSuggestionOpen(true) : setSuggestionOpen(false);
   };
 
   const handleBlur = () => {

@@ -11,12 +11,9 @@ export default async function MyItemsPage() {
   } = await supabase.auth.getUser();
 
   return (
-    <section className="max-w-5xl mx-auto">
+    <section className="max-w-6xl mx-auto">
       <div className="mb-10 text-center">
-        <h2 className="font-bold text-3xl mb-2">내 정보</h2>
-        <p className="text-gray-500 text-sm">
-          판매/구매중인 아이템을 조회/수정할 수 있습니다.
-        </p>
+        <h2 className="font-bold text-3xl mb-2">마이페이지</h2>
       </div>
 
       {!user ? <LoginRequiredMessage /> : <MyItemsContent userId={user.id} />}

@@ -87,7 +87,7 @@ export default function MarketPriceDashboard() {
   const hasMarketPrice = marketPrice.price !== "" && tradedPrice.price !== "";
 
   return (
-    <section className="max-w-5xl mx-auto">
+    <section className="max-w-6xl mx-auto">
       <div className="rounded-xl border p-4 mt-4">
         <p className="text-sm text-gray-500">
           * 아이템 이름, 아이템 성별을 입력하고 검색 버튼을 눌러주세요.

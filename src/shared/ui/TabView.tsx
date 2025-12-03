@@ -11,7 +11,7 @@ interface Props {
 
 export default function TabView({ initialItems }: Props) {
   return (
-    <Tabs defaultValue="marketPrices" className="max-w-5xl mx-auto">
+    <Tabs defaultValue="marketPrices" className="max-w-6xl mx-auto">
       <TabsList className="w-full">
         <TabsTrigger value="marketPrices" className="cursor-pointer py-2">
           시세 조회
