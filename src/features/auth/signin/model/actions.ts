@@ -1,10 +1,10 @@
 "use server";
 
-import { createClient } from "@/shared/api/supabase-server-cookie";
+import { getSupabaseServerCookie } from "@/shared/api/supabase-cookie";
 import { DiscordGuild } from "./discord";
 
 export async function login() {
-  const supabase = await createClient();
+  const supabase = await getSupabaseServerCookie();
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
   const { data, error } = await supabase.auth.signInWithOAuth({
@@ -23,7 +23,7 @@ export async function login() {
 }
 
 export async function logout() {
-  const supabase = await createClient();
+  const supabase = await getSupabaseServerCookie();
 
   const { error } = await supabase.auth.signOut();
 
@@ -43,7 +43,7 @@ export async function logout() {
 const TARGET_GUILD_ID = "1303996406268428288";
 
 export async function checkDiscordMember() {
-  const supabase = await createClient();
+  const supabase = await getSupabaseServerCookie();
   const {
     data: { session },
   } = await supabase.auth.getSession();

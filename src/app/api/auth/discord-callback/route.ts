@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/shared/api/supabase-server-cookie";
+import { getSupabaseServerCookie } from "@/shared/api/supabase-cookie";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js"; // 관리자 클라이언트 생성용
 import { DiscordGuild } from "@/features/auth/signin/model/discord";
 
@@ -53,7 +53,7 @@ export async function GET(req: Request) {
     );
   }
 
-  const supabase = await createClient();
+  const supabase = await getSupabaseServerCookie();
 
   try {
     // 1. OAuth code를 Supabase 세션으로 교환

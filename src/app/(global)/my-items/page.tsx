@@ -1,11 +1,11 @@
 import UserItemList from "@/features/items/ui/UserItemList";
-import { createClient } from "@/shared/api/supabase-server-cookie";
+import { getSupabaseServerCookie } from "@/shared/api/supabase-cookie";
 import ButtonToMain from "@/shared/ui/LinkButton/ButtonToMain";
 import { Suspense } from "react";
 import UserItemListHeader from "@/features/items/ui/UserItemListHeader";
 
 export default async function MyItemsPage() {
-  const supabase = await createClient();
+  const supabase = await getSupabaseServerCookie();
   const {
     data: { user },
   } = await supabase.auth.getUser();

@@ -1,7 +1,5 @@
 "use server";
 
-import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
 import {
   checkAndIncrementDailyItemLimit,
   DAILY_LIMIT,
@@ -9,6 +7,8 @@ import {
 } from "@/shared/api/redis";
 import { ITEMS_TABLE_NAME } from "@/shared/config/constants";
 import { getRemainingTime } from "@/shared/api/redis";
+import { getSupabaseClientCookie } from "@/shared/api/supabase-cookie";
+import preventCreateExistingItem from "./preventCreateExistingItem";
 
 interface CreateSellingItemValues {
   item_name: string;
@@ -41,12 +41,19 @@ interface CreatePurchaseItemValues {
 }
 
 export async function createSellingItem(values: CreateSellingItemValues) {
-  const supabase = await getSupabaseCookie();
+  const supabase = await getSupabaseClientCookie();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) throw new Error("로그인이 필요합니다.");
 
+  // 아이템 중복 등록 방지
+  await preventCreateExistingItem({
+    itemName: values.item_name,
+    userId: user.id,
+  });
+
+  // 아이템 등록
   const { data, error } = await supabase
     // .from(ITEMS_TABLE_NAME)
     .from("items_test")
@@ -64,11 +71,17 @@ export async function createSellingItem(values: CreateSellingItemValues) {
 }
 
 export async function createPurchaseItem(values: CreatePurchaseItemValues) {
-  const supabase = await getSupabaseCookie();
+  const supabase = await getSupabaseClientCookie();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) throw new Error("로그인이 필요합니다.");
+
+  // 아이템 중복 등록 방지
+  await preventCreateExistingItem({
+    itemName: values.item_name,
+    userId: user.id,
+  });
 
   const { data, error } = await supabase
     // .from(ITEMS_TABLE_NAME)
@@ -77,12 +90,13 @@ export async function createPurchaseItem(values: CreatePurchaseItemValues) {
     .select();
 
   if (error) throw new Error(error.message);
+
   return { data };
 }
 
 // 클라이언트에 일일 등록 카운트 표시해주는 함수
 export async function getDailyItemCountAction() {
-  const supabase = await getSupabaseCookie();
+  const supabase = await getSupabaseClientCookie();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -98,24 +112,4 @@ export async function getDailyItemInsertStatus(userId: string) {
   const count = await getDailyItemCount(userId);
   const remainingTime = await getRemainingTime(userId); // 초 단위
   return { count, remaining: DAILY_LIMIT - count, remainingTime };
-}
-
-async function getSupabaseCookie() {
-  const cookieStore = await cookies();
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll: () => cookieStore.getAll(),
-        setAll: (cookiesToSet) => {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options)
-          );
-        },
-      },
-    }
-  );
-
-  return supabase;
 }

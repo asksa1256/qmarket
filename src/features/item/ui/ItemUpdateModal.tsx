@@ -36,13 +36,13 @@ interface ItemUpdateModalProps {
   item: Item;
 }
 
-// rhf defaultValues에 일부 컬럼 역매핑 (key 리턴)
+// rhf defaultValues에 일부 컬럼 역매핑(map의 key 리턴): ItemFormType 값과 맞추기 위함
 const getKeyByValue = <T extends Record<string, string>>(
   map: T,
   value: string
 ): keyof T => {
   const entry = Object.entries(map).find(([_, v]) => v === value);
-  return (entry?.[0] || Object.keys(map)[0]) as keyof T;
+  return entry?.[0] as keyof T;
 };
 
 export default function ItemUpdateModal({ item }: ItemUpdateModalProps) {
