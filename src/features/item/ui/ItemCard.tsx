@@ -85,15 +85,16 @@ const ItemCard = ({ item, userId }: ItemCardProps) => {
         </div>
 
         {/* 아이템 등록 유저 정보 */}
-
         <div className="flex flex-col items-end gap-1 text-xs mt-1">
           {!pathname.includes("my-items") && !pathname.includes("user") && (
             <Link
               href={`/user/${item.user_id}`}
-              className="font-medium group hover:text-blue-600 hover:underline underline-offset-4"
+              className="flex font-medium group hover:text-blue-600 hover:underline underline-offset-4"
             >
-              {item.nickname}({item.discord_id})
-              <ExternalLink className="size-3 text-foreground/70 inline-block ml-0.5 group-hover:text-blue-600" />
+              <span className="truncate w-[80px] text-right">
+                {item.nickname}
+              </span>
+              <ExternalLink className="shrink-0 size-3 text-foreground/70 inline-block ml-0.5 group-hover:text-blue-600" />
             </Link>
           )}
 
