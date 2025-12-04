@@ -5,8 +5,7 @@ import { ITEMS_TABLE_NAME } from "@/shared/config/constants";
 
 export const getMyItems = async (userId: string) => {
   const { data, error } = await supabase
-    // .from(ITEMS_TABLE_NAME)
-    .from("items_test")
+    .from(ITEMS_TABLE_NAME)
     .select("*")
     .eq("user_id", userId)
     .order("created_at", { ascending: false });

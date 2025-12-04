@@ -43,8 +43,7 @@ export async function createItem(values: ItemFormValues) {
   });
 
   const { data, error } = await supabase
-    // .from(ITEMS_TABLE_NAME)
-    .from("items_test")
+    .from(ITEMS_TABLE_NAME)
     .insert([{ ...values, user_id: user.id }])
     .select();
 
@@ -69,8 +68,7 @@ export async function updateItem(values: ItemFormValues) {
   const { id, ...updateData } = values;
 
   const { data, error } = await supabase
-    // .from(ITEMS_TABLE_NAME)
-    .from("items_test")
+    .from(ITEMS_TABLE_NAME)
     .update(updateData)
     .eq("id", id)
     .eq("user_id", user.id)

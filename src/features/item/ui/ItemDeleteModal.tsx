@@ -16,6 +16,7 @@ import { Trash } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/shared/api/supabase-client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ITEMS_TABLE_NAME } from "@/shared/config/constants";
 
 interface Props {
   itemId: number;
@@ -37,8 +38,7 @@ export function ItemDeleteModal({ itemId, userId }: Props) {
       }
 
       const { error } = await supabase
-        // .from("items")
-        .from("items_test")
+        .from(ITEMS_TABLE_NAME)
         .delete()
         .eq("id", itemId)
         .eq("user_id", user.id);

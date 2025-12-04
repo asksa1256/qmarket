@@ -20,8 +20,7 @@ const getFilteredItems = async ({
   isSold,
 }: getFilteredItemsProps) => {
   let query = supabase
-    // .from(ITEMS_TABLE_NAME)
-    .from("items_test")
+    .from(ITEMS_TABLE_NAME)
     .select("*")
     .not("user_id", "is", null);
 

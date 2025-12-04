@@ -3,8 +3,7 @@ import { ITEMS_TABLE_NAME } from "@/shared/config/constants";
 
 export const updateItemToSold = async (itemId: number, isForSale: boolean) => {
   const { data, error } = await supabase
-    // .from(ITEMS_TABLE_NAME)
-    .from("items_test")
+    .from(ITEMS_TABLE_NAME)
     .update({ is_sold: true })
     .eq("id", itemId)
     .select();
