@@ -15,7 +15,7 @@ export type ItemCategory =
   | "game";
 
 export interface Item {
-  id: string; // 상품 ID
+  id: number; // 상품 ID
   item_name: string; // 상품명
   price: number; // 가격
   image: string; // 이미지 URL (컬럼명 변경)
@@ -34,8 +34,9 @@ export interface Item {
 export interface SearchItemInfo {
   id: string;
   name: string;
-  item_gender: string;
   image: string;
+  item_gender: string;
+  item_source: string;
   category: string;
 }
 

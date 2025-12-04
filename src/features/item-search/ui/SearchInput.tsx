@@ -13,14 +13,14 @@ import {
 import { cn } from "@/shared/lib/utils";
 import { useItemsQuery } from "@/shared/hooks/useItemsQuery";
 import { useSearchItemQuery } from "@/shared/hooks/useSearchItemQuery";
-import { Button } from "@/shared/ui/button";
 import Image from "next/image";
 import { SearchItemInfo } from "@/features/item/model/itemTypes";
+import RequestItemModal from "@/features/item/ui/RequestItemModal";
 
 interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
   className?: string;
-  onSearch: (value: string) => void;
+  onSearch?: (value: string) => void;
   onSelectSuggestion?: (suggestion: SearchItemInfo) => void;
 }
 
@@ -31,7 +31,6 @@ export default function SearchInput({
   onSelectSuggestion,
   ...rest
 }: SearchInputProps) {
-  const [inputValue, setInputValue] = useState(value);
   const [suggestionOpen, setSuggestionOpen] = useState(false);
 
   // 전체 아이템 캐싱
@@ -39,52 +38,51 @@ export default function SearchInput({
 
   // 검색 캐싱
   const { data: suggestions = [], refetch } = useSearchItemQuery(
-    inputValue,
+    value,
     allItems
   );
 
   const debouncedSearch = useMemo(
     () =>
       debounce((val: string) => {
-        setInputValue(val);
-        refetch(); // React Query 검색 수행
+        onSearch?.(val);
+        // refetch(); // React Query 검색 수행
       }, 300),
     [refetch]
   );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
-    setInputValue(val);
-    debouncedSearch(val);
+    onSearch?.(val); // 즉시 부모에게 값 전달 (실시간 업데이트)
+    debouncedSearch(val); // debounced 검색도 수행
+
     if (!suggestionOpen && val.length > 0) setSuggestionOpen(true);
     if (suggestionOpen && val.length === 0) setSuggestionOpen(false);
   };
 
   const handleSelect = (s: SearchItemInfo) => {
-    setInputValue(s.name);
-    onSearch(s.name);
+    onSearch?.(s.name);
     if (onSelectSuggestion) onSelectSuggestion(s);
     setSuggestionOpen(false);
   };
 
-  const handleFocus = (e: ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    val.length > 0 ? setSuggestionOpen(true) : setSuggestionOpen(false);
+  const handleFocus = () => {
+    if (value.length > 0) setSuggestionOpen(true);
   };
 
-  const handleBlur = () => {
-    setTimeout(() => setSuggestionOpen(false), 150);
-  };
+  // const handleBlur = () => {
+  //   setTimeout(() => setSuggestionOpen(false), 150);
+  // };
 
   return (
     <div className={cn("relative w-full", className)}>
       <Input
         type="text"
         placeholder="아이템명 입력"
-        value={inputValue}
+        value={value}
         onChange={handleChange}
         onFocus={handleFocus}
-        onBlur={handleBlur}
+        // onBlur={handleBlur}
         {...rest}
       />
 
@@ -92,14 +90,12 @@ export default function SearchInput({
         <div className="absolute left-0 right-0 top-full z-10 mt-1 rounded-md border bg-popover text-popover-foreground shadow-md">
           <Command>
             <CommandList>
-              {inputValue.length > 1 && suggestions.length === 0 ? (
+              {value.length > 1 && suggestions.length === 0 ? (
                 <CommandEmpty className="flex flex-col gap-2 items-center py-4 text-sm text-gray-400 p-3">
                   <p className="text-center text-gray-500 text-xs">
                     검색 결과가 없습니다.
                   </p>
-                  <Button variant="outline" size="sm">
-                    아이템 등록 요청
-                  </Button>
+                  <RequestItemModal itemName={value} />
                 </CommandEmpty>
               ) : (
                 <CommandGroup heading="검색 결과">

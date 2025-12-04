@@ -53,13 +53,13 @@ const ItemCard = ({ item, userId }: ItemCardProps) => {
           <h3 className="text-sm font-medium truncate">
             <Link href={`/item/${encodedItemName}/${encodedItemGender}`}>
               {item.item_name}
-              <span className="ml-1 text-gray-500 text-xs">
+              <span className="text-gray-500 text-xs">
                 ({item.item_gender})
               </span>
               {item.item_source && (
                 <Badge
                   variant="outline"
-                  className="text-[10px] bg-yellow-100 text-yellow-800 border-yellow-200 px-1.5 py-0"
+                  className="ml-1 text-[10px] bg-yellow-100 text-yellow-800 border-yellow-200 px-1.5 py-0"
                 >
                   {item.item_source}
                 </Badge>
@@ -67,7 +67,7 @@ const ItemCard = ({ item, userId }: ItemCardProps) => {
             </Link>
           </h3>
 
-          <h4 className="text-base font-semibold text-blue-700 flex items-center gap-0.5">
+          <h4 className="text-base font-semibold text-blue-700 flex items-center">
             {item.price.toLocaleString()}
             <span className="text-[10px] mt-0.5">원</span>
           </h4>

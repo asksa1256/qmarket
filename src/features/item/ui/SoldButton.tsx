@@ -4,7 +4,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 import ItemTransactionConfirmModal from "./ItemTransactionConfirmModal";
 
 interface SoldButtonProps {
-  itemId: string;
+  itemId: number;
   userId: string;
   isForSale: boolean;
 }

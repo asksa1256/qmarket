@@ -25,23 +25,13 @@ interface ItemDetailProps {
 }
 
 export default function ItemDetailClient({ item }: ItemDetailProps) {
-  const {
-    data: saleHistory,
-    isError,
-    error,
-    isPending,
-  } = useQuery({
+  const { data: saleHistory, isPending } = useQuery({
     queryKey: ["item-sale-history", item.name, item.item_gender],
     queryFn: () => getItemSaleHistory(item.name, item.item_gender),
   });
 
   if (isPending) {
     return <div>로딩중...</div>;
-  }
-
-  if (isError) {
-    console.error("Item fetch error:", error);
-    return <div>존재하지 않는 아이템입니다.</div>;
   }
 
   return (

@@ -18,7 +18,7 @@ import { supabase } from "@/shared/api/supabase-client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface Props {
-  itemId: string;
+  itemId: number;
   userId: string;
 }
 
