@@ -52,19 +52,19 @@ export default function RequestItemModal({
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-center">
+          <AlertDialogTitle>
             <span className="text-blue-600">
               {itemName}({itemGender})
             </span>
             <br /> 아이템을 등록 요청하시겠습니까?
           </AlertDialogTitle>
-          <AlertDialogDescription className="text-center">
+          <AlertDialogDescription>
             요청하신 아이템은 확인 절차를 거쳐 등록되므로
             <br />
             다소 시간이 소요될 수 있습니다.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter className="md:justify-center">
+        <AlertDialogFooter>
           <AlertDialogCancel>취소</AlertDialogCancel>
           <AlertDialogAction
           // disabled={deleteItemMutation.isPending}
