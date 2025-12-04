@@ -1,5 +1,6 @@
 import ItemDetailClient from "@/features/item/ui/ItemDetailClient";
 import { supabaseServer } from "@/shared/api/supabase-server";
+import RequestItemModal from "@/features/item/ui/RequestItemModal";
 
 export default async function ItemDetailPage({
   params,
@@ -7,21 +8,28 @@ export default async function ItemDetailPage({
   params: Promise<{ itemName: string; itemGender: string }>;
 }) {
   const { itemName, itemGender } = await params;
+  const decodedItemName = decodeURIComponent(itemName);
+  const decodedItemGender = decodeURIComponent(itemGender);
 
   const { data: item, error } = await supabaseServer
     .from("items_info")
     .select("id, name, item_gender, image, category, item_source")
-    .eq("name", decodeURIComponent(itemName))
-    .eq("item_gender", decodeURIComponent(itemGender))
+    .eq("name", decodedItemName)
+    .eq("item_gender", decodedItemGender)
     .single();
 
-  if (error || !item) {
-    return <div>존재하지 않는 아이템입니다.</div>;
-  }
-
   return (
-    <section>
-      <ItemDetailClient item={item} />
+    <section className="lg:max-w-6xl mx-auto">
+      {(error || !item) && (
+        <div className="flex flex-col gap-4 items-center justify-center h-[300px]">
+          <p className="text-foreground/50">존재하지 않는 아이템입니다.</p>
+          <RequestItemModal
+            itemName={decodedItemName}
+            itemGender={decodedItemGender}
+          />
+        </div>
+      )}
+      {item && <ItemDetailClient item={item} />}
     </section>
   );
 }
