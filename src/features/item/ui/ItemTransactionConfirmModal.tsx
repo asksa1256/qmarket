@@ -17,7 +17,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateItemToSold } from "../model/updateItemToSold";
 
 interface Props {
-  itemId: string;
+  itemId: number;
   userId: string;
   isForSale: boolean;
 }

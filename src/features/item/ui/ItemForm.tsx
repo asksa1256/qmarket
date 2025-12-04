@@ -13,32 +13,66 @@ import {
 import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
 import { Button } from "@/shared/ui/button";
-import { useCreateItemMutation } from "../model/createItemMutation";
+import {
+  useCreateItemMutation,
+  useUpdateItemMutation,
+} from "../model/itemMutations";
 import { useState } from "react";
 
-interface CreateItemFormProps {
+interface ItemFormProps {
   isForSale: boolean;
+  initialData?: ItemFormType;
   onSuccess?: () => void;
   onClose?: () => void;
 }
 
-export default function CreateItemForm({
+const getKeyByValue = <T extends Record<string, string>>(
+  map: T,
+  value: string
+): keyof T => {
+  const entry = Object.entries(map).find(([_, v]) => v === value);
+  return entry?.[0] as keyof T;
+};
+
+export default function ItemForm({
   isForSale,
+  initialData,
   onSuccess,
   onClose,
-}: CreateItemFormProps) {
+}: ItemFormProps) {
+  // initialData가 있을 때 한글 값을 key로 변환
+  const getDefaultValues = () => {
+    if (!initialData) {
+      return {
+        item_name: "",
+        image: "/images/empty.png",
+        price: 0,
+        quantity: 1,
+        item_source: "gatcha" as const,
+        item_gender: "m" as const,
+        is_sold: false,
+        category: "clothes" as const,
+        message: "",
+      };
+    }
+
+    return {
+      ...initialData,
+      item_source:
+        getKeyByValue(ITEM_SOURCES_MAP, initialData.item_source) ||
+        initialData.item_source,
+      item_gender:
+        getKeyByValue(ITEM_GENDER_MAP, initialData.item_gender) ||
+        initialData.item_gender,
+      category:
+        getKeyByValue(ITEM_CATEGORY_MAP, initialData.category) ||
+        initialData.category,
+    };
+  };
+
   const form = useForm<ItemFormType>({
     resolver: zodResolver(ItemFormSchema),
-    defaultValues: {
-      item_name: "",
-      image: "/images/empty.png",
-      price: 0,
-      item_source: "gatcha",
-      item_gender: "m",
-      is_sold: false,
-      category: "clothes",
-      message: "",
-    },
+    defaultValues: getDefaultValues(),
   });
 
   const {
@@ -49,9 +83,16 @@ export default function CreateItemForm({
   } = form;
 
   // 자동완성에서 선택했는지 추적
-  const [isFromSuggestion, setIsFromSuggestion] = useState(false);
+  const [isFromSuggestion, setIsFromSuggestion] = useState(
+    initialData?.image !== "/images/empty.png"
+  );
 
   const createItemMutation = useCreateItemMutation({
+    onSuccessCallback: onSuccess,
+    isForSale: isForSale,
+  });
+
+  const updateItemMutation = useUpdateItemMutation({
     onSuccessCallback: onSuccess,
     isForSale: isForSale,
   });
@@ -62,16 +103,34 @@ export default function CreateItemForm({
       image: isFromSuggestion ? values.image : "/images/empty.png",
     };
 
-    createItemMutation.mutate(payload, {
-      onSuccess: () => {
-        reset();
-        setIsFromSuggestion(false);
-      },
-    });
+    if (initialData) {
+      updateItemMutation.mutate(
+        {
+          id: initialData.id,
+          data: payload,
+        },
+        {
+          onSuccess: () => {
+            reset();
+            setIsFromSuggestion(false);
+          },
+        }
+      );
+    } else {
+      createItemMutation.mutate(payload, {
+        onSuccess: () => {
+          reset();
+          setIsFromSuggestion(false);
+        },
+      });
+    }
   };
 
   const watchedImage = form.watch("image");
   const watchedItemName = form.watch("item_name");
+
+  const isPending =
+    createItemMutation.isPending || updateItemMutation.isPending;
 
   return (
     <ScrollArea className="max-h-[60vh] pr-4">
@@ -186,8 +245,6 @@ export default function CreateItemForm({
               control={control}
               render={({ field: { value, onChange, onBlur } }) => {
                 const priceUnits = [
-                  { label: "+ 십원", amount: 10 },
-                  { label: "+ 백원", amount: 100 },
                   { label: "+ 천원", amount: 1000 },
                   { label: "+ 만원", amount: 10000 },
                   { label: "+ 십만원", amount: 100000 },
@@ -241,6 +298,58 @@ export default function CreateItemForm({
             )}
           </div>
 
+          {/* 수량 */}
+          <div className="grid gap-3">
+            <label htmlFor="quantity" className="text-sm">
+              수량
+            </label>
+            <Controller
+              name="quantity"
+              control={control}
+              render={({ field: { value, onChange } }) => (
+                <div className="flex items-center gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    onClick={() => onChange(Math.max(1, value - 1))}
+                    disabled={value <= 1}
+                  >
+                    -
+                  </Button>
+                  <Input
+                    id="quantity"
+                    inputMode="numeric"
+                    className="text-center"
+                    value={value}
+                    onChange={(e) => {
+                      const num = parseInt(e.target.value) || 1;
+                      onChange(Math.min(99, Math.max(1, num)));
+                    }}
+                    onBlur={() => {
+                      if (value < 1) onChange(1);
+                      if (value > 99) onChange(99);
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    onClick={() => onChange(Math.min(99, value + 1))}
+                    disabled={value >= 99}
+                  >
+                    +
+                  </Button>
+                </div>
+              )}
+            />
+            {errors.quantity && (
+              <p className="text-red-600 text-sm mt-1">
+                {errors.quantity.message}
+              </p>
+            )}
+          </div>
+
           <div className="grid gap-3">
             <label htmlFor="message" className="text-sm">
               메시지
@@ -265,12 +374,25 @@ export default function CreateItemForm({
           </div>
         </div>
 
+        {Object.entries(errors).map(([fieldName, error]) => (
+          <li key={fieldName} style={{ color: "red" }}>
+            **{fieldName}**:{" "}
+            {error.message || `유효성 검사 실패 (${error.type})`}
+          </li>
+        ))}
+
         <div className="mt-6 flex justify-end gap-2">
           <Button variant="outline" onClick={onClose}>
             닫기
           </Button>
-          <Button type="submit" disabled={createItemMutation.isPending}>
-            {createItemMutation.isPending ? "등록 중..." : "등록하기"}
+          <Button type="submit" disabled={isPending}>
+            {isPending
+              ? initialData
+                ? "수정 중..."
+                : "등록 중..."
+              : initialData
+              ? "수정하기"
+              : "등록하기"}
           </Button>
         </div>
       </form>

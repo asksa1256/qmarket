@@ -15,9 +15,10 @@ export type ItemCategory =
   | "game";
 
 export interface Item {
-  id: string; // 상품 ID
+  id: number; // 상품 ID
   item_name: string; // 상품명
   price: number; // 가격
+  quantity: number; // 수량
   image: string; // 이미지 URL (컬럼명 변경)
   is_for_sale: boolean; // 판매/구매 아이템 구분 (true: 판매 아이템, false: 구매 아이템)
   item_source: ItemSource; // 뽑기/상점/복권/기타 아이템

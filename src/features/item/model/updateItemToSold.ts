@@ -1,6 +1,6 @@
 import { supabase } from "@/shared/api/supabase-client";
 
-export const updateItemToSold = async (itemId: string) => {
+export const updateItemToSold = async (itemId: number) => {
   const { data, error } = await supabase
     .from("items_test")
     .update({ is_sold: true })

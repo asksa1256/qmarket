@@ -10,9 +10,11 @@ import { getRemainingTime } from "@/shared/api/redis";
 import { getSupabaseClientCookie } from "@/shared/api/supabase-cookie";
 import preventCreateExistingItem from "./preventCreateExistingItem";
 
-interface CreateItemValues {
+interface ItemFormValues {
+  id?: number;
   item_name: string;
   price: number;
+  quantity: number;
   image: string | null;
   item_source: string;
   item_gender: string;
@@ -25,7 +27,8 @@ interface CreateItemValues {
   message: string;
 }
 
-export async function createItem(values: CreateItemValues) {
+// 아이템 등록
+export async function createItem(values: ItemFormValues) {
   const supabase = await getSupabaseClientCookie();
   const {
     data: { user },
@@ -40,7 +43,6 @@ export async function createItem(values: CreateItemValues) {
     userId: user.id,
   });
 
-  // 아이템 등록
   const { data, error } = await supabase
     // .from(ITEMS_TABLE_NAME)
     .from("items_test")
@@ -54,6 +56,30 @@ export async function createItem(values: CreateItemValues) {
   // const remaining = DAILY_LIMIT - currentCount;
 
   // return { data, currentCount, remaining };
+  return { data };
+}
+
+// 아이템 수정
+export async function updateItem(values: ItemFormValues) {
+  const supabase = await getSupabaseClientCookie();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error("로그인이 필요합니다.");
+
+  const { id, ...updateData } = values;
+
+  const { data, error } = await supabase
+    // .from(ITEMS_TABLE_NAME)
+    .from("items_test")
+    .update(updateData)
+    .eq("id", id)
+    .eq("user_id", user.id)
+    .select();
+
+  if (error) throw new Error(error.message);
+  if (!data || data.length === 0) throw new Error("아이템을 찾을 수 없습니다.");
+
   return { data };
 }
 

@@ -1,8 +1,13 @@
 import { z } from "zod";
 
 export const ItemFormSchema = z.object({
+  id: z.number().optional(),
   item_name: z.string().min(1, { message: "아이템명을 입력해주세요." }),
   price: z.number().min(1, { message: "가격을 입력해주세요." }),
+  quantity: z
+    .number()
+    .min(1, "최소 1개 이상 입력해주세요.")
+    .max(99, "최대 99개까지 가능합니다."),
   is_sold: z.boolean(),
   item_source: z.enum(["gatcha", "shop", "lottery", "magic"]),
   item_gender: z.enum(["w", "m"]),

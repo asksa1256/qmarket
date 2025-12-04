@@ -14,7 +14,7 @@ import { useUser } from "@/shared/hooks/useUser";
 import { useState } from "react";
 import { getDailyItemCountAction } from "../model/actions";
 import { DAILY_LIMIT } from "@/shared/api/redis";
-import CreateItemForm from "./CreateItemForm";
+import ItemForm from "./ItemForm";
 
 export default function PurchaseItemCreateModal() {
   const [open, setOpen] = useState(false);
@@ -48,7 +48,7 @@ export default function PurchaseItemCreateModal() {
           </DialogDescription>
         </DialogHeader>
 
-        <CreateItemForm
+        <ItemForm
           isForSale={false}
           onSuccess={() => setOpen(false)}
           onClose={() => setOpen(false)}
