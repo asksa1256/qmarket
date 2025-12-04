@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { UserDetail } from "../model/userTypes";
+import UserBioForm from "./UserBioForm";
 
 export default function UserProfileCard({ user }: { user: UserDetail }) {
   return (
@@ -16,7 +17,7 @@ export default function UserProfileCard({ user }: { user: UserDetail }) {
 
       <h4 className="font-bold text-foreground/80 mb-1">{user.username}</h4>
 
-      <p className="text-base text-gray-600 mb-5 px-3 min-h-10">{user.bio}</p>
+      <UserBioForm user={user} />
 
       <span className="block text-sm text-gray-400 pt-3 mt-4 border-t border-gray-200">
         가입일: {user.created_at.slice(0, 10)}

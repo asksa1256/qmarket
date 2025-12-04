@@ -1,6 +1,6 @@
 export const ITEMS_TABLE_NAME = "items";
 export const ITEMS_INFO_TABLE_NAME = "items_info";
-export const USERS_TABLE_NAME = "users";
+export const USER_PROFILES_TABLE_NAME = "user_profiles";
 
 export const ITEMS_PAGE_SIZE = 10;
 
@@ -47,3 +47,18 @@ export const ITEM_IS_SOLD_MAP = {
 
 export const SELECT_ITEM_COLUMNS =
   "id, item_name, category, price, image, is_for_sale, item_source, nickname, is_sold, user_id, item_gender, discord_id, created_at, message";
+
+export const PROFANITY_LIST = [
+  "씨발",
+  "개새",
+  "개새끼",
+  "개새꺄",
+  "지랄",
+  "병신",
+  "좆",
+  "니미",
+  "시발",
+  "ㅅㅂ",
+  "ㄱㅅㄲ",
+  "ㅂㅅ",
+];
