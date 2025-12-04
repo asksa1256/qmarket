@@ -2,14 +2,15 @@ import { Suspense } from "react";
 import UserItemList from "@/features/items/ui/UserItemList";
 import UserProfileCard from "./UserProfileCard";
 import { UserDetail } from "../model/userTypes";
+import UserItemListHeader from "@/features/items/ui/UserItemListHeader";
 
 interface UserDetailProps {
   user: UserDetail;
 }
 
-export default function UserDetailSection({ user }: UserDetailProps) {
-  const LoadingFallback = <div>로드중...</div>;
+const LoadingFallback = <div>로드중...</div>;
 
+export default function UserDetailSection({ user }: UserDetailProps) {
   const BuySellListSection = () => (
     <div className="pl-8">
       <h2 className="text-2xl font-bold text-gray-700 mb-6 border-b pb-2">
@@ -61,6 +62,7 @@ export default function UserDetailSection({ user }: UserDetailProps) {
 
       {/* 우측 컨텐츠 (삽니다/팝니다 목록) */}
       <section className="grow">
+        <UserItemListHeader userId={user.id} />
         <BuySellListSection />
       </section>
     </div>

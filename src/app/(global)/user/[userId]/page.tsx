@@ -19,8 +19,8 @@ export default async function UserDetailPage({
   }
 
   return (
-    <section>
+    <>
       <UserDetailSection user={user} />
-    </section>
+    </>
   );
 }

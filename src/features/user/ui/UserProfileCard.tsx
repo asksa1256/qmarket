@@ -2,11 +2,10 @@
 
 import Image from "next/image";
 import { UserDetail } from "../model/userTypes";
-import { Textarea } from "@/shared/ui/textarea";
 
 export default function UserProfileCard({ user }: { user: UserDetail }) {
   return (
-    <section className="text-center">
+    <div className="text-center">
       <Image
         src={user.discord_profile_image ?? "images/empty.png"}
         alt={user.username}
@@ -22,6 +21,6 @@ export default function UserProfileCard({ user }: { user: UserDetail }) {
       <span className="block text-sm text-gray-400 pt-3 mt-4 border-t border-gray-200">
         가입일: {user.created_at.slice(0, 10)}
       </span>
-    </section>
+    </div>
   );
 }

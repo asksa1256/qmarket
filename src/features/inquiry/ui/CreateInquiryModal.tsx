@@ -112,11 +112,11 @@ const CreateInquiryModal = ({ trigger }: { trigger?: ReactNode }) => {
 
           <DialogFooter className="mt-6">
             <DialogClose asChild>
-              <Button variant="outline">닫기</Button>
+              <Button type="button" variant="outline">
+                닫기
+              </Button>
             </DialogClose>
-            <Button type="submit">
-              {isSubmitting ? "등록 중..." : "등록하기"}
-            </Button>
+            <Button>{isSubmitting ? "등록 중..." : "등록하기"}</Button>
           </DialogFooter>
         </form>
       </DialogContent>

@@ -163,11 +163,11 @@ const CreateReportModal = () => {
 
           <DialogFooter className="mt-6">
             <DialogClose asChild>
-              <Button variant="outline" disabled={isSubmitting}>
+              <Button type="button" variant="outline" disabled={isSubmitting}>
                 닫기
               </Button>
             </DialogClose>
-            <Button type="submit" disabled={isSubmitting}>
+            <Button disabled={isSubmitting}>
               {isSubmitting ? "등록 중..." : "등록하기"}
             </Button>
           </DialogFooter>
