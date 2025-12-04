@@ -74,8 +74,7 @@ export default function ItemTransactionConfirmModal({
             {forSaleText} 완료 처리하시겠습니까?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            · 한번 완료한 내역은 수정할 수 없습니다.
-            <br />· 수량이 2개 이상인 아이템은 한꺼번에 완료 처리됩니다.
+            한번 완료한 내역은 수정할 수 없습니다.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

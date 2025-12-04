@@ -1,5 +1,5 @@
 const getMiddlePrice = (priceArr: number[]) => {
-  const trimRate = 0.3; // 상하 30% 제거
+  const trimRate = 0.1;
 
   const start = Math.floor(priceArr.length * trimRate);
   const end = Math.ceil(priceArr.length * (1 - trimRate));
@@ -12,7 +12,7 @@ const getMiddlePrice = (priceArr: number[]) => {
       ? trimmed[mid]
       : (trimmed[mid - 1] + trimmed[mid]) / 2;
 
-  return price.toFixed(2);
+  return price;
 };
 
 export default getMiddlePrice;

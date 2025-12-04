@@ -1,6 +1,10 @@
 import ItemDetailClient from "@/features/item/ui/ItemDetailClient";
 import { supabaseServer } from "@/shared/api/supabase-server";
 import RequestItemModal from "@/features/item/ui/RequestItemModal";
+import {
+  getItemMarketPrice,
+  getTradedMarketPrice,
+} from "@/features/item/model/getItemMarketPrice";
 
 export default async function ItemDetailPage({
   params,
@@ -10,6 +14,10 @@ export default async function ItemDetailPage({
   const { itemName, itemGender } = await params;
   const decodedItemName = decodeURIComponent(itemName);
   const decodedItemGender = decodeURIComponent(itemGender);
+  const [marketPrice, tradedPrice] = await Promise.all([
+    getItemMarketPrice(decodedItemName, decodedItemGender),
+    getTradedMarketPrice(decodedItemName, decodedItemGender),
+  ]);
 
   const { data: item, error } = await supabaseServer
     .from("items_info")
@@ -26,7 +34,7 @@ export default async function ItemDetailPage({
           <RequestItemModal itemName={decodedItemName} />
         </div>
       )}
-      {item && <ItemDetailClient item={item} />}
+      {item && <ItemDetailClient item={item} marketPrice={marketPrice.price} />}
     </section>
   );
 }

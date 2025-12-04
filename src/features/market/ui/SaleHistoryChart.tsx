@@ -19,8 +19,8 @@ interface SaleHistoryChartProps {
 export default function SaleHistoryChart({ data }: SaleHistoryChartProps) {
   if (!data || data.length === 0) {
     return (
-      <div className="text-center py-10 text-gray-500">
-        판매 완료 내역이 없습니다.
+      <div className="text-center py-10 text-gray-500 border rounded-2xl">
+        거래 완료 내역이 없습니다.
       </div>
     );
   }

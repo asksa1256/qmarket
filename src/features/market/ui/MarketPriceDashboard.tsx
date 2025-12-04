@@ -29,8 +29,8 @@ export default function MarketPriceDashboard() {
   const [isLoading, setIsLoading] = useState(false);
 
   // 시세 상태
-  const [marketPrice, setMarketPrice] = useState({ price: "", count: 0 }); // 현재 시세
-  const [tradedPrice, setTradedPrice] = useState({ price: "", count: 0 }); // 거래 시세
+  const [marketPrice, setMarketPrice] = useState({ price: 0, count: 0 }); // 현재 시세
+  const [tradedPrice, setTradedPrice] = useState({ price: 0, count: 0 }); // 거래 시세
 
   // 거래 내역 상태
   const [saleHistory, setSaleHistory] = useState<SaleHistory[]>([]);
@@ -42,8 +42,8 @@ export default function MarketPriceDashboard() {
   const handleSearch = useCallback(async () => {
     const trimmedInput = searchInput.trim();
     if (!trimmedInput) {
-      setMarketPrice({ price: "", count: 0 });
-      setTradedPrice({ price: "", count: 0 });
+      setMarketPrice({ price: 0, count: 0 });
+      setTradedPrice({ price: 0, count: 0 });
       setSaleHistory([]);
       setSearchQuery(""); // 검색어도 초기화
       setItemImageUrl("");
@@ -84,7 +84,7 @@ export default function MarketPriceDashboard() {
     }
   }, [searchInput, itemGender]);
 
-  const hasMarketPrice = marketPrice.price !== "" && tradedPrice.price !== "";
+  const hasMarketPrice = marketPrice.price !== 0 && tradedPrice.price !== 0;
 
   return (
     <section className="max-w-6xl mx-auto">

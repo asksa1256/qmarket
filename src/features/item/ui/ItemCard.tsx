@@ -89,12 +89,10 @@ const ItemCard = ({ item, userId }: ItemCardProps) => {
           {!pathname.includes("my-items") && !pathname.includes("user") && (
             <Link
               href={`/user/${item.user_id}`}
-              className="flex font-medium group hover:text-blue-600 hover:underline underline-offset-4"
+              className="flex font-medium group hover:text-blue-600 hover:underline underline-offset-2"
             >
-              <span className="truncate w-[80px] text-right">
-                {item.nickname}
-              </span>
-              <ExternalLink className="shrink-0 size-3 text-foreground/70 inline-block ml-0.5 group-hover:text-blue-600" />
+              {item.nickname}
+              <ExternalLink className="mt-0.5 shrink-0 size-3 text-foreground/70 inline-block ml-0.5 group-hover:text-blue-600" />
             </Link>
           )}
 
