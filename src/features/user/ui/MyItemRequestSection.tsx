@@ -1,19 +1,27 @@
 import SectionTitle from "@/shared/ui/SectionTitle";
-import { supabase } from "@/shared/api/supabase-client";
+import { supabaseServer } from "@/shared/api/supabase-server";
+import { unstable_cache } from "next/cache";
 
-async function getItemRequests() {
-  const { data, error } = await supabase
-    .from("item_reg_request")
-    .select("id, item_name, item_gender, isRegistered")
-    .order("created_at", { ascending: false });
+const getItemRequests = unstable_cache(
+  async () => {
+    const { data, error } = await supabaseServer
+      .from("item_reg_request")
+      .select("id, item_name, item_gender, isRegistered")
+      .order("created_at", { ascending: false });
 
-  if (error) {
-    console.error("데이터 불러오기 실패:", error);
-    return [];
+    if (error) {
+      console.error("데이터 불러오기 실패:", error);
+      return [];
+    }
+
+    return data || [];
+  },
+  ["item-reg-requests"],
+  {
+    tags: ["item-reg-requests"],
+    revalidate: 1800, // 30분 후 서버 동기화
   }
-
-  return data || [];
-}
+);
 
 export default async function MyItemRequestSection() {
   const data = await getItemRequests();
