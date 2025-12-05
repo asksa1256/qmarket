@@ -321,13 +321,6 @@ export default function ItemForm({
           </div>
         </div>
 
-        {Object.entries(errors).map(([fieldName, error]) => (
-          <li key={fieldName} style={{ color: "red" }}>
-            **{fieldName}**:{" "}
-            {error.message || `유효성 검사 실패 (${error.type})`}
-          </li>
-        ))}
-
         <div className="mt-6 flex justify-end gap-2">
           <Button type="button" variant="outline" onClick={onClose}>
             닫기

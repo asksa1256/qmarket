@@ -16,6 +16,7 @@ import { useSearchItemQuery } from "@/shared/hooks/useSearchItemQuery";
 import Image from "next/image";
 import { SearchItemInfo } from "@/features/item/model/itemTypes";
 import RequestItemModal from "@/features/item/ui/RequestItemModal";
+import { Button } from "@/shared/ui/button";
 
 interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
@@ -95,7 +96,17 @@ export default function SearchInput({
                   <p className="text-center text-gray-500 text-xs">
                     검색 결과가 없습니다.
                   </p>
-                  <RequestItemModal itemName={value} />
+
+                  <div className="flex gap-2">
+                    <RequestItemModal itemName={value} />
+                    <Button
+                      variant="outline"
+                      type="button"
+                      onClick={() => setSuggestionOpen(false)}
+                    >
+                      닫기
+                    </Button>
+                  </div>
                 </CommandEmpty>
               ) : (
                 <CommandGroup heading="검색 결과">

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isContainProfanity } from "@/shared/lib/isContainProfanity";
 
 export const ItemFormSchema = z.object({
   id: z.number().optional(),
@@ -22,7 +23,10 @@ export const ItemFormSchema = z.object({
     "game",
   ]),
   image: z.string().nullable(),
-  message: z.string().min(1, { message: "메시지를 입력해주세요." }),
+  message: z
+    .string()
+    .min(1, { message: "메시지를 입력해주세요." })
+    .refine((val) => !isContainProfanity(val), "금지어가 포함되어 있습니다."),
 });
 
 export type ItemFormType = z.infer<typeof ItemFormSchema>;
