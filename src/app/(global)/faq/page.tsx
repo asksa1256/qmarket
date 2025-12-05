@@ -23,9 +23,9 @@ export default function FAQPage() {
           </AccordionTrigger>
           <AccordionContent className="text-gray-600 p-4 bg-gray-50 border-t">
             <div className="leading-relaxed">
-              시세는 어디까지나 참고용이기 때문에, 필요하신 경우 '큐플레이
-              아카이브' 디스코드 채널 또는 별도 커뮤니티에서 추가로 조사해보시는
-              것을 권장드립니다.
+              시세는 어디까지나 참고용이기 때문에, 필요하신 경우 &apos;큐플레이
+              아카이브&apos; 디스코드 채널 또는 별도 커뮤니티에서 추가로
+              조사해보시는 것을 권장드립니다.
             </div>
           </AccordionContent>
         </AccordionItem>

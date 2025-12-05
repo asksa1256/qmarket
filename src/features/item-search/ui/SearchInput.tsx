@@ -38,6 +38,7 @@ export default function SearchInput({
   const [suggestionOpen, setSuggestionOpen] = useState(false);
 
   const [recentSearches, setRecentSearches] = useState<SearchItemInfo[]>(() => {
+    if (typeof window === "undefined") return [];
     try {
       const stored = localStorage.getItem(RECENT_SEARCHES_KEY);
       return stored ? JSON.parse(stored) : [];
@@ -126,10 +127,6 @@ export default function SearchInput({
     if (value.length > 0) setSuggestionOpen(true);
   };
 
-  // const handleBlur = () => {
-  //   setTimeout(() => setSuggestionOpen(false), 150);
-  // };
-
   return (
     <div className={cn("relative w-full", className)}>
       <Input
@@ -138,7 +135,6 @@ export default function SearchInput({
         value={value}
         onChange={handleChange}
         onFocus={handleFocus}
-        // onBlur={handleBlur}
         {...rest}
       />
 
@@ -172,7 +168,7 @@ export default function SearchInput({
                           key={s.id}
                           value={s.id}
                           onSelect={() => handleSelect(s)}
-                          className="flex items-center text-left gap-3 py-3 cursor-pointer"
+                          className="flex items-center text-left gap-3 py-1 cursor-pointer"
                         >
                           <img
                             src={s.image || "/images/empty.png"}
@@ -198,23 +194,25 @@ export default function SearchInput({
                         <Clock className="w-3.5 h-3.5" />
                         최근 검색
                       </div>
-                      {recentSearches.length > 0 && (
-                        <button
-                          onClick={clearAllRecent}
-                          className="text-xs text-foreground/40 hover:text-foreground/60"
-                        >
-                          전체 삭제
-                        </button>
-                      )}
+
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="text-xs px-2 py-1 h-auto"
+                        onClick={() => setSuggestionOpen(false)}
+                      >
+                        닫기
+                      </Button>
                     </div>
 
-                    {recentSearches.length > 0 ? (
+                    {recentSearches && recentSearches.length > 0 ? (
                       recentSearches.map((s) => (
                         <CommandItem
                           key={s.id}
                           value={s.id}
                           onSelect={() => handleSelect(s)}
-                          className="flex items-start text-left gap-3 py-3 cursor-pointer group"
+                          className="flex items-center text-left gap-3 py-1 cursor-pointer group"
                         >
                           <img
                             src={s.image || "/images/empty.png"}
@@ -234,7 +232,7 @@ export default function SearchInput({
                       ))
                     ) : (
                       <div className="py-6 text-center text-sm text-gray-400">
-                        최근 검색 내역이 없습니다
+                        검색 내역이 없습니다
                       </div>
                     )}
                   </CommandGroup>

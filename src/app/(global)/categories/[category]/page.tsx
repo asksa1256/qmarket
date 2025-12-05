@@ -10,7 +10,7 @@ export default async function ItemCategoryPage({
 }) {
   const { category } = await params;
   return (
-    <section className="w-full lg:max-w-6xl mx-auto">
+    <section className="w-full lg:max-w-6xl mx-auto lg:px-0 px-4">
       <SectionTitle>
         <b className="text-blue-600 inline-block mr-2">
           {ITEM_CATEGORY_MAP[category]}
@@ -18,15 +18,15 @@ export default async function ItemCategoryPage({
         아이템 판매/구매 목록
       </SectionTitle>
 
-      <div className="flex gap-4">
+      <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
         {/* 팝니다 */}
-        <div className="w-[50%]">
+        <div>
           <h3 className="md:text-lg font-bold mb-2 text-base">판매해요</h3>
           <ItemList category={category} isForSale={true} isSold={false} />
         </div>
 
         {/* 삽니다 */}
-        <div className="w-[50%]">
+        <div>
           <h3 className="md:text-lg font-bold mb-2 text-base">구매해요</h3>
           <ItemList category={category} isForSale={false} isSold={false} />
         </div>

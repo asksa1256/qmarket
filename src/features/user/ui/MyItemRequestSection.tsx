@@ -27,7 +27,7 @@ export default async function MyItemRequestSection() {
   const data = await getItemRequests();
 
   return (
-    <section>
+    <section className="md:pl-8">
       <SectionTitle>🔔 아이템 등록 요청 목록</SectionTitle>
 
       {data.length === 0 ? (

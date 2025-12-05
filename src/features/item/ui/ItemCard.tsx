@@ -75,7 +75,7 @@ const ItemCard = ({ item, userId }: ItemCardProps) => {
           {item.message && (
             <Tooltip>
               <TooltipTrigger asChild>
-                <p className="bg-secondary text-foreground font-medium text-xs rounded-sm px-1.5 py-0.5 w-[200px] truncate">
+                <p className="bg-secondary text-foreground font-medium text-xs rounded-sm px-1.5 py-0.5 w-[120px] truncate">
                   {item.message}
                 </p>
               </TooltipTrigger>

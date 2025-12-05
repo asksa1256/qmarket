@@ -12,8 +12,8 @@ export default function UserProfileCard({ user }: { user: UserDetail }) {
       <Image
         src={user.discord_profile_image ?? "images/empty.png"}
         alt={user.username}
-        width={180}
-        height={180}
+        width={120}
+        height={120}
         className="rounded-full border-4 border-blue-500 mb-5 mx-auto object-cover block"
       />
 

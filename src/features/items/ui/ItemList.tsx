@@ -13,6 +13,12 @@ interface ItemListProps {
   isForSale?: boolean;
   isSold?: boolean;
   className?: string;
+  filterParams?: {
+    minPrice?: number;
+    maxPrice?: number;
+    sortBy?: "created_at" | "price";
+    sortOrder?: "asc" | "desc";
+  };
 }
 
 export default function ItemList({
@@ -22,6 +28,10 @@ export default function ItemList({
   isForSale,
   isSold,
   className,
+  filterParams = {
+    sortBy: "created_at",
+    sortOrder: "desc",
+  },
 }: ItemListProps) {
   const { data, isPending } = useQuery({
     queryKey: [
@@ -31,9 +41,20 @@ export default function ItemList({
       category,
       isForSale,
       isSold,
+      filterParams.minPrice,
+      filterParams.maxPrice,
+      filterParams.sortBy,
+      filterParams.sortOrder,
     ],
     queryFn: () =>
-      getFilteredItems({ itemName, itemGender, category, isForSale, isSold }),
+      getFilteredItems({
+        itemName,
+        itemGender,
+        category,
+        isForSale,
+        isSold,
+        ...filterParams,
+      }),
   });
 
   if (isPending) return <div>로딩 중...</div>;

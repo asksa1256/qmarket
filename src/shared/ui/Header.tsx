@@ -30,7 +30,7 @@ import {
 
 const DynamicCreateInquiryModal = dynamic(
   () => import("@/features/inquiry/ui/CreateInquiryModal"),
-  { ssr: false } // **서버 렌더링 비활성화**
+  { ssr: false } // 서버 렌더링 비활성화
 );
 
 export default function Header() {
@@ -59,8 +59,8 @@ export default function Header() {
   };
 
   return (
-    <header className="py-8 px-4 md:px-0 max-w-6xl mx-auto flex items-center justify-between">
-      <Link href="/" className="w-[280px] shrink-0">
+    <header className="py-8 px-4 lg:px-0 max-w-6xl mx-auto flex items-center justify-between">
+      <Link href="/" className="lg:w-[280px] md:w-[240px] shrink-0">
         <Image src="/images/logo.png" alt="큐마켓" width={140} height={54} />
       </Link>
 
@@ -68,7 +68,7 @@ export default function Header() {
       <div className="hidden md:flex flex-1 items-center justify-between">
         <SearchBar className="mx-auto w-full max-w-md" />
 
-        <div className="flex gap-2 w-[280px] shrink-0 justify-end">
+        <div className="flex gap-2 lg:w-[280px] md:w-[240px] shrink-0 justify-end">
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger className="shrink-0 bg-discord hover:bg-discord-hover flex gap-1 px-3 rounded-md items-center border-discord text-white text-sm">
@@ -123,7 +123,7 @@ export default function Header() {
               <Menu className="size-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-[300px] sm:w-[350px]">
+          <SheetContent side="right" className="w-full max-w-[400px]">
             <SheetHeader className="text-left mb-6">
               <SheetTitle>메뉴</SheetTitle>
             </SheetHeader>

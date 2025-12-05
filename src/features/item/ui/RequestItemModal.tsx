@@ -15,23 +15,26 @@ import { Button } from "@/shared/ui/button";
 import { Plus, Lock } from "lucide-react";
 import { toast } from "sonner";
 import { createItemRequestAction } from "@/app/actions/item-reg-request-actions";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useUser } from "@/shared/hooks/useUser";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/shared/ui/tooltip";
 import { useState } from "react";
 
-export default function RequestItemModal({ itemName }: { itemName: string }) {
+export default function RequestItemModal({
+  itemName,
+  itemGender,
+}: {
+  itemName: string;
+  itemGender?: string;
+}) {
   const { data: user } = useUser();
-  const [gender, setGender] = useState("");
+  const [gender, setGender] = useState(itemGender || "");
   const [open, setOpen] = useState(false);
-  const queryClient = useQueryClient();
 
   const createRequestMutation = useMutation({
     mutationFn: createItemRequestAction,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["item-reg-requests"] });
       setOpen(false);
-      setGender("");
       toast.success("아이템 등록 요청이 완료되었습니다.");
     },
     onError: (error) => {
@@ -59,7 +62,6 @@ export default function RequestItemModal({ itemName }: { itemName: string }) {
       });
 
       setOpen(false);
-      setGender("");
       toast.success("아이템 등록 요청이 완료되었습니다.");
     } catch (error) {
       if (error instanceof Error) {

@@ -20,8 +20,8 @@ export default async function UserDetailSection({ user }: UserDetailProps) {
   } = await supabase.auth.getUser();
 
   const BuySellListSection = () => (
-    <div className="pl-8">
-      <SectionTitle>🛒 판매 / 구매 목록</SectionTitle>
+    <div className="md:pl-8">
+      <SectionTitle>📋 판매 / 구매 목록</SectionTitle>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         {/* 팝니다 */}
@@ -60,15 +60,18 @@ export default async function UserDetailSection({ user }: UserDetailProps) {
   );
 
   return (
-    <div className="flex lg:max-w-6xl mx-auto">
+    <div className="flex md:flex-nowrap flex-wrap lg:max-w-6xl mx-auto lg:px-0 px-4">
       {/* 좌측 사이드바 (유저 정보) */}
-      <aside className="w-64 shrink-0 pt-20">
+      <aside className="w-full md:w-64 max-w-64 mx-auto shrink-0 md:pt-20">
         <UserProfileCard user={user} />
       </aside>
 
       {/* 우측 컨텐츠 (삽니다/팝니다 목록) */}
-      <section className="grow">
-        <UserItemListHeader userId={user.id} />
+      <section className="grow md:mt-0 mt-8">
+        {/* 마이페이지 전용 */}
+        {authUser?.id === user.id && <UserItemListHeader userId={user.id} />}
+
+        {/* 전체 공개: 유저 팝니다/삽니다 목록 */}
         <BuySellListSection />
 
         {/* 마이페이지 전용 */}

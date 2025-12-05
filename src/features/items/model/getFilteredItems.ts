@@ -9,15 +9,22 @@ interface getFilteredItemsProps {
   category?: ItemCategory;
   isForSale?: boolean;
   isSold?: boolean;
+  minPrice?: number;
+  maxPrice?: number;
+  sortBy?: "created_at" | "price";
+  sortOrder?: "asc" | "desc";
 }
 
-// 추후 필터 로직 추가로 클라이언트에서 데이터 캐싱 필요
 const getFilteredItems = async ({
   itemName,
   itemGender,
   category,
   isForSale,
   isSold,
+  minPrice,
+  maxPrice,
+  sortBy = "created_at",
+  sortOrder = "desc",
 }: getFilteredItemsProps) => {
   let query = supabase
     .from(ITEMS_TABLE_NAME)
@@ -39,6 +46,17 @@ const getFilteredItems = async ({
   if (isSold !== undefined) {
     query = query.eq("is_sold", isSold);
   }
+
+  // 가격 필터
+  if (minPrice !== undefined) {
+    query = query.gte("price", minPrice);
+  }
+  if (maxPrice !== undefined) {
+    query = query.lte("price", maxPrice);
+  }
+
+  // 정렬
+  query = query.order(sortBy, { ascending: sortOrder === "asc" });
 
   const { data, error } = await query.order("created_at", { ascending: false });
 

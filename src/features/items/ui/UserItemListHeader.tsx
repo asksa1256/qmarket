@@ -22,7 +22,7 @@ export default function UserItemListHeader({ userId }: { userId: string }) {
   // });
 
   return (
-    <div className="w-full mb-4">
+    <div className="w-full mb-4 flex items-center justify-between">
       <ButtonToMain />
 
       {/* 판매 아이템 등록 가능 횟수 */}
