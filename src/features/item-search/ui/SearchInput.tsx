@@ -38,6 +38,7 @@ export default function SearchInput({
   const [suggestionOpen, setSuggestionOpen] = useState(false);
 
   const [recentSearches, setRecentSearches] = useState<SearchItemInfo[]>(() => {
+    if (typeof window === "undefined") return [];
     try {
       const stored = localStorage.getItem(RECENT_SEARCHES_KEY);
       return stored ? JSON.parse(stored) : [];
@@ -167,7 +168,7 @@ export default function SearchInput({
                           key={s.id}
                           value={s.id}
                           onSelect={() => handleSelect(s)}
-                          className="flex items-center text-left gap-3 py-3 cursor-pointer"
+                          className="flex items-center text-left gap-3 py-1 cursor-pointer"
                         >
                           <img
                             src={s.image || "/images/empty.png"}
@@ -211,7 +212,7 @@ export default function SearchInput({
                           key={s.id}
                           value={s.id}
                           onSelect={() => handleSelect(s)}
-                          className="flex items-start text-left gap-3 py-3 cursor-pointer group"
+                          className="flex items-center text-left gap-3 py-1 cursor-pointer group"
                         >
                           <img
                             src={s.image || "/images/empty.png"}
