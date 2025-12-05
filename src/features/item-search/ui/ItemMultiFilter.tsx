@@ -57,16 +57,6 @@ export default function ItemMultiFilter({
           <Label className="text-sm text-gray-600 font-medium">성별</Label>
           <ItemGenderFilter value={gender} onChange={handleGenderChange} />
         </div>
-
-        {/* 판매 상태 */}
-        {isSold && (
-          <div className="flex flex-col gap-1">
-            <Label className="text-sm text-gray-600 font-medium">
-              판매 상태
-            </Label>
-            <ItemSoldFilter value={isSold} onChange={handleisSoldChange} />
-          </div>
-        )}
       </div>
     </div>
   );
