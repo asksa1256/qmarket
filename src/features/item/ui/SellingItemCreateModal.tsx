@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import { Lock, Plus } from "lucide-react";
 import { useUser } from "@/shared/hooks/useUser";
 import { useState } from "react";
-import { getDailyItemCountAction } from "../model/server-actions";
+import { getDailyItemCountAction } from "@/app/actions/item-actions";
 import { DAILY_LIMIT } from "@/shared/api/redis";
 import ItemForm from "./ItemForm";
 
@@ -44,7 +44,7 @@ export default function SellingItemCreateModal() {
         <DialogHeader className="mb-4">
           <DialogTitle>판매 아이템 등록</DialogTitle>
           <DialogDescription className="flex flex-col">
-            가격 제시 요청은 지양해주세요! 경고 대상이 될 수 있습니다.
+            가격 제시 요청 시 경고 대상이 될 수 있습니다.
           </DialogDescription>
         </DialogHeader>
 

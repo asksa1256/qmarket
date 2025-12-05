@@ -8,7 +8,7 @@ import {
 import { ITEMS_TABLE_NAME } from "@/shared/config/constants";
 import { getRemainingTime } from "@/shared/api/redis";
 import { getSupabaseClientCookie } from "@/shared/api/supabase-cookie";
-import preventCreateExistingItem from "./preventCreateExistingItem";
+import preventCreateExistingItem from "@/features/item/model/preventCreateExistingItem";
 
 interface ItemFormValues {
   id?: number;

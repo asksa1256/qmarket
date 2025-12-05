@@ -26,7 +26,7 @@ export default async function UserDetailSection({ user }: UserDetailProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         {/* 팝니다 */}
         <div className="flex flex-col gap-2">
-          <h3 className="font-semibold text-lg">팝니다</h3>
+          <h3 className="font-semibold text-lg">판매해요</h3>
           <Suspense fallback={LoadingFallback}>
             <UserItemList userId={user.id} isForSale={true} isSold={false} />
           </Suspense>
@@ -34,7 +34,7 @@ export default async function UserDetailSection({ user }: UserDetailProps) {
 
         {/* 삽니다 */}
         <div className="flex flex-col gap-2">
-          <h3 className="font-semibold text-lg">삽니다</h3>
+          <h3 className="font-semibold text-lg">구매해요</h3>
           <Suspense fallback={LoadingFallback}>
             <UserItemList userId={user.id} isForSale={false} isSold={false} />
           </Suspense>

@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import SellingItemCreateModal from "@/features/item/ui/SellingItemCreateModal";
 import ButtonToMain from "@/shared/ui/LinkButton/ButtonToMain";
-import { getDailyItemCountAction } from "@/features/item/model/server-actions";
+import { getDailyItemCountAction } from "@/app/actions/item-actions";
 import { DAILY_LIMIT } from "@/shared/api/redis";
 import DailyLimitDisplay from "@/features/item/ui/DailyLimitDisplay";
 import LoadingSpinner from "@/shared/ui/LoadingSpinner";

@@ -19,13 +19,13 @@ export default async function ItemCategoryPage({
       </SectionTitle>
 
       <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
-        {/* 팝니다 */}
+        {/* 판매해요 */}
         <div>
           <h3 className="md:text-lg font-bold mb-2 text-base">판매해요</h3>
           <ItemList category={category} isForSale={true} isSold={false} />
         </div>
 
-        {/* 삽니다 */}
+        {/* 구매해요 */}
         <div>
           <h3 className="md:text-lg font-bold mb-2 text-base">구매해요</h3>
           <ItemList category={category} isForSale={false} isSold={false} />

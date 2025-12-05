@@ -64,17 +64,6 @@ export default function SearchInput({
     });
   };
 
-  const clearAllRecent = () => {
-    setRecentSearches([]);
-
-    // localStorage에서도 삭제
-    try {
-      localStorage.removeItem(RECENT_SEARCHES_KEY);
-    } catch (error) {
-      console.error("최근 검색 전체 삭제 실패:", error);
-    }
-  };
-
   // 전체 아이템 캐싱
   const { data: allItems = [] } = useItemsQuery();
 
