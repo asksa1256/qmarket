@@ -3,6 +3,11 @@ import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 
 export default async function Home() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const formattedMonth = String(month).padStart(2, "0");
+
   return (
     <main className="flex p-4 md:p-0">
       <section className="flex flex-col w-full gap-4 items-center">
@@ -22,13 +27,14 @@ export default async function Home() {
         </div>
 
         <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl">
-          <Link href="/items">
+          <Link href="/new-items">
             <div className="p-6 rounded-2xl bg-card border hover:border-primary/50 transition-colors h-full">
               <h3 className="text-lg font-semibold mb-2 flex items-center gap-1">
-                실시간 판매/구매 목록 확인 <ExternalLink className="size-4" />
+                {year}년 {formattedMonth}월 로테이션 조회{" "}
+                <ExternalLink className="size-4" />
               </h3>
               <p className="text-muted-foreground break-keep">
-                아이템의 실시간 구매/판매 현황을 확인할 수 있습니다.
+                이번 달에 업데이트된 새로운 아이템들을 확인해보세요!
               </p>
             </div>
           </Link>

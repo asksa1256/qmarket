@@ -31,6 +31,17 @@ export const ITEM_CATEGORY_MAP = {
   game: "게임 아이템",
 };
 
+export const FILTER_CATEGORIES_MAP = {
+  hair: "머리",
+  clothes: "옷",
+  eye: "눈",
+  ear: "귀",
+  mouth: "턱",
+  bg: "배경",
+  pet: "펫",
+  acc: "소품",
+};
+
 export const ITEM_CATEGORY_NAV = Object.entries(ITEM_CATEGORY_MAP).map(
   ([key, value]: [string, string]) => ({
     key,
