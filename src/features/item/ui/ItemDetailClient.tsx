@@ -32,6 +32,11 @@ export default function ItemDetailClient({
   const { data: saleHistory, isPending } = useQuery({
     queryKey: ["item-sale-history", item.name, item.item_gender],
     queryFn: () => getItemSaleHistory(item.name, item.item_gender),
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
   });
 
   return (

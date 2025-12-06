@@ -55,6 +55,11 @@ export default function ItemList({
         isSold,
         ...filterParams,
       }),
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
   });
 
   if (isPending) return <div>로딩 중...</div>;

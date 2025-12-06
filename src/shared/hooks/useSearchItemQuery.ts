@@ -20,6 +20,10 @@ export const useSearchItemQuery = (
       });
     },
     enabled: keyword.length > 0 && items.length > 0,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
   });
 };

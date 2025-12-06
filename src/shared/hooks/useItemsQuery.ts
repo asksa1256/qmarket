@@ -13,5 +13,8 @@ export const useItemsQuery = () => {
       return data;
     },
     staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
   });
 };
