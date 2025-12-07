@@ -9,11 +9,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/ui/select";
 import { Textarea } from "@/shared/ui/textarea";
 import { ReactNode, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/shared/api/supabase-client";
-import { sanitize } from "@/shared/lib/sanitize";
 import { Input } from "@/shared/ui/input";
 import { MailQuestionMark } from "lucide-react";
 import { useUser } from "@/shared/hooks/useUser";
@@ -21,6 +27,7 @@ import { useUser } from "@/shared/hooks/useUser";
 const CreateInquiryModal = ({ trigger }: { trigger?: ReactNode }) => {
   const [contact, setContact] = useState("");
   const [inquiry, setInquiry] = useState("");
+  const [inquiryCategory, setInquiryCategory] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { data: user } = useUser();
 
@@ -29,18 +36,21 @@ const CreateInquiryModal = ({ trigger }: { trigger?: ReactNode }) => {
     setIsSubmitting(true);
 
     try {
+      if (inquiryCategory === "") {
+        toast.error("문의 유형을 선택해주세요.");
+        return;
+      }
+
       if (inquiry === "") {
         toast.error("문의사항을 입력해주세요.");
         return;
       }
 
-      const createdAt = new Date().toISOString();
-
       const { error } = await supabase.from("inquiry").insert([
         {
-          inquiry: sanitize(inquiry),
-          contact: user ? user.email : sanitize(contact),
-          created_at: createdAt,
+          inquiry,
+          contact: user ? user.email : contact,
+          inquiry_category: inquiryCategory,
         },
       ]);
 
@@ -50,6 +60,7 @@ const CreateInquiryModal = ({ trigger }: { trigger?: ReactNode }) => {
 
       setInquiry("");
       setContact("");
+      setInquiryCategory("");
     } catch (error) {
       if (error instanceof Error) {
         toast.error(`문의 등록 실패: ${error.message}`);
@@ -75,11 +86,9 @@ const CreateInquiryModal = ({ trigger }: { trigger?: ReactNode }) => {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader className="mb-4">
           <DialogTitle className="text-left">문의하기</DialogTitle>
-          {!user && (
-            <DialogDescription className="text-left">
-              * 신고 기능은 로그인 후 이용할 수 있습니다.
-            </DialogDescription>
-          )}
+          <DialogDescription className="text-left">
+            {!user && "신고 기능은 로그인 후 이용할 수 있습니다."}
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit}>
@@ -88,26 +97,25 @@ const CreateInquiryModal = ({ trigger }: { trigger?: ReactNode }) => {
               <Textarea
                 id="inquiry"
                 name="inquiry"
-                placeholder="문의사항 입력"
+                placeholder="내용을 입력해주세요."
                 value={inquiry}
                 onChange={(e) => setInquiry(e.target.value)}
               />
             </div>
 
-            {!user && (
-              <div className="grid gap-3">
-                <label htmlFor="contact" className="text-sm">
-                  연락처 <span className="text-gray-400">(선택)</span>
-                </label>
-                <Input
-                  id="contact"
-                  name="contact"
-                  placeholder="이메일 또는 디스코드 아이디"
-                  value={contact}
-                  onChange={(e) => setContact(e.target.value)}
-                />
-              </div>
-            )}
+            <div className="grid gap-3">
+              <label htmlFor="contact" className="text-sm">
+                연락처 <span className="text-gray-400">(선택)</span>
+              </label>
+              <Input
+                id="contact"
+                name="contact"
+                type="email"
+                placeholder="이메일"
+                value={contact}
+                onChange={(e) => setContact(e.target.value)}
+              />
+            </div>
           </div>
 
           <DialogFooter className="mt-6">

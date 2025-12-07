@@ -162,7 +162,7 @@ export default function SearchInput({
                           <img
                             src={s.image || "/images/empty.png"}
                             alt=""
-                            className="w-10 h-12 object-cover rounded"
+                            className="w-10 h-12 object-contain"
                           />
                           <span className="text-sm">
                             {s.name} ({s.item_gender})
@@ -206,7 +206,7 @@ export default function SearchInput({
                           <img
                             src={s.image || "/images/empty.png"}
                             alt=""
-                            className="w-10 h-12 object-cover rounded"
+                            className="w-10 h-12 object-contain"
                           />
                           <span className="text-sm flex-1">
                             {s.name} ({s.item_gender})

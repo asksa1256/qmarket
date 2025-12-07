@@ -10,6 +10,9 @@ import {
 } from "@/features/item/model/itemTypes";
 import ButtonToBack from "@/shared/ui/LinkButton/ButtonToBack";
 import ItemList from "@/features/items/ui/ItemList";
+import ItemsFilter from "@/features/item-search/ui/ItemsFilter";
+import { useState } from "react";
+import { FilterParams } from "@/features/items/model/types";
 
 interface ItemDetail {
   id: string;
@@ -29,6 +32,11 @@ export default function ItemDetailClient({
   item,
   marketPrice,
 }: ItemDetailProps) {
+  const [filterParams, setFilterParams] = useState<FilterParams>({
+    sortBy: "created_at" as "created_at" | "price",
+    sortOrder: "desc" as "asc" | "desc",
+  });
+
   const { data: saleHistory, isPending } = useQuery({
     queryKey: ["item-sale-history", item.name, item.item_gender],
     queryFn: () => getItemSaleHistory(item.name, item.item_gender),
@@ -112,6 +120,11 @@ export default function ItemDetailClient({
           {/* 아이템 팝니다/삽니다 목록 및 차트 */}
           <div className="flex-1 order-2 lg:order-2">
             <div className="flex flex-wrap md:flex-row gap-4">
+              <ItemsFilter
+                onFilterChange={(filters) => setFilterParams(filters)}
+                className="w-full mb-4"
+              />
+
               <div className="w-full md:w-[48%] grow shrink-0">
                 <h3 className="md:text-lg font-bold mb-2 text-base">
                   판매해요
@@ -121,6 +134,7 @@ export default function ItemDetailClient({
                   itemGender={item.item_gender}
                   isForSale={true}
                   isSold={false}
+                  filterParams={filterParams}
                 />
               </div>
 
@@ -133,6 +147,7 @@ export default function ItemDetailClient({
                   itemGender={item.item_gender}
                   isForSale={false}
                   isSold={false}
+                  filterParams={filterParams}
                 />
               </div>
             </div>

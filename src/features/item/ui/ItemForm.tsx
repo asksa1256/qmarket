@@ -18,6 +18,7 @@ import {
   useUpdateItemMutation,
 } from "../model/itemMutations";
 import { useState } from "react";
+import { FieldError } from "react-hook-form";
 
 interface ItemFormProps {
   isForSale: boolean;
@@ -50,7 +51,7 @@ export default function ItemForm({
         item_source: "gatcha" as const,
         item_gender: "m" as const,
         is_sold: false,
-        category: "clothes" as const,
+        category: "hair" as const,
         message: "",
       };
     }
@@ -183,7 +184,11 @@ export default function ItemForm({
                       ([_key, label]) => label === s.item_source
                     )?.[0] as keyof typeof ITEM_SOURCES_MAP;
 
-                    form.setValue("item_source", sourceKey);
+                    if (sourceKey) {
+                      form.setValue("item_source", sourceKey);
+                    } else {
+                      form.setValue("item_source", "gatcha");
+                    }
 
                     form.setValue("image", s.image);
                   }}
@@ -320,6 +325,20 @@ export default function ItemForm({
             )}
           </div>
         </div>
+
+        {/* {(Object.entries(errors) as [keyof ItemFormType, FieldError][]).map(
+          ([key, error]) => (
+            <li key={key as string} className="text-red-600 text-sm">
+              <span className="font-medium mr-1">
+                {(key as string).includes("item_name")
+                  ? "아이템명"
+                  : key}
+                :
+              </span>
+              {error?.message}
+            </li>
+          )
+        )} */}
 
         <div className="mt-6 flex justify-end gap-2">
           <Button type="button" variant="outline" onClick={onClose}>

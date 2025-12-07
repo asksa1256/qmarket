@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import ItemCard from "@/features/item/ui/ItemCard";
 import { ItemCategory, ItemGender } from "@/features/item/model/itemTypes";
 import { cn } from "@/shared/lib/utils";
+import LoadingSpinner from "@/shared/ui/LoadingSpinner";
 
 interface ItemListProps {
   itemName?: string;
@@ -62,11 +63,14 @@ export default function ItemList({
     refetchOnMount: false,
   });
 
-  if (isPending) return <div>로딩 중...</div>;
-
   return (
     <div className={cn("pb-10 shrink-0", className)}>
       <div className="flex flex-col h-[400px] overflow-auto rounded-2xl border border-border">
+        {isPending && (
+          <div className="flex items-center justify-center">
+            <LoadingSpinner />
+          </div>
+        )}
         {data?.length === 0 ? (
           <div className="flex items-center justify-center h-full text-sm text-gray-500">
             등록된 아이템이 없습니다.

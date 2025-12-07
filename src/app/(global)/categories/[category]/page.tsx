@@ -7,6 +7,7 @@ import {
   getItemCategories,
 } from "@/features/items/model/getRegItemsByCategory";
 import CategoryItemAccordion from "@/features/items/ui/CategoryItemAccordion";
+import CategoryItemFilteredList from "@/features/items/ui/CategoryItemFilteredList";
 
 export async function generateStaticParams() {
   const categories = await getItemCategories();
@@ -39,19 +40,7 @@ export default async function ItemCategoryPage({
         아이템 판매/구매 목록
       </SectionTitle>
 
-      <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
-        {/* 판매해요 */}
-        <div>
-          <h3 className="md:text-lg font-bold mb-2 text-base">판매해요</h3>
-          <ItemList category={category} isForSale={true} isSold={false} />
-        </div>
-
-        {/* 구매해요 */}
-        <div>
-          <h3 className="md:text-lg font-bold mb-2 text-base">구매해요</h3>
-          <ItemList category={category} isForSale={false} isSold={false} />
-        </div>
-      </div>
+      <CategoryItemFilteredList category={category} />
 
       {/* 카테고리별 아이템 전체 목록 */}
       <div className="mt-8">
