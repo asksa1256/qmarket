@@ -10,7 +10,6 @@ export function useUser() {
       } = await supabase.auth.getUser();
       return user;
     },
-    staleTime: Infinity,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     refetchOnMount: false,

@@ -1,4 +1,4 @@
-import getNewItems from "@/features/items/model/getNewItems";
+import getNewRotationItems from "@/features/items/model/getNewRotationItems";
 import SectionTitle from "@/shared/ui/SectionTitle";
 import NewItemsClient from "@/features/items/ui/NewItemsClient";
 
@@ -12,28 +12,28 @@ export default async function NewItems() {
   const dateFormat = `${year}-${String(month).padStart(2, "0")}`;
 
   const [maleGatcha, femaleGatcha, maleMagic, femaleMagic] = await Promise.all([
-    getNewItems({
+    getNewRotationItems({
       dateFormat,
       nextYear,
       nextMonth,
       gender: "남",
       source: "뽑기",
     }),
-    getNewItems({
+    getNewRotationItems({
       dateFormat,
       nextYear,
       nextMonth,
       gender: "여",
       source: "뽑기",
     }),
-    getNewItems({
+    getNewRotationItems({
       dateFormat,
       nextYear,
       nextMonth,
       gender: "남",
       source: "요술상자",
     }),
-    getNewItems({
+    getNewRotationItems({
       dateFormat,
       nextYear,
       nextMonth,

@@ -1,5 +1,4 @@
 import { FetchError } from "@/shared/config/types";
-import { ItemCardSmallProps } from "@/features/item/ui/ItemCardSmall";
 
 const getNewItems = async ({
   dateFormat,
@@ -61,9 +60,7 @@ const getNewItems = async ({
         status: response.status,
       };
 
-      const data: ItemCardSmallProps[] = await response.json();
-
-      return { data: data || [], error: null }; // 성공
+      return { data: [], error: httpError };
     }
 
     const data = await response.json();
