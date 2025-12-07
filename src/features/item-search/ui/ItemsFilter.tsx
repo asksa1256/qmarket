@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, ChangeEvent } from "react";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import { Filter, RefreshCcw } from "lucide-react";
@@ -13,6 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/ui/select";
+import { Badge } from "@/shared/ui/badge";
+import { X } from "lucide-react";
 
 type SortOption = "created_at" | "price";
 type SortOrder = "asc" | "desc";
@@ -31,24 +33,56 @@ export default function ItemsFilter({
   onFilterChange,
   className,
 }: ItemsFilterProps) {
-  const [minPrice, setMinPrice] = useState<string>("");
-  const [maxPrice, setMaxPrice] = useState<string>("");
+  const [isFilterApplied, setIsFilterApplied] = useState(false);
+  const minPriceRef = useRef<HTMLInputElement>(null);
+  const maxPriceRef = useRef<HTMLInputElement>(null);
   const [sortBy, setSortBy] = useState<SortOption>("created_at");
   const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
 
+  // 필터 데이터 헬퍼 함수
+  const getCurrentFilters = () => ({
+    minPrice: minPriceRef.current?.value
+      ? Number(minPriceRef.current.value)
+      : undefined,
+    maxPrice: maxPriceRef.current?.value
+      ? Number(maxPriceRef.current.value)
+      : undefined,
+  });
+
+  // 정렬 변경 시 즉시 적용
+  const handleSortChange = (
+    newSortBy?: SortOption,
+    newSortOrder?: SortOrder
+  ) => {
+    const currentSortBy = newSortBy ?? sortBy;
+    const currentSortOrder = newSortOrder ?? sortOrder;
+
+    onFilterChange({
+      ...getCurrentFilters(),
+      sortBy: currentSortBy,
+      sortOrder: currentSortOrder,
+    });
+  };
+
+  // 가격 필터 적용
   const handleApplyFilter = () => {
-    const filters = {
-      minPrice: minPrice ? Number(minPrice) : undefined,
-      maxPrice: maxPrice ? Number(maxPrice) : undefined,
+    setIsFilterApplied(true);
+
+    onFilterChange({
+      ...getCurrentFilters(),
       sortBy,
       sortOrder,
-    };
-    onFilterChange(filters);
+    });
   };
 
   const handleReset = () => {
-    setMinPrice("");
-    setMaxPrice("");
+    setIsFilterApplied(false);
+    if (minPriceRef.current) {
+      minPriceRef.current.value = "";
+    }
+    if (maxPriceRef.current) {
+      maxPriceRef.current.value = "";
+    }
     setSortBy("created_at");
     setSortOrder("desc");
     onFilterChange({
@@ -56,6 +90,37 @@ export default function ItemsFilter({
       sortOrder: "desc",
     });
   };
+
+  const handleResetPrice = () => {
+    setIsFilterApplied(false);
+    if (minPriceRef.current) {
+      minPriceRef.current.value = "";
+    }
+    if (maxPriceRef.current) {
+      maxPriceRef.current.value = "";
+    }
+    onFilterChange({
+      sortBy,
+      sortOrder,
+    });
+  };
+
+  const handleMinPrice = (e: ChangeEvent<HTMLInputElement>) => {
+    const minPriceEl = minPriceRef.current;
+    if (minPriceEl) {
+      minPriceEl.value = e.target.value;
+    }
+  };
+
+  const handleMaxPrice = (e: ChangeEvent<HTMLInputElement>) => {
+    const maxPriceEl = maxPriceRef.current;
+    if (maxPriceEl) {
+      maxPriceEl.value = e.target.value;
+    }
+  };
+
+  const hasPriceFilter =
+    minPriceRef.current?.value || maxPriceRef.current?.value;
 
   return (
     <div
@@ -72,8 +137,8 @@ export default function ItemsFilter({
             <Input
               type="number"
               placeholder="최소"
-              value={minPrice}
-              onChange={(e) => setMinPrice(e.target.value)}
+              ref={minPriceRef}
+              onChange={handleMinPrice}
               className="flex-1 px-3 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               min="0"
             />
@@ -81,8 +146,8 @@ export default function ItemsFilter({
             <Input
               type="number"
               placeholder="최대"
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(e.target.value)}
+              ref={maxPriceRef}
+              onChange={handleMaxPrice}
               className="flex-1 px-3 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               min="0"
             />
@@ -95,7 +160,11 @@ export default function ItemsFilter({
           <div className="flex gap-2">
             <Select
               value={sortBy}
-              onValueChange={(value) => setSortBy(value as SortOption)}
+              onValueChange={(value) => {
+                const newSortBy = value as SortOption;
+                setSortBy(newSortBy);
+                handleSortChange(newSortBy, undefined);
+              }}
             >
               <SelectTrigger>
                 <SelectValue placeholder="정렬 선택" />
@@ -109,7 +178,11 @@ export default function ItemsFilter({
             </Select>
             <Select
               value={sortOrder}
-              onValueChange={(value) => setSortOrder(value as SortOrder)}
+              onValueChange={(value) => {
+                const newSortOrder = value as SortOrder;
+                setSortOrder(newSortOrder);
+                handleSortChange(undefined, newSortOrder);
+              }}
             >
               <SelectTrigger>
                 <SelectValue placeholder="오름차순/내림차순" />
@@ -140,6 +213,22 @@ export default function ItemsFilter({
           </Button>
         </div>
       </div>
+
+      {/* 필터 적용 badges */}
+      {isFilterApplied && (
+        <div className="flex items-center mt-2">
+          <span className="text-xs mr-2 font-medium">필터: </span>
+          {hasPriceFilter && (
+            <Badge className="bg-blue-100 text-blue-500 font-medium">
+              {Number(minPriceRef.current?.value).toLocaleString()} ~{" "}
+              {Number(maxPriceRef.current?.value).toLocaleString()}원
+              <button type="button" onClick={handleResetPrice}>
+                <X className="size-3" />
+              </button>
+            </Badge>
+          )}
+        </div>
+      )}
     </div>
   );
 }
