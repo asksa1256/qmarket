@@ -17,34 +17,63 @@ export default async function Home() {
   const formattedLastMonth = String(lastMonth).padStart(2, "0");
 
   return (
-    <main className="flex p-4 md:p-0">
+    <main className="flex p-4 md:p-0 mt-20">
       <section className="flex flex-col w-full gap-4 items-center">
         {/* 아이템 카테고리 메뉴 */}
-        <div className="mt-20">
-          <h3 className="font-bold text-xl text-center mb-4">
-            아이템 카테고리별 검색
-          </h3>
-          <ItemCategoryNav />
+        <div className="w-full max-w-4xl">
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold tracking-tight mb-2">
+              아이템 카테고리 검색
+            </h2>
+            <p className="text-muted-foreground text-sm md:text-base">
+              찾으시는 아이템의 종류를 선택하여 빠르게 검색해보세요.
+            </p>
+          </div>
+
+          <div className="p-4 md:p-6 rounded-3xl bg-card border shadow-sm flex justify-center items-center">
+            <ItemCategoryNav />
+          </div>
         </div>
 
         {/* 이번 달 로테이션 아이템 */}
-        <div className="mt-8">
-          <h3 className="font-bold text-xl text-center mb-4">
-            이번 달 로테이션 아이템
-          </h3>
-          <Link href="/rotation-items/new">
-            <div className="p-6 rounded-2xl bg-card border hover:border-primary/50 transition-colors h-full">
-              <h3 className="text-lg font-semibold mb-2 flex items-center gap-1">
-                {year}년 {formattedMonth}월 로테이션{" "}
-                <ExternalLink className="size-4" />
-              </h3>
-              <p className="text-muted-foreground break-keep">
-                이번 달에 업데이트된 새로운 아이템들을 확인해보세요!
-              </p>
+        <div className="mt-10 w-full max-w-4xl">
+          <div className="flex items-center justify-between mb-4 px-2">
+            <h3 className="font-bold text-2xl flex items-center gap-2">
+              ✨ 이번 달 로테이션 아이템
+            </h3>
+            {/* 필요시 더보기 버튼 등을 여기에 배치 */}
+          </div>
+
+          <Link href="/rotation-items/new" className="group block">
+            <div className="relative overflow-hidden p-8 rounded-3xl bg-gradient-to-br from-primary/10 via-card to-card border border-primary/20 hover:border-primary transition-all duration-300 shadow-lg hover:shadow-primary/25 hover:-translate-y-1">
+              <div className="absolute top-0 right-0 -mt-10 -mr-10 w-32 h-32 bg-primary/20 rounded-full blur-3xl group-hover:bg-primary/30 transition-colors" />
+
+              <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                  <span className="inline-block px-3 py-1 mb-3 text-xs font-bold text-primary bg-primary/10 rounded-full border border-primary/20">
+                    NEW UPDATE
+                  </span>
+
+                  <h3 className="text-2xl md:text-3xl font-bold mb-3 flex items-center gap-2 text-foreground group-hover:text-primary transition-colors">
+                    {year}년 {formattedMonth}월 로테이션
+                  </h3>
+
+                  <p className="text-muted-foreground break-keep max-w-xl">
+                    이번 달에 업데이트된 새로운 뽑기, 요술상자 아이템을
+                    확인해보세요!
+                  </p>
+                </div>
+
+                {/* 오른쪽 화살표 아이콘 (CTA 강조) */}
+                <div className="hidden md:flex items-center justify-center size-12 rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all">
+                  <ExternalLink className="size-6" />
+                </div>
+              </div>
             </div>
           </Link>
         </div>
 
+        {/* 하단 그리드 메뉴 */}
         <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl">
           <Link href="/rotation-items/last">
             <div className="p-6 rounded-2xl bg-card border hover:border-primary/50 transition-colors h-full">
