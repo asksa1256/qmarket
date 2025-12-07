@@ -73,9 +73,7 @@ export default function ItemTransactionConfirmModal({
           <AlertDialogTitle>
             {forSaleText} 완료 처리하시겠습니까?
           </AlertDialogTitle>
-          <AlertDialogDescription>
-            한번 완료한 내역은 수정할 수 없습니다.
-          </AlertDialogDescription>
+          <AlertDialogDescription></AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={markAsSoldMutation.isPending}>
