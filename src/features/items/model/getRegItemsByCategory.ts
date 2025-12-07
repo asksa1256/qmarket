@@ -1,16 +1,17 @@
 import { ITEM_CATEGORY_MAP, ITEM_GENDER_MAP } from "@/shared/config/constants";
 import { ItemCategory, ItemGender } from "@/features/item/model/itemTypes";
+import { ItemSimple } from "@/features/item/ui/ItemBar";
 
 export async function getRegItemsByCategory(
   category: ItemCategory,
-  gender: ItemGender
+  item_gender: ItemGender
 ) {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/items_info?` +
       new URLSearchParams({
         select: "id,name,item_gender,image,category",
         category: `eq.${ITEM_CATEGORY_MAP[category]}`,
-        item_gender: `eq.${ITEM_GENDER_MAP[gender]}`,
+        item_gender: `eq.${ITEM_GENDER_MAP[item_gender]}`,
         order: "name.asc",
       }),
     {
@@ -28,7 +29,7 @@ export async function getRegItemsByCategory(
 
   const data = await res.json();
 
-  return data.map((item: any) => ({
+  return data.map((item: ItemSimple) => ({
     ...item,
     image: item.image ? item.image.trim() : null,
   }));
