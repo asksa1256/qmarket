@@ -5,8 +5,19 @@ import { UserDetail } from "../model/userTypes";
 import UserBioForm from "./UserBioForm";
 import { copyToClipboard } from "@/shared/lib/copyToClipboard";
 import { Button } from "@/shared/ui/button";
+import { getDailyItemCountAction } from "@/app/actions/item-actions";
+import DailyLimitDisplay from "@/features/item/ui/DailyLimitDisplay";
+import { useQuery } from "@tanstack/react-query";
 
 export default function UserProfileCard({ user }: { user: UserDetail }) {
+  // 일일 등록 잔여 횟수 조회
+  const { data: limitStatus } = useQuery({
+    queryKey: ["item-create-limit-count", user.id],
+    queryFn: getDailyItemCountAction,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
+  });
+
   return (
     <div className="text-center">
       <Image
@@ -40,6 +51,10 @@ export default function UserProfileCard({ user }: { user: UserDetail }) {
       </div>
 
       <UserBioForm user={user} />
+
+      <div className="mt-2 flex justify-center">
+        <DailyLimitDisplay remaining={limitStatus?.remaining || 0} />
+      </div>
 
       <span className="block text-sm text-gray-400 pt-3 mt-4 border-t border-gray-200">
         가입일: {user.created_at.slice(0, 10)}

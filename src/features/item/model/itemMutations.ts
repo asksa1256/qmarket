@@ -8,6 +8,7 @@ import {
 } from "@/shared/config/constants";
 import { toast } from "sonner";
 import { useUser } from "@/shared/hooks/useUser";
+import { getDailyItemCountAction } from "@/app/actions/item-actions";
 
 interface UseCreateItemMutationProps {
   isForSale: boolean;
@@ -21,6 +22,13 @@ export const useCreateItemMutation = (props: UseCreateItemMutationProps) => {
   return useMutation({
     mutationFn: async (values: ItemFormType) => {
       if (!user) throw new Error("로그인이 필요합니다.");
+
+      const { remaining } = await getDailyItemCountAction();
+      if (remaining <= 0) {
+        throw new Error(
+          "일일 등록 횟수를 모두 사용했습니다. 내일 다시 시도해주세요."
+        );
+      }
 
       return createItem({
         item_name: values.item_name,
@@ -47,6 +55,9 @@ export const useCreateItemMutation = (props: UseCreateItemMutationProps) => {
       queryClient.invalidateQueries({ queryKey: ["items"] });
       queryClient.invalidateQueries({ queryKey: ["my-items", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["filtered-items"] });
+      queryClient.invalidateQueries({
+        queryKey: ["item-create-limit-count", user?.id],
+      });
 
       props?.onSuccessCallback?.();
     },

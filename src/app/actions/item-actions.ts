@@ -6,9 +6,9 @@ import {
   getDailyItemCount,
 } from "@/shared/api/redis";
 import { ITEMS_TABLE_NAME } from "@/shared/config/constants";
-import { getRemainingTime } from "@/shared/api/redis";
 import { getSupabaseClientCookie } from "@/shared/api/supabase-cookie";
 import preventCreateExistingItem from "@/features/item/model/preventCreateExistingItem";
+import { getRemainingTime } from "@/shared/api/redis";
 
 interface ItemFormValues {
   id?: number;
@@ -49,12 +49,11 @@ export async function createItem(values: ItemFormValues) {
 
   if (error) throw new Error(error.message);
 
-  // 아이템 등록 성공 후 Redis 카운트 증가 (등록 실패 시 횟수 차감 방지)
-  // const currentCount = await checkAndIncrementDailyItemLimit(user.id);
-  // const remaining = DAILY_LIMIT - currentCount;
+  // 아이템 등록 사용 횟수 증가
+  const currentCount = await checkAndIncrementDailyItemLimit(user.id);
+  const remaining = DAILY_LIMIT - currentCount;
 
-  // return { data, currentCount, remaining };
-  return { data };
+  return { data, remaining };
 }
 
 // 아이템 수정
@@ -77,10 +76,10 @@ export async function updateItem(values: ItemFormValues) {
   if (error) throw new Error(error.message);
   if (!data || data.length === 0) throw new Error("아이템을 찾을 수 없습니다.");
 
-  return { data };
+  return data;
 }
 
-// 클라이언트에 일일 등록 카운트 표시해주는 함수
+// 아이템 일일 등록 가능 횟수 표시 (redis 함수는 서버에서만 사용 가능하므로 서버 액션 함수 별도 생성)
 export async function getDailyItemCountAction() {
   const supabase = await getSupabaseClientCookie();
   const {
@@ -89,13 +88,17 @@ export async function getDailyItemCountAction() {
   if (!user) return { count: 0, remaining: DAILY_LIMIT };
 
   const count = await getDailyItemCount(user.id);
-  const remaining = DAILY_LIMIT - count;
+  const remaining = Math.max(0, DAILY_LIMIT - count);
   return { count, remaining };
 }
 
-// 등록 잔여 횟수, 시간 리턴 함수
-export async function getDailyItemInsertStatus(userId: string) {
-  const count = await getDailyItemCount(userId);
-  const remainingTime = await getRemainingTime(userId); // 초 단위
-  return { count, remaining: DAILY_LIMIT - count, remainingTime };
+export async function getRemainingTimeAction(): Promise<number> {
+  const supabase = await getSupabaseClientCookie();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return 0;
+
+  return await getRemainingTime(user.id);
 }
