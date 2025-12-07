@@ -20,6 +20,7 @@ type SortOption = "created_at" | "price";
 type SortOrder = "asc" | "desc";
 
 interface ItemsFilterProps {
+  variant?: "wide" | "sidebar";
   onFilterChange: (filters: {
     minPrice?: number;
     maxPrice?: number;
@@ -30,8 +31,9 @@ interface ItemsFilterProps {
 }
 
 export default function ItemsFilter({
-  onFilterChange,
+  variant = "wide",
   className,
+  onFilterChange,
 }: ItemsFilterProps) {
   const [isFilterApplied, setIsFilterApplied] = useState(false);
   const minPriceRef = useRef<HTMLInputElement>(null);
@@ -129,7 +131,12 @@ export default function ItemsFilter({
         className
       )}
     >
-      <div className="flex flex-wrap md:flex-nowrap gap-2 w-full">
+      <div
+        className={cn({
+          "flex flex-wrap md:flex-nowrap gap-2 w-full": variant === "wide",
+          "flex flex-col gap-4 w-[230px]": variant === "sidebar",
+        })}
+      >
         {/* 가격 필터 */}
         <div className="w-full max-w-[300px]">
           <label className="text-sm font-medium mb-2 block">가격</label>

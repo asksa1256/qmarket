@@ -17,13 +17,16 @@ export default function CategoryItemFilteredList({
   });
 
   return (
-    <>
-      <ItemsFilter
-        onFilterChange={(filters) => setFilterParams(filters)}
-        className="w-full mb-4"
-      />
+    <section className="flex gap-4 md:flex-row flex-col">
+      <div>
+        <h3 className="md:text-lg font-bold mb-2 text-base">필터</h3>
+        <ItemsFilter
+          variant="sidebar"
+          onFilterChange={(filters) => setFilterParams(filters)}
+        />
+      </div>
 
-      <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
+      <div className="w-full grid md:grid-cols-2 grid-cols-1 gap-4">
         {/* 판매해요 */}
         <div>
           <h3 className="md:text-lg font-bold mb-2 text-base">판매해요</h3>
@@ -46,6 +49,6 @@ export default function CategoryItemFilteredList({
           />
         </div>
       </div>
-    </>
+    </section>
   );
 }
