@@ -20,8 +20,8 @@ export default function TermsOfUseContent() {
       </h2>
       <ul className="list-disc list-inside text-gray-700 space-y-2 mb-4">
         <li>
-          본 서비스는 <strong>비영리 사이드 프로젝트</strong>로 운영되며, 거래를
-          직접 중개하거나 보증하지 않습니다.
+          본 서비스는 비영리 사이드 프로젝트로 운영되며, 거래를 직접 중개하거나
+          보증하지 않습니다.
         </li>
         <li>사용자 간 거래는 전적으로 당사자 간 책임 하에 이루어집니다.</li>
         <li>운영자는 서버 장애, 데이터 손실 등에 대해 책임지지 않습니다.</li>

@@ -45,6 +45,22 @@ export default function FAQPage() {
             </div>
           </AccordionContent>
         </AccordionItem>
+
+        <AccordionItem value="faq-3" className="border-b">
+          <AccordionTrigger className="text-lg font-semibold text-left hover:no-underline py-4 text-gray-700">
+            디스코드 계정으로 로그인 시 '현재 접속한 서버 확인하기'는 무슨
+            의미인가요?
+          </AccordionTrigger>
+          <AccordionContent className="text-gray-600 p-4 bg-gray-50 border-t">
+            <div className="leading-relaxed">
+              큐마켓은 '큐플레이 아카이브' 게임 데이터를 기준으로 운영되고 있기
+              때문에, 구매자와 판매자의 원활한 소통을 위해 통합적인 가입 기준을
+              제시하고자 디스코드 '큐플레이 아카이브' 채널의 가입 여부를
+              확인하고 있습니다. 따라서 해당 채널의 가입 여부만 확인하며, 그외
+              다른 디스코드 채널은 확인하지 않습니다.
+            </div>
+          </AccordionContent>
+        </AccordionItem>
       </Accordion>
 
       <p className="mt-10 text-center text-sm text-gray-500">
