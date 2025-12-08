@@ -21,13 +21,10 @@ export default async function Home() {
       <section className="flex flex-col w-full gap-4 items-center">
         {/* 아이템 카테고리 메뉴 */}
         <div className="w-full max-w-4xl">
-          <div className="mb-6">
+          <div className="mb-4">
             <h2 className="text-2xl font-bold tracking-tight mb-2">
-              아이템 카테고리 검색
+              🔍 아이템 카테고리별 조회
             </h2>
-            <p className="text-muted-foreground text-sm md:text-base">
-              찾으시는 아이템의 종류를 선택하여 빠르게 검색해보세요.
-            </p>
           </div>
 
           <div className="p-4 md:p-6 rounded-3xl bg-card border shadow-sm flex justify-center items-center">
@@ -35,11 +32,11 @@ export default async function Home() {
           </div>
         </div>
 
-        {/* 이번 달 로테이션 아이템 */}
+        {/* 이번 달 로테이션 */}
         <div className="mt-10 w-full max-w-4xl">
           <div className="flex items-center justify-between mb-4 px-2">
             <h3 className="font-bold text-2xl flex items-center gap-2">
-              ✨ 이번 달 로테이션 아이템
+              ✨ 이번 달 로테이션
             </h3>
           </div>
 
