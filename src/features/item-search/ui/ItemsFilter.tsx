@@ -134,29 +134,27 @@ export default function ItemsFilter({
       <div
         className={cn({
           "flex flex-wrap md:flex-nowrap gap-2 w-full": variant === "wide",
-          "flex flex-col gap-4 w-[230px]": variant === "sidebar",
+          "flex flex-col gap-4 md:w-[230px] w-full": variant === "sidebar",
         })}
       >
         {/* 가격 필터 */}
-        <div className="w-full max-w-[300px]">
+        <div className="w-full md:max-w-[300px]">
           <label className="text-sm font-medium mb-2 block">가격</label>
           <div className="flex items-center gap-2">
             <Input
               type="number"
               placeholder="최소"
               ref={minPriceRef}
-              onChange={handleMinPrice}
-              className="flex-1 px-3 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               min="0"
+              onChange={handleMinPrice}
             />
             <span className="text-gray-500">~</span>
             <Input
               type="number"
               placeholder="최대"
               ref={maxPriceRef}
-              onChange={handleMaxPrice}
-              className="flex-1 px-3 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               min="0"
+              onChange={handleMaxPrice}
             />
           </div>
         </div>
@@ -173,7 +171,9 @@ export default function ItemsFilter({
                 handleSortChange(newSortBy, undefined);
               }}
             >
-              <SelectTrigger>
+              <SelectTrigger
+                className={variant === "sidebar" ? "grow" : "grow md:grow-0"}
+              >
                 <SelectValue placeholder="정렬 선택" />
               </SelectTrigger>
               <SelectContent>
@@ -191,7 +191,9 @@ export default function ItemsFilter({
                 handleSortChange(undefined, newSortOrder);
               }}
             >
-              <SelectTrigger>
+              <SelectTrigger
+                className={variant === "sidebar" ? "grow" : "grow md:grow-0"}
+              >
                 <SelectValue placeholder="오름차순/내림차순" />
               </SelectTrigger>
               <SelectContent>
@@ -210,11 +212,20 @@ export default function ItemsFilter({
 
         {/* actions */}
         <div className="flex w-full gap-2 pt-2 self-end">
-          <Button type="button" onClick={handleApplyFilter}>
+          <Button
+            type="button"
+            className={variant === "sidebar" ? "grow" : "grow md:grow-0"}
+            onClick={handleApplyFilter}
+          >
             <Filter />
             필터 적용
           </Button>
-          <Button type="button" variant="outline" onClick={handleReset}>
+          <Button
+            type="button"
+            variant="outline"
+            className={variant === "sidebar" ? "grow" : "grow md:grow-0"}
+            onClick={handleReset}
+          >
             <RefreshCcw />
             초기화
           </Button>

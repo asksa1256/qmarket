@@ -54,63 +54,66 @@ export default function ItemDetailClient({
       <ButtonToBack />
 
       <div className="flex flex-col lg:flex-row gap-8 mt-4">
-        <div className="rounded-xl lg:sticky lg:top-24 w-full lg:w-64 order-1 lg:order-1">
-          <SectionTitle>아이템 정보</SectionTitle>
+        {/* 아이템 정보 */}
+        <div className="w-full lg:w-64 order-1 lg:order-1 lg:shrink-0">
+          <div className="rounded-xl lg:sticky lg:top-20">
+            <SectionTitle>아이템 정보</SectionTitle>
 
-          <div className="flex flex-col items-center">
-            {item.image && (
-              <img
-                src={item.image}
-                alt={item.name}
-                className="w-36 h-40 object-cover rounded-xl border border-gray-200 p-1 mb-4"
-              />
-            )}
+            <div className="flex flex-col items-center">
+              {item.image && (
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-36 h-40 object-cover rounded-xl border border-gray-200 p-1 mb-4"
+                />
+              )}
 
-            <h1 className="text-2xl font-extrabold text-gray-800 mb-4 text-center">
-              {item.name}({item.item_gender})
-            </h1>
+              <h1 className="text-2xl font-extrabold text-gray-800 mb-4 text-center">
+                {item.name}({item.item_gender})
+              </h1>
 
-            <ul className="w-full space-y-2 text-foreground/70 text-sm">
-              <li className="flex justify-between border-b pb-1 last:border-b-0">
-                <span className="font-semibold">카테고리:</span>
-                <span>{item.category}</span>
-              </li>
-              <li className="flex justify-between border-b pb-1 last:border-b-0">
-                <span className="font-semibold">출처:</span>
-                <span>{item.item_source}</span>
-              </li>
-              <li className="flex justify-between border-b pb-1 last:border-b-0">
-                <span className="font-semibold">평균 호가:</span>
-                <span>
-                  {marketPrice === 0
-                    ? "-"
-                    : marketPrice.toLocaleString("ko-KR")}
-                  <span className="ml-1 text-xs">(최근 10건)</span>
-                </span>
-              </li>
-              <li className="flex justify-between border-b pb-1 last:border-b-0">
-                <span className="font-semibold">최근 거래가:</span>
-                <span>
-                  {saleHistory && saleHistory.length > 0 ? (
-                    <h6>
-                      {saleHistory[
-                        saleHistory.length - 1
-                      ].transactions[0].price.toLocaleString()}
-                      원
-                      <span className="ml-1 text-xs">
-                        ({saleHistory[saleHistory.length - 1].date})
-                      </span>
-                    </h6>
-                  ) : (
-                    "-"
-                  )}
-                </span>
-              </li>
-            </ul>
+              <ul className="w-full space-y-2 text-foreground/70 text-sm">
+                <li className="flex justify-between border-b pb-1 last:border-b-0">
+                  <span className="font-semibold">카테고리:</span>
+                  <span>{item.category}</span>
+                </li>
+                <li className="flex justify-between border-b pb-1 last:border-b-0">
+                  <span className="font-semibold">출처:</span>
+                  <span>{item.item_source}</span>
+                </li>
+                <li className="flex justify-between border-b pb-1 last:border-b-0">
+                  <span className="font-semibold">평균 호가:</span>
+                  <span>
+                    {marketPrice === 0
+                      ? "-"
+                      : marketPrice.toLocaleString("ko-KR")}
+                    <span className="ml-1 text-xs">(최근 10건)</span>
+                  </span>
+                </li>
+                <li className="flex justify-between border-b pb-1 last:border-b-0">
+                  <span className="font-semibold">최근 거래가:</span>
+                  <span>
+                    {saleHistory && saleHistory.length > 0 ? (
+                      <h6>
+                        {saleHistory[
+                          saleHistory.length - 1
+                        ].transactions[0].price.toLocaleString()}
+                        원
+                        <span className="ml-1 text-xs">
+                          ({saleHistory[saleHistory.length - 1].date})
+                        </span>
+                      </h6>
+                    ) : (
+                      "-"
+                    )}
+                  </span>
+                </li>
+              </ul>
 
-            <p className="text-foreground/50 text-sm break-keep">
-              * 아이템 시세는 참고용이며 정확하지 않을 수 있습니다.
-            </p>
+              <p className="text-foreground/50 text-sm break-keep">
+                * 아이템 시세는 참고용이며 정확하지 않을 수 있습니다.
+              </p>
+            </div>
           </div>
         </div>
 
