@@ -50,14 +50,12 @@ const CreateReportModal = () => {
     e.preventDefault();
 
     if (!reportData.item_name && !reportData.discord_id) {
-      toast.error(
-        "신고 조사를 위해 아이템 이름 또는 신고 대상의 디스코드 아이디 중 최소 하나는 입력해야 합니다."
-      );
+      toast.error("신고 대상 아이템 이름 또는 디스코드 아이디를 입력해주세요.");
       return;
     }
 
     if (!reportData.details.trim()) {
-      toast.error("구체적인 신고 내용을 작성해주세요.");
+      toast.error("내용을 작성해주세요.");
       return;
     }
 
@@ -68,26 +66,24 @@ const CreateReportModal = () => {
 
       const { error } = await supabase.from("report").insert([
         {
-          item_name: sanitize(reportData.item_name) || null,
-          discord_id: sanitize(reportData.discord_id) || null, // 신고 대상자 디스코드 ID
-          details: sanitize(reportData.details),
+          item_name: reportData.item_name || null,
+          discord_id: reportData.discord_id || null, // 신고 대상 디스코드 ID
+          details: reportData.details,
           contact: user?.email,
-          user_id: user?.id, // 신고자 ID 저장 (악성 신고자 대비)
+          user_id: user?.id, // 제보자 ID
           created_at: createdAt,
         },
       ]);
 
       if (error) throw error;
 
-      toast.success(
-        "신고가 접수되었습니다. 신속히 검토하겠습니다. 감사합니다."
-      );
+      toast.success("신고가 접수되었습니다.");
 
       setReportData(initialReportState);
       setIsOpen(false);
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(`신고 실패: ${error.message}`);
+        toast.error(`신고 접수 실패: ${error.message}`);
       } else {
         toast.error("알 수 없는 오류가 발생했습니다.");
       }
