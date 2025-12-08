@@ -41,21 +41,23 @@ export default async function Home() {
             <h3 className="font-bold text-2xl flex items-center gap-2">
               ✨ 이번 달 로테이션 아이템
             </h3>
-            {/* 필요시 더보기 버튼 등을 여기에 배치 */}
           </div>
 
           <Link href="/rotation-items/new" className="group block">
-            <div className="relative overflow-hidden p-8 rounded-3xl bg-gradient-to-br from-primary/10 via-card to-card border border-primary/20 hover:border-primary transition-all duration-300 shadow-lg hover:shadow-primary/25 hover:-translate-y-1">
-              <div className="absolute top-0 right-0 -mt-10 -mr-10 w-32 h-32 bg-primary/20 rounded-full blur-3xl group-hover:bg-primary/30 transition-colors" />
+            {/* 좌측 상단 배경 그라데이션 */}
+            <div className="relative overflow-hidden p-8 rounded-3xl bg-gradient-to-br from-blue-200 via-card to-card border border-blue-300 hover:border-blue-500 transition-all duration-300 shadow-lg hover:shadow-primary/15 hover:-translate-y-1">
+              {/* 우측 상단 배경 그라데이션 */}
+              <div className="absolute top-0 right-0 -mt-10 -mr-10 w-32 h-32 bg-blue-200 rounded-full blur-3xl" />
 
-              <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
-                  <span className="inline-block px-3 py-1 mb-3 text-xs font-bold text-primary bg-primary/10 rounded-full border border-primary/20">
+                  <span className="inline-block px-3 py-1 mb-3 text-xs font-bold text-primary bg-blue-300 rounded-full border border-primary/20">
                     NEW UPDATE
                   </span>
 
-                  <h3 className="text-2xl md:text-3xl font-bold mb-3 flex items-center gap-2 text-foreground group-hover:text-primary transition-colors">
-                    {year}년 {formattedMonth}월 로테이션
+                  <h3 className="text-2xl md:text-3xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors">
+                    {year}년 {formattedMonth}월 로테이션{" "}
+                    <ExternalLink className="inline-block size-5 md:hidden" />
                   </h3>
 
                   <p className="text-muted-foreground break-keep max-w-xl">
@@ -65,7 +67,7 @@ export default async function Home() {
                 </div>
 
                 {/* 오른쪽 화살표 아이콘 (CTA 강조) */}
-                <div className="hidden md:flex items-center justify-center size-12 rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all">
+                <div className="hidden md:flex items-center justify-center size-12 rounded-full bg-blue-100 text-blue-500 group-hover:bg-blue-600 group-hover:text-white transition-all">
                   <ExternalLink className="size-6" />
                 </div>
               </div>

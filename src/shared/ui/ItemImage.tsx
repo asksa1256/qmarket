@@ -4,14 +4,14 @@ import { cn } from "../lib/utils";
 export interface ItemImageProps {
   name: string;
   imgUrl: string | null;
-  size: "sm" | "lg";
+  size?: "sm" | "lg";
   className?: string;
 }
 
 export default function ItemImage({
   name,
   imgUrl,
-  size,
+  size = "lg",
   className,
 }: ItemImageProps) {
   return (
