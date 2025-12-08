@@ -88,17 +88,17 @@ export default function UserBioForm({ user }: { user: UserDetail }) {
     );
 
   return (
-    <div className="flex items-start justify-center">
+    <div className="relative flex items-start justify-center">
       <p className="text-sm text-foreground/70 break-keep whitespace-pre-line p-2 border rounded-md w-full">
         {!user.bio ? "자기소개를 입력해주세요." : user.bio}
       </p>
 
-      {pathname === "my-items" && loginUser?.id === user.id && (
+      {pathname === "/my-items" && loginUser?.id === user.id && (
         <Button
           variant="ghost"
           aria-label="수정하기"
           title="수정하기"
-          className="has-[>svg]:px-1 h-auto py-1"
+          className="absolute right-0 top-0 has-[>svg]:px-1 h-auto py-1"
           onClick={() => setIsEditMode(true)}
         >
           <Edit />

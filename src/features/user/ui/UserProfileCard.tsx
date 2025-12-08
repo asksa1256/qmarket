@@ -25,20 +25,21 @@ export default function UserProfileCard({ user }: { user: UserDetail }) {
 
   return (
     <div className="text-center">
-      <Image
-        src={user.discord_profile_image ?? "images/empty.png"}
-        alt={user.username}
-        width={120}
-        height={120}
-        className="rounded-full border-4 border-blue-500 mb-5 mx-auto object-cover block"
-      />
+      <div className="relative w-[120px] h-[120px] rounded-full overflow-hidden mb-4 mx-auto">
+        <Image
+          src={user.discord_profile_image ?? "images/discord-default.png"}
+          alt={user.username}
+          fill
+          className="object-cover"
+        />
+      </div>
 
       <div className="mb-2">
         <h4 className="font-bold text-foreground mb-1 md:text-xl text-lg">
           {user.nickname}
         </h4>
         <h5 className="text-foreground/70 text-sm">
-          @
+          <span className="block">디스코드 아이디/이메일:</span>
           <Button
             type="button"
             variant="link"
@@ -57,7 +58,7 @@ export default function UserProfileCard({ user }: { user: UserDetail }) {
 
       <UserBioForm user={user} />
 
-      {pathname === "my-items" && loginUser?.id === user.id && (
+      {pathname === "/my-items" && loginUser?.id === user.id && (
         <div className="mt-3 flex justify-center">
           <DailyLimitDisplay remaining={limitStatus?.remaining || 0} />
         </div>

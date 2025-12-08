@@ -15,7 +15,11 @@ export default async function MyItemsPage() {
     .single();
 
   if (error || !user) {
-    return <div>회원 정보를 찾을 수 없습니다.</div>;
+    return (
+      <div className="flex items-center justify-center lg:max-w-6xl mx-auto lg:px-0 px-4">
+        회원 정보를 찾을 수 없습니다.
+      </div>
+    );
   }
 
   return <UserDetailSection user={userDetail} />;

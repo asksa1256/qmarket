@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import ButtonToMain from "@/shared/ui/LinkButton/ButtonToMain";
 
 export default function SignInErrorBox({
   errorMessage,
@@ -10,12 +10,10 @@ export default function SignInErrorBox({
   console.log(errorMessage);
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex flex-col gap-2 items-center justify-center">
       <h2>로그인 에러</h2>
       <p>메인으로 이동하여 다시 로그인을 시도해주세요.</p>
-      <p>
-        <Link href="/">메인으로</Link>
-      </p>
+      <ButtonToMain />
     </div>
   );
 }
