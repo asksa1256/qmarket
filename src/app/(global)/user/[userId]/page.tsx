@@ -15,12 +15,12 @@ export default async function UserDetailPage({
     .single();
 
   if (error || !user) {
-    return <div>존재하지 않는 유저입니다.</div>;
+    return (
+      <div className="lg:max-w-6xl mx-auto lg:px-0 px-4 text-center">
+        존재하지 않는 유저입니다.
+      </div>
+    );
   }
 
-  return (
-    <>
-      <UserDetailSection user={user} />
-    </>
-  );
+  return <UserDetailSection user={user} />;
 }
