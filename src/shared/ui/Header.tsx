@@ -177,7 +177,7 @@ export default function Header() {
                   </div>
                 ) : (
                   <Button
-                    className="bg-discord hover:bg-discord-hover w-full"
+                    className="bg-discord hover:bg-discord-hover w-auto mx-auto"
                     onClick={handleSignIn}
                   >
                     <DiscordIcon className="w-6 h-6 text-white mr-2" /> 로그인
