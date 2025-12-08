@@ -32,7 +32,7 @@ export default async function ItemCategoryPage({
   };
 
   return (
-    <section className="w-full lg:max-w-6xl mx-auto lg:px-0 px-4">
+    <section className="w-full lg:max-w-6xl mx-auto">
       <SectionTitle>
         <b className="text-blue-600 inline-block mr-2">
           {ITEM_CATEGORY_MAP[category]}

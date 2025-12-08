@@ -62,7 +62,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 backdrop-blur-sm z-50 py-2 px-4 lg:px-0 max-w-6xl mx-auto flex items-center justify-between">
+    <header className="sticky top-0 backdrop-blur-sm z-50 py-2 max-w-6xl mx-auto flex items-center justify-between">
       <Link href="/" className="lg:w-[280px] md:w-[240px] shrink-0">
         <Image src="/images/logo.png" alt="큐마켓" width={140} height={54} />
       </Link>
@@ -137,7 +137,7 @@ export default function Header() {
           </SheetTrigger>
           <SheetContent side="right" className="w-full max-w-[400px]">
             <SheetHeader className="text-left mb-6">
-              <SheetTitle>메뉴</SheetTitle>
+              <SheetTitle></SheetTitle>
             </SheetHeader>
 
             <div className="flex flex-col gap-6">
