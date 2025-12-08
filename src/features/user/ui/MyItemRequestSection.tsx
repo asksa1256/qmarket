@@ -31,7 +31,7 @@ export default async function MyItemRequestSection() {
       <SectionTitle>🔔 아이템 등록 요청 목록</SectionTitle>
 
       {data.length === 0 ? (
-        <p>등록 요청이 없습니다.</p>
+        <p>등록 요청하신 아이템이 없습니다.</p>
       ) : (
         <ul className="flex gap-2 flex-wrap">
           {data.map((d) => (

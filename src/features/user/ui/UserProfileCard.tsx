@@ -8,8 +8,13 @@ import { Button } from "@/shared/ui/button";
 import { getDailyItemCountAction } from "@/app/actions/item-actions";
 import DailyLimitDisplay from "@/features/item/ui/DailyLimitDisplay";
 import { useQuery } from "@tanstack/react-query";
+import { useUser } from "@/shared/hooks/useUser";
+import { usePathname } from "next/navigation";
 
 export default function UserProfileCard({ user }: { user: UserDetail }) {
+  const { data: loginUser } = useUser();
+  const pathname = usePathname();
+
   // 일일 등록 잔여 횟수 조회
   const { data: limitStatus } = useQuery({
     queryKey: ["item-create-limit-count", user.id],
@@ -52,9 +57,11 @@ export default function UserProfileCard({ user }: { user: UserDetail }) {
 
       <UserBioForm user={user} />
 
-      <div className="mt-2 flex justify-center">
-        <DailyLimitDisplay remaining={limitStatus?.remaining || 0} />
-      </div>
+      {pathname === "my-items" && loginUser?.id === user.id && (
+        <div className="mt-3 flex justify-center">
+          <DailyLimitDisplay remaining={limitStatus?.remaining || 0} />
+        </div>
+      )}
 
       <span className="block text-sm text-gray-400 pt-3 mt-4 border-t border-gray-200">
         가입일: {user.created_at.slice(0, 10)}

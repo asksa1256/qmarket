@@ -11,9 +11,13 @@ import { toast } from "sonner";
 import { supabase } from "@/shared/api/supabase-client";
 import { USER_PROFILES_TABLE_NAME } from "@/shared/config/constants";
 import { UserDetail } from "../model/userTypes";
+import { useUser } from "@/shared/hooks/useUser";
+import { usePathname } from "next/navigation";
 
 export default function UserBioForm({ user }: { user: UserDetail }) {
   const [isEditMode, setIsEditMode] = useState(false);
+  const { data: loginUser } = useUser();
+  const pathname = usePathname();
 
   const {
     register,
@@ -85,18 +89,21 @@ export default function UserBioForm({ user }: { user: UserDetail }) {
 
   return (
     <div className="flex items-start justify-center">
-      <p className="text-sm text-foreground/70">
+      <p className="text-sm text-foreground/70 break-keep whitespace-pre-line p-2 border rounded-md w-full">
         {!user.bio ? "자기소개를 입력해주세요." : user.bio}
       </p>
-      <Button
-        variant="ghost"
-        aria-label="수정하기"
-        title="수정하기"
-        className="has-[>svg]:px-1 h-auto py-1"
-        onClick={() => setIsEditMode(true)}
-      >
-        <Edit />
-      </Button>
+
+      {pathname === "my-items" && loginUser?.id === user.id && (
+        <Button
+          variant="ghost"
+          aria-label="수정하기"
+          title="수정하기"
+          className="has-[>svg]:px-1 h-auto py-1"
+          onClick={() => setIsEditMode(true)}
+        >
+          <Edit />
+        </Button>
+      )}
     </div>
   );
 }
