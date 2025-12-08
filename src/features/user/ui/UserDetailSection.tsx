@@ -60,7 +60,7 @@ export default async function UserDetailSection({ user }: UserDetailProps) {
   );
 
   return (
-    <div className="flex md:flex-nowrap flex-wrap lg:max-w-6xl mx-auto lg:px-0 px-4">
+    <div className="flex md:flex-row flex-col lg:max-w-6xl mx-auto lg:px-0 px-4">
       {/* 좌측 사이드바 (유저 정보) */}
       <aside className="w-full md:w-64 max-w-64 mx-auto shrink-0 md:pt-20">
         <UserProfileCard user={user} />
@@ -69,7 +69,7 @@ export default async function UserDetailSection({ user }: UserDetailProps) {
       {/* 우측 컨텐츠 (삽니다/팝니다 목록) */}
       <section className="grow md:mt-0 mt-8">
         {/* 마이페이지 전용 */}
-        {authUser?.id === user.id && <UserItemListHeader userId={user.id} />}
+        {authUser?.id === user.id && <UserItemListHeader />}
 
         {/* 전체 공개: 유저 팝니다/삽니다 목록 */}
         <BuySellListSection />

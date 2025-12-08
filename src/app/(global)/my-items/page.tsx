@@ -18,9 +18,5 @@ export default async function MyItemsPage() {
     return <div>회원 정보를 찾을 수 없습니다.</div>;
   }
 
-  return (
-    <>
-      <UserDetailSection user={userDetail} />
-    </>
-  );
+  return <UserDetailSection user={userDetail} />;
 }

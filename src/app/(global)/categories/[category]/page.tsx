@@ -1,4 +1,3 @@
-import ItemList from "@/features/items/ui/ItemList";
 import { ItemCategory } from "@/features/item/model/itemTypes";
 import { ITEM_CATEGORY_MAP } from "@/shared/config/constants";
 import SectionTitle from "@/shared/ui/SectionTitle";
@@ -8,6 +7,7 @@ import {
 } from "@/features/items/model/getRegItemsByCategory";
 import CategoryItemAccordion from "@/features/items/ui/CategoryItemAccordion";
 import CategoryItemFilteredList from "@/features/items/ui/CategoryItemFilteredList";
+import ButtonToBack from "@/shared/ui/LinkButton/ButtonToBack";
 
 export async function generateStaticParams() {
   const categories = await getItemCategories();
@@ -33,6 +33,8 @@ export default async function ItemCategoryPage({
 
   return (
     <section className="w-full lg:max-w-6xl mx-auto">
+      <ButtonToBack />
+
       <SectionTitle>
         <b className="text-blue-600 inline-block mr-2">
           {ITEM_CATEGORY_MAP[category]}

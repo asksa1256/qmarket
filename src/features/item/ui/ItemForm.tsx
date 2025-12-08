@@ -157,8 +157,8 @@ export default function ItemForm({
               render={({ field }) => (
                 <SearchInput
                   value={field.value}
-                  placeholder="아이템명"
-                  className="w-full"
+                  placeholder="아이템명 입력"
+                  className="w-full [&_svg]:size-5 [&_svg]:right-4"
                   onSearch={(value) => {
                     field.onChange(value);
                     setIsFromSuggestion(false); // 직접 입력 시 자동완성 여부 false 처리

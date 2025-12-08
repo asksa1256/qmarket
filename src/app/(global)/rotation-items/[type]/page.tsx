@@ -2,6 +2,7 @@ import getRotationItems from "@/features/items/model/getRotationItems";
 import SectionTitle from "@/shared/ui/SectionTitle";
 import NewItemsClient from "@/features/items/ui/NewItemsClient";
 import { notFound } from "next/navigation";
+import ButtonToBack from "@/shared/ui/LinkButton/ButtonToBack";
 
 export default async function RotationItemsPage({
   params,
@@ -68,6 +69,8 @@ export default async function RotationItemsPage({
 
   return (
     <section className="lg:max-w-5xl lg:mx-auto lg:px-0 px-4">
+      <ButtonToBack />
+
       <SectionTitle>
         ✨{" "}
         <b className="text-blue-600">
