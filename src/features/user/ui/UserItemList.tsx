@@ -1,7 +1,7 @@
 "use client";
 
 import ItemCard from "@/features/item/ui/ItemCard";
-import getFilteredUserItems from "../model/getFilteredUserItems";
+import getFilteredUserItems from "../../items/model/getFilteredUserItems";
 import { getMyItems } from "@/features/items/model/getMyItems";
 import { useQuery } from "@tanstack/react-query";
 

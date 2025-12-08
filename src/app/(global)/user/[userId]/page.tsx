@@ -1,5 +1,6 @@
 import { supabaseServer } from "@/shared/api/supabase-server";
 import UserDetailSection from "@/features/user/ui/UserDetailSection";
+import ButtonToBack from "@/shared/ui/LinkButton/ButtonToBack";
 
 export default async function UserDetailPage({
   params,
@@ -22,5 +23,10 @@ export default async function UserDetailPage({
     );
   }
 
-  return <UserDetailSection user={user} />;
+  return (
+    <div className="lg:max-w-6xl mx-auto lg:px-0 px-4">
+      <ButtonToBack className="mb-0" />
+      <UserDetailSection user={user} />
+    </div>
+  );
 }

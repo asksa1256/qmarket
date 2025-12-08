@@ -1,6 +1,7 @@
 import { getSupabaseServerCookie } from "@/shared/api/supabase-cookie";
 import { supabaseServer } from "@/shared/api/supabase-server";
 import UserDetailSection from "@/features/user/ui/UserDetailSection";
+import ButtonToBack from "@/shared/ui/LinkButton/ButtonToBack";
 
 export default async function MyItemsPage() {
   const supabase = await getSupabaseServerCookie();
@@ -22,5 +23,10 @@ export default async function MyItemsPage() {
     );
   }
 
-  return <UserDetailSection user={userDetail} />;
+  return (
+    <div className="lg:max-w-6xl mx-auto lg:px-0 px-4">
+      <ButtonToBack className="mb-0" />
+      <UserDetailSection user={userDetail} />
+    </div>
+  );
 }

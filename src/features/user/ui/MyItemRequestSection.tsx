@@ -19,7 +19,7 @@ const getItemRequests = unstable_cache(
   ["item-reg-requests"],
   {
     tags: ["item-reg-requests"],
-    revalidate: 1800, // 30분 후 서버 동기화
+    revalidate: 86400, // 24시간 후 서버 동기화
   }
 );
 
