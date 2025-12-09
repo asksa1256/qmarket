@@ -129,7 +129,7 @@ export default function SearchInput({
       <Search className="absolute text-blue-600 size-5 md:size-6 md:right-6 right-4 top-1/2 -translate-y-1/2 z-[1]" />
 
       {suggestionOpen && (
-        <div className="absolute left-0 right-0 top-full z-10 mt-1 rounded-md border bg-popover text-popover-foreground shadow-md">
+        <div className="command-wrap md:min-w-[450px] absolute left-0 right-0 top-full z-10 mt-1 rounded-md border bg-popover text-popover-foreground shadow-md">
           <Command className="border rounded-lg">
             <CommandList>
               {value.length > 0 && suggestions.length === 0 ? (

@@ -139,3 +139,8 @@
     background-color: var(--primary-blue) !important;
   }
 }
+
+/* 헤더 검색 자동완성 커스텀 */
+header .command-wrap {
+  @apply translate-x-[-15%];
+}
