@@ -11,9 +11,9 @@ export default function Footer({ className }: { className?: string }) {
         className
       )}
     >
-      <div className="lg:w-6xl mx-auto">
+      <div className="lg:max-w-6xl mx-auto">
         <div className="flex flex-col gap-2 text-xs text-foreground/50">
-          <p>&copy; {currentYear} QMarket.</p>
+          <p>&copy; {currentYear} Q-Market.</p>
           <Link href="/terms">이용약관 | 개인정보처리방침</Link>
         </div>
       </div>

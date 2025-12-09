@@ -68,7 +68,7 @@ export default async function RotationItemsPage({
   ]);
 
   return (
-    <section className="lg:max-w-5xl lg:mx-auto lg:px-0 px-4">
+    <section className="lg:max-w-6xl lg:mx-auto lg:px-0 px-4">
       <ButtonToBack />
 
       <SectionTitle>

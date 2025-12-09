@@ -6,10 +6,12 @@ import { formatTime } from "@/shared/lib/formatters";
 
 interface DailyLimitDisplayProps {
   remaining: number; // 잔여 일일 등록 횟수
+  isLoading?: boolean;
 }
 
 export default function DailyLimitDisplay({
   remaining,
+  isLoading,
 }: DailyLimitDisplayProps) {
   const [countdown, setCountdown] = useState(0);
 
@@ -40,6 +42,8 @@ export default function DailyLimitDisplay({
     }
   }, [remaining, ttl]);
 
+  if (isLoading) return null;
+
   return (
     <div className="flex flex-col gap-2 items-center text-sm font-medium">
       <span className="text-xs bg-gray-100 text-gray-800 px-3 py-0.5 rounded-full inline-flex items-center">
@@ -49,10 +53,10 @@ export default function DailyLimitDisplay({
         <span className="text-gray-600">{DAILY_LIMIT}</span>
       </span>
 
-      {remaining === 0 && (
+      {!isLoading && remaining === 0 && (
         <div className="flex flex-col gap-1 mt-1 text-xs">
           <p className="font-medium rounded-full bg-red-100 px-2 py-1 text-red-700">
-            ⚠️ 일일 아이템 등록 횟수가 모두 소진되었습니다.
+            ⚠️ 일일 아이템 등록 횟수를 모두 사용하셨습니다.
           </p>
           <p className="text-foreground/50">
             횟수 초기화까지 {formatTime(countdown)}

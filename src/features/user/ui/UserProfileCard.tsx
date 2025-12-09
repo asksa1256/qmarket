@@ -16,7 +16,7 @@ export default function UserProfileCard({ user }: { user: UserDetail }) {
   const pathname = usePathname();
 
   // 일일 등록 잔여 횟수 조회
-  const { data: limitStatus } = useQuery({
+  const { data: limitStatus, isPending } = useQuery({
     queryKey: ["item-create-limit-count", user.id],
     queryFn: getDailyItemCountAction,
     staleTime: 1000 * 60 * 5,
@@ -39,7 +39,7 @@ export default function UserProfileCard({ user }: { user: UserDetail }) {
           {user.nickname}
         </h4>
         <h5 className="text-foreground/70 text-sm">
-          <span className="block">디스코드 아이디/이메일:</span>
+          @
           <Button
             type="button"
             variant="link"
@@ -60,7 +60,10 @@ export default function UserProfileCard({ user }: { user: UserDetail }) {
 
       {pathname === "/my-items" && loginUser?.id === user.id && (
         <div className="mt-3 flex justify-center">
-          <DailyLimitDisplay remaining={limitStatus?.remaining || 0} />
+          <DailyLimitDisplay
+            remaining={limitStatus?.remaining || 0}
+            isLoading={isPending}
+          />
         </div>
       )}
 

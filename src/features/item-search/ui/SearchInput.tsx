@@ -183,7 +183,7 @@ export default function SearchInput({
                     <div className="flex items-center justify-between px-2 py-1.5 mb-1">
                       <div className="flex items-center gap-1.5 text-xs font-medium text-foreground/50">
                         <Clock className="w-3.5 h-3.5" />
-                        최근 검색
+                        최근 검색(5개)
                       </div>
 
                       <Button

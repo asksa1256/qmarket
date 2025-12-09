@@ -19,30 +19,24 @@ export default async function Home() {
 
   return (
     <main className="flex mt-8">
-      <section className="flex flex-col w-full gap-4 items-center">
+      <section className="flex flex-col w-full gap-8 items-center">
         {/* 아이템 검색 */}
-        <div className="flex flex-col gap-2 items-center mb-12 md:w-xl w-full max-w-md">
-          <h2 className="text-2xl font-bold tracking-tight mb-2">
-            아이템 검색
-          </h2>
+        <div className="mb-16 flex flex-col gap-2 items-center md:w-xl w-full max-w-md">
+          <div className="mb-4 text-center space-y-2">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+              Q-Market
+            </h2>
+            <p className="text-foreground/50 text-sm">
+              큐플레이 아이템 판매/구매 등록 및 조회, 아이템 상세 정보, 시세
+              조회
+            </p>
+          </div>
+
           <SearchBar className="w-full [&_input]:!max-w-none [&_input]:rounded-full md:[&_input]:!text-lg [&_input]:h-auto md:[&_input]:!px-6 md:[&_input]:!py-4" />
         </div>
 
-        {/* 아이템 카테고리 메뉴 */}
-        <div className="w-full max-w-4xl">
-          <div className="mb-4">
-            <h2 className="text-2xl font-bold tracking-tight mb-2">
-              🧭 아이템 카테고리별 조회
-            </h2>
-          </div>
-
-          <div className="p-4 md:p-6 rounded-3xl bg-card border shadow-sm flex justify-center items-center">
-            <ItemCategoryNav />
-          </div>
-        </div>
-
         {/* 이번 달 로테이션 */}
-        <div className="mt-10 w-full max-w-4xl">
+        <div className="mb-16 w-full max-w-4xl">
           <div className="flex items-center justify-between mb-4 px-2">
             <h3 className="font-bold text-2xl flex items-center gap-2">
               ✨ 이번 달 로테이션
@@ -81,8 +75,21 @@ export default async function Home() {
           </Link>
         </div>
 
+        {/* 아이템 카테고리 메뉴 */}
+        <div className="w-full max-w-4xl">
+          <div className="mb-4">
+            <h2 className="text-2xl font-bold tracking-tight mb-2">
+              🧭 아이템 카테고리별 조회
+            </h2>
+          </div>
+
+          <div className="p-4 md:p-6 rounded-3xl bg-card border shadow-sm flex justify-center items-center">
+            <ItemCategoryNav />
+          </div>
+        </div>
+
         {/* 하단 그리드 메뉴 */}
-        <div className="w-full mt-16 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl">
+        <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl">
           <Link href="/rotation-items/last" className="h-full">
             <div className="h-full p-6 rounded-2xl bg-card border hover:border-primary/50 transition-colors break-keep">
               <h3 className="text-lg font-semibold mb-2 flex items-center gap-1">

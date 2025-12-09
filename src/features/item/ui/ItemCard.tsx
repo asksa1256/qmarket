@@ -79,7 +79,9 @@ const ItemCard = ({ item, userId }: ItemCardProps) => {
                   {item.message}
                 </p>
               </TooltipTrigger>
-              <TooltipContent>{item.message}</TooltipContent>
+              <TooltipContent className="whitespace-pre-line">
+                {item.message}
+              </TooltipContent>
             </Tooltip>
           )}
         </div>

@@ -4,6 +4,7 @@ import ItemCard from "@/features/item/ui/ItemCard";
 import getFilteredUserItems from "../../items/model/getFilteredUserItems";
 import { getMyItems } from "@/features/items/model/getMyItems";
 import { useQuery } from "@tanstack/react-query";
+import LoadingSpinner from "@/shared/ui/LoadingSpinner";
 
 interface Props {
   userId: string;
@@ -33,13 +34,15 @@ export default function UserItemList({ userId, isForSale, isSold }: Props) {
     refetchOnMount: false,
   });
 
-  if (isLoadingItems) return <div>전체 아이템 로딩 중...</div>;
-  if (isLoadingFiltered) return <div>필터링 중...</div>;
-
   return (
     <div className="pb-10 grow">
       {/* 아이템 리스트 */}
       <div className="flex flex-col h-[400px] overflow-auto rounded-2xl border border-border">
+        {isLoadingFiltered && (
+          <div className="flex items-center justify-center h-full">
+            <LoadingSpinner />
+          </div>
+        )}
         {filteredItems?.length === 0 ? (
           <div className="flex items-center justify-center h-full text-sm text-gray-500">
             등록된 아이템이 없습니다.
