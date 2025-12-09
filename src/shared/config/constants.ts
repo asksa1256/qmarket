@@ -61,6 +61,8 @@ export const SELECT_ITEM_COLUMNS =
 
 export const INQUIRY_CATEGORY = ["문의", "건의", "아이템 정보 수정", "기타"];
 
+export const REPORT_CATEGORY = ["유저 신고", "사기 거래", "시세 조작", "기타"];
+
 export const PROFANITY_LIST = [
   "씨발",
   "개새",
