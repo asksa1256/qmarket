@@ -1,6 +1,8 @@
 import SectionTitle from "@/shared/ui/SectionTitle";
 import { supabaseServer } from "@/shared/api/supabase-server";
 import { unstable_cache } from "next/cache";
+import { Info } from "lucide-react";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/shared/ui/tooltip";
 
 const getItemRequests = unstable_cache(
   async () => {
@@ -28,7 +30,17 @@ export default async function MyItemRequestSection() {
 
   return (
     <section className="md:pl-8">
-      <SectionTitle>🔔 아이템 등록 요청 목록</SectionTitle>
+      <SectionTitle className="flex items-center gap-2">
+        🔔 아이템 등록 요청 목록{" "}
+        <Tooltip>
+          <TooltipTrigger>
+            <Info className="size-4 text-foreground/50" />
+          </TooltipTrigger>
+          <TooltipContent className="text-sm">
+            검색되지 않는 아이템을 등록 요청하신 내역입니다.
+          </TooltipContent>
+        </Tooltip>
+      </SectionTitle>
 
       {data.length === 0 ? (
         <p className="text-foreground/50 text-sm">
