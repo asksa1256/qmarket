@@ -20,13 +20,7 @@ import { BadgeQuestionMark, Menu, LogOut } from "lucide-react";
 import SearchBar from "@/features/item-search/ui/SearchBar";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetHeader,
-  SheetTitle,
-} from "./sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./sheet";
 import { usePathname } from "next/navigation";
 import { cn } from "../lib/utils";
 
@@ -76,7 +70,7 @@ export default function Header() {
         {/* Desktop View */}
         <div className="hidden md:flex flex-1 items-center justify-between">
           <SearchBar
-            className={cn("mx-auto w-full max-w-xs", {
+            className={cn("mx-auto w-full max-w-xs [&_svg]:md:right-4", {
               hidden: pathname === "/",
             })}
           />
