@@ -25,6 +25,7 @@ export default async function MyItemsPage() {
 
   return (
     <div className="lg:max-w-6xl mx-auto lg:px-0 px-4">
+      <h1 className="mb-20 text-3xl font-bold text-center">마이페이지</h1>
       <ButtonToBack className="mb-0" />
       <UserDetailSection user={userDetail} />
     </div>
