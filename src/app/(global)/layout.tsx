@@ -20,10 +20,10 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${pretendard.className} antialiased xl:px-0 px-4`}>
+      <body className={`${pretendard.className} antialiased`}>
         <QueryProvider>
           <Header />
-          <div className="pt-12">{children}</div>
+          <div className="pt-12 xl:px-0 px-4">{children}</div>
           <Footer />
           <Toaster
             position="bottom-center"

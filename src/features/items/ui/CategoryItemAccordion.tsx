@@ -29,14 +29,17 @@ export default function CategoryItemAccordion({
           <ItemBarList items={items.male} />
         </AccordionContent>
       </AccordionItem>
-      <AccordionItem value="female" className="border-none w-full md:w-[50%]">
-        <AccordionTrigger className="font-semibold">
-          여({items.female.length}개)
-        </AccordionTrigger>
-        <AccordionContent>
-          <ItemBarList items={items.female} />
-        </AccordionContent>
-      </AccordionItem>
+
+      <div>
+        <AccordionItem value="female" className="border-none w-full md:w-[50%]">
+          <AccordionTrigger className="font-semibold">
+            여({items.female.length}개)
+          </AccordionTrigger>
+          <AccordionContent>
+            <ItemBarList items={items.female} />
+          </AccordionContent>
+        </AccordionItem>
+      </div>
     </Accordion>
   );
 }

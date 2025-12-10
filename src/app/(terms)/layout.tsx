@@ -19,7 +19,7 @@ export default async function TermsLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${pretendard.className} antialiased xl:px-0 px-4`}>
+      <body className={`${pretendard.className} antialiased`}>
         <QueryProvider>
           <Header />
           {children}

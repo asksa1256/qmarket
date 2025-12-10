@@ -64,7 +64,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 backdrop-blur-sm z-50">
-      <div className="flex items-center justify-between py-2 lg:max-w-6xl mx-auto">
+      <div className="flex items-center justify-between py-2 lg:max-w-6xl mx-auto px-4 md:px-0">
         <Link href="/" className="lg:w-[280px] md:w-[240px] shrink-0">
           <Image src="/images/logo.png" alt="큐마켓" width={140} height={54} />
         </Link>
@@ -109,9 +109,7 @@ export default function Header() {
               </DropdownMenu>
             ) : (
               <Button
-                className="bg-discord hover:bg-discord-hover focus-visible:ring-2
-      focus-visible:ring-black
-      focus-visible:ring-offset-2"
+                className="bg-discord hover:bg-discord-hover"
                 style={{}}
                 onClick={handleSignIn}
               >
@@ -119,14 +117,17 @@ export default function Header() {
               </Button>
             )}
 
+            {/* actions */}
             <Button
               size="icon"
               variant="outline"
-              onClick={() => router.push("/faq")}
+              onClick={() => {
+                router.push("/faq");
+                setIsSidebarOpen(false);
+              }}
             >
               <BadgeQuestionMark />
             </Button>
-
             <DynamicCreateInquiryModal />
             {user && <CreateReportModal />}
           </div>
