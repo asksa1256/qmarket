@@ -51,7 +51,10 @@ const ItemCard = ({ item, userId }: ItemCardProps) => {
       <div className="flex justify-between w-full">
         <div className="flex flex-col">
           <h3 className="text-sm font-medium truncate">
-            <Link href={`/item/${encodedItemName}/${encodedItemGender}`}>
+            <Link
+              href={`/item/${encodedItemName}/${encodedItemGender}`}
+              className="hover:font-medium hover:underline hover:underline-offset-2 hover:text-blue-600"
+            >
               {item.item_name}
               <span className="text-gray-500 text-xs">
                 ({item.item_gender})

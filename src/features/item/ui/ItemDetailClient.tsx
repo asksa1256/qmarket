@@ -76,13 +76,9 @@ export default function ItemDetailClient({
 
               <ul className="w-full space-y-2 text-foreground/70 text-sm">
                 <li className="flex justify-between border-b pb-1 last:border-b-0">
-                  <span className="font-semibold">카테고리:</span>
-                  <span>{item.category}</span>
-                </li>
-                <li className="flex justify-between border-b pb-1 last:border-b-0">
                   <span className="font-semibold">출처:</span>
                   <span>
-                    {item.item_source}{" "}
+                    {item.item_source ? item.item_source : "-"}{" "}
                     {item.rotation_date && (
                       <em className="text-xs not-italic">
                         (로테이션: {item.rotation_date})
@@ -96,32 +92,40 @@ export default function ItemDetailClient({
                     {marketPrice === 0
                       ? "-"
                       : marketPrice.toLocaleString("ko-KR")}
-                    <span className="ml-1 text-xs">(최근 10건)</span>
+                    원{/* <span className="ml-1 text-xs">(최근 10건)</span> */}
                   </span>
+                </li>
+                <li className="flex flex-col gap-1 border-b pb-1 last:border-b-0">
+                  <div className="flex justify-between">
+                    <span className="font-semibold">최근 거래가:</span>
+                    <span>
+                      {saleHistory && saleHistory.length > 0 ? (
+                        <h6>
+                          {saleHistory[
+                            saleHistory.length - 1
+                          ].transactions[0].price.toLocaleString()}
+                          원
+                          <span className="ml-1 text-xs">
+                            ({saleHistory[saleHistory.length - 1].date})
+                          </span>
+                        </h6>
+                      ) : (
+                        <span className="text-xs">
+                          최근 거래 내역이 없습니다.
+                        </span>
+                      )}
+                    </span>
+                  </div>
+
+                  <p className="text-foreground/50 text-xs break-keep">
+                    * 아이템 시세는 참고용이며 정확하지 않을 수 있습니다.
+                  </p>
                 </li>
                 <li className="flex justify-between border-b pb-1 last:border-b-0">
-                  <span className="font-semibold">최근 거래가:</span>
-                  <span>
-                    {saleHistory && saleHistory.length > 0 ? (
-                      <h6>
-                        {saleHistory[
-                          saleHistory.length - 1
-                        ].transactions[0].price.toLocaleString()}
-                        원
-                        <span className="ml-1 text-xs">
-                          ({saleHistory[saleHistory.length - 1].date})
-                        </span>
-                      </h6>
-                    ) : (
-                      "-"
-                    )}
-                  </span>
+                  <span className="font-semibold">카테고리:</span>
+                  <span>{item.category}</span>
                 </li>
               </ul>
-
-              <p className="text-foreground/50 text-sm break-keep">
-                * 아이템 시세는 참고용이며 정확하지 않을 수 있습니다.
-              </p>
             </div>
           </div>
         </div>
