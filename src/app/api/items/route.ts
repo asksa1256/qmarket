@@ -28,6 +28,10 @@ export const GET = async (req: Request) => {
       .from(ITEMS_TABLE_NAME)
       .select(SELECT_ITEM_COLUMNS)
       .neq("nickname", "관리자")
+      .neq("nickname", "빙기")
+      .neq("nickname", "홈런볼")
+      .neq("nickname", "둥빈")
+      .neq("nickname", "초코빵123")
       .range(offset, offset + limit - 1);
 
     // 필터
