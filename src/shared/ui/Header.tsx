@@ -23,6 +23,7 @@ import dynamic from "next/dynamic";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./sheet";
 import { usePathname } from "next/navigation";
 import { cn } from "../lib/utils";
+import { useState } from "react";
 
 const DynamicCreateInquiryModal = dynamic(
   () => import("@/features/inquiry/ui/CreateInquiryModal"),
@@ -35,6 +36,7 @@ const DynamicSheetTrigger = dynamic(
 );
 
 export default function Header() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
   const { data: user } = useUser();
   const queryClient = useQueryClient();
@@ -132,7 +134,7 @@ export default function Header() {
 
         {/* Mobile View (Sidebar)  */}
         <div className="md:hidden">
-          <Sheet>
+          <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
             <DynamicSheetTrigger asChild>
               <Button variant="outline" size="icon">
                 <Menu className="size-5" />
@@ -146,7 +148,7 @@ export default function Header() {
               <div className="flex flex-col gap-6">
                 <div className="px-4 flex flex-col gap-2">
                   <h3 className="font-bold text-base">검색</h3>
-                  <SearchBar />
+                  <SearchBar onSelect={() => setIsSidebarOpen(false)} />
                 </div>
 
                 <div className="flex flex-col gap-3 w-full">

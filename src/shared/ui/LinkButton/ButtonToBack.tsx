@@ -10,7 +10,7 @@ export default function ButtonToBack({ className }: { className?: string }) {
   return (
     <Button
       variant="ghost"
-      className={cn("mb-8", className)}
+      className={cn("md:mb-8", className)}
       onClick={() => router.back()}
     >
       <ChevronLeft /> 돌아가기
