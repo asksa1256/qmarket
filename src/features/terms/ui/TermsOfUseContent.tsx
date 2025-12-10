@@ -10,9 +10,9 @@ export default function TermsOfUseContent() {
         1. 서비스 소개
       </h2>
       <p className="text-gray-700 mb-4">
-        본 서비스는 게임 아이템 거래 정보 공유 플랫폼입니다. 사용자 간 아이템
-        판매/구매 요청을 등록하고, 아이템 상세 정보와 거래 내역 등을 확인할 수
-        있는 커뮤니티 서비스를 제공합니다.
+        본 서비스는 게임 아이템 거래 정보 공유 플랫폼으로, 사용자 간 아이템
+        판매/구매 요청 등록, 아이템 상세 정보와 거래 내역 확인 등의 컨텐츠를
+        이용하실 수 있는 커뮤니티 기능을 제공합니다.
       </p>
 
       <h2 className="text-2xl font-semibold text-gray-900 mt-10 mb-4 pb-2 border-b border-gray-200">
@@ -30,6 +30,10 @@ export default function TermsOfUseContent() {
         <li>회원 가입은 Discord 계정 연동을 통해 이루어집니다.</li>
         <li>한 사람이 여러 계정을 만들어 악용하는 행위는 금지됩니다.</li>
         <li>회원 탈퇴: [디스코드 설정] - [승인한 앱] - [승인 해제하기]</li>
+        <li>
+          회원 탈퇴 시 남아있는 데이터는 프로필코드와 함께
+          qmarket.cs@gmail.com으로 요청해주세요.
+        </li>
       </ul>
 
       <h2 className="text-2xl font-semibold text-gray-900 mt-10 mb-4 pb-2 border-b border-gray-200">
@@ -61,28 +65,18 @@ export default function TermsOfUseContent() {
         6. 서비스 이용
       </h2>
       <ul className="list-disc list-inside text-gray-700 space-y-2 mb-4">
-        <li>서비스는 무료로 제공되며, 향후 정책 변경 가능성이 있습니다.</li>
-        <li>
-          운영자는 서비스 개선을 위해 기능을 추가하거나 변경할 수 있습니다.
-        </li>
-        <li>중요한 정책 변경 사항은 서비스 내 공지로 안내합니다.</li>
+        <li>서비스는 무료로 제공되며, 향후 정책이 변경될 수도 있습니다.</li>
+        <li>중요한 변경 사항은 서비스 내 공지로 안내 드리겠습니다.</li>
       </ul>
 
       <h2 className="text-2xl font-semibold text-gray-900 mt-10 mb-4 pb-2 border-b border-gray-200">
-        7. 분쟁 해결
-      </h2>
-      <ul className="list-disc list-inside text-gray-700 space-y-2 mb-4">
-        <li>사용자 간 분쟁은 당사자 간 해결을 원칙으로 합니다.</li>
-        <li>운영자는 분쟁 해결을 위한 중재나 조정을 제공하지 않습니다.</li>
-      </ul>
-
-      <h2 className="text-2xl font-semibold text-gray-900 mt-10 mb-4 pb-2 border-b border-gray-200">
-        8. 기타
+        7. 기타
       </h2>
       <ul className="list-disc list-inside text-gray-700 space-y-2 mb-4">
         <li>본 약관에 명시되지 않은 사항은 관련 법령 및 상관례에 따릅니다.</li>
         <li>
-          본 약관은 필요에 따라 수정될 수 있으며, 중요 변경 사항은 공지합니다.
+          본 약관은 필요에 따라 수정될 수 있으며, 중요 변경 사항은 공지로 안내
+          드리겠습니다.
         </li>
       </ul>
     </div>

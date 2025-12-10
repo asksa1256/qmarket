@@ -61,7 +61,7 @@ export default async function UserDetailSection({ user }: UserDetailProps) {
   return (
     <div className="flex md:flex-row flex-col">
       {/* 좌측 사이드바 (유저 정보) */}
-      <aside className="w-full md:w-64 max-w-64 mx-auto shrink-0 md:pt-20">
+      <aside className="w-full md:w-65 max-w-65 mx-auto shrink-0 md:pt-15">
         <div className="md:sticky top-24">
           <UserProfileCard user={user} />
         </div>

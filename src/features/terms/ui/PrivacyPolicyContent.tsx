@@ -9,8 +9,7 @@ export default function PrivacyPolicyContent() {
       </p>
 
       <p className="text-gray-700 mb-4">
-        본 서비스는 개인 개발자가 운영하는 비영리 프로젝트로, 서비스 운영에
-        필요한 최소한의 개인정보만을 수집합니다.
+        본 서비스는 운영에 필요한 최소한의 개인정보만을 수집합니다.
       </p>
 
       <h2 className="text-2xl font-semibold text-gray-900 mt-10 mb-4 pb-2 border-b border-gray-200">
@@ -54,14 +53,11 @@ export default function PrivacyPolicyContent() {
       </h2>
       <ul className="list-disc list-inside text-gray-700 space-y-2 mb-4">
         <li>
-          <strong>회원 탈퇴 시:</strong> 모든 개인정보는 즉시 삭제됩니다.
+          회원 탈퇴 시 개인정보는 즉시 삭제되지만, 서비스 이용 기록은 별도의
+          삭제 요청이 필요합니다. 프로필코드와 함께 qmarket.cs@gmail.com으로
+          요청해주세요.
         </li>
-        <li>
-          <strong>서비스 종료 시:</strong> 모든 사용자 데이터가 삭제됩니다.
-        </li>
-        <li>
-          단, 법령에 따라 보관이 필요한 경우 해당 기간 동안 보관 후 삭제합니다.
-        </li>
+        <li>서비스 종료 시 모든 사용자 데이터가 삭제됩니다.</li>
       </ul>
 
       <h2 className="text-2xl font-semibold text-gray-900 mt-10 mb-4 pb-2 border-b border-gray-200">
@@ -107,21 +103,14 @@ export default function PrivacyPolicyContent() {
       </h2>
       <ul className="list-disc list-inside text-gray-700 space-y-2 mb-4">
         <li>본 방침은 필요에 따라 변경될 수 있습니다.</li>
-        <li>중요한 변경 사항은 서비스 내 공지를 통해 안내합니다.</li>
+        <li>중요한 변경 사항은 서비스 내 공지를 통해 안내 드리겠습니다.</li>
       </ul>
 
       <hr className="my-10 border-t-2 border-gray-200" />
 
       <div className="bg-amber-50 border-l-4 border-amber-400 p-5 rounded">
-        <p className="font-semibold text-amber-900 mb-2">※ 안내사항</p>
         <p className="text-sm text-amber-800 leading-relaxed">
-          • 본 서비스는 개인 개발자의 비영리 사이드 프로젝트입니다.
-          <br />
-          • 서비스 운영에 최선을 다하지만, 예고 없이 중단되거나 변경될 수
-          있습니다.
-          <br />
-          • 중요한 데이터는 별도로 백업해 두시기 바랍니다.
-          <br />• 문의사항이 있으시면 qmarket.cs@gmail.com로 연락해 주세요.
+          • 중요한 데이터는 별도로 백업해주세요.
         </p>
       </div>
 

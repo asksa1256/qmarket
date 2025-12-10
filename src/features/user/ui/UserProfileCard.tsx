@@ -10,6 +10,7 @@ import DailyLimitDisplay from "@/features/item/ui/DailyLimitDisplay";
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "@/shared/hooks/useUser";
 import { usePathname } from "next/navigation";
+import { Copy } from "lucide-react";
 
 export default function UserProfileCard({ user }: { user: UserDetail }) {
   const { data: loginUser } = useUser();
@@ -25,6 +26,23 @@ export default function UserProfileCard({ user }: { user: UserDetail }) {
 
   return (
     <div className="text-center">
+      <div className="mb-4 text-xs bg-secondary rounded-sm p-1 flex flex-col items-center">
+        <h6>프로필코드</h6>
+        <div className="flex items-center justify-center gap-1">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="p-0 text-xs font-normal h-auto hover:bg-transparent"
+            onClick={() =>
+              copyToClipboard(user.id, "프로필코드가 복사되었습니다.")
+            }
+          >
+            <span className="shrink-0">{user.id}</span>
+            <Copy className="size-3" />
+          </Button>
+        </div>
+      </div>
+
       <div className="relative w-[120px] h-[120px] rounded-full overflow-hidden mb-4 mx-auto">
         <Image
           src={user.discord_profile_image ?? "images/discord-default.png"}
@@ -39,11 +57,10 @@ export default function UserProfileCard({ user }: { user: UserDetail }) {
           {user.nickname}
         </h4>
         <h5 className="text-foreground/70 text-sm">
-          @
           <Button
             type="button"
             variant="link"
-            className="px-0 py-0 h-auto text-foreground/70"
+            className="px-0 py-0 h-auto text-foreground/70 font-normal"
             onClick={() =>
               copyToClipboard(
                 user.username,
@@ -52,6 +69,7 @@ export default function UserProfileCard({ user }: { user: UserDetail }) {
             }
           >
             {user.username}
+            <Copy className="size-3" />
           </Button>
         </h5>
       </div>
