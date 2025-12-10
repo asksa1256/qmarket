@@ -1,5 +1,5 @@
-import TransactionList from "@/features/transaction-list/ui/TransactionList";
-import { SaleHistory } from "../lib/getItemSaleHistory";
+import TransactionList from "@/features/market/ui/TransactionList";
+import { SaleHistory } from "../../features/item/model/getItemSaleHistory";
 
 interface CustomTooltipProps {
   active?: boolean;

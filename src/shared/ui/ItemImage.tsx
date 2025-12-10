@@ -4,22 +4,19 @@ import { cn } from "../lib/utils";
 export interface ItemImageProps {
   name: string;
   imgUrl: string | null;
-  size: "sm" | "lg";
+  size?: "sm" | "lg";
   className?: string;
 }
 
 export default function ItemImage({
   name,
   imgUrl,
-  size,
+  size = "lg",
   className,
 }: ItemImageProps) {
   return (
     <figure
-      className={cn(
-        "relative flex-shrink-0 rounded-md overflow-hidden",
-        className
-      )}
+      className={cn("relative shrink-0 rounded-md overflow-hidden", className)}
     >
       <Image
         src={imgUrl ?? "/images/empty.png"}

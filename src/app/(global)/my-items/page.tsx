@@ -1,42 +1,33 @@
-import ItemCardList from "@/widgets/item-list/ui/ItemCardList";
-import { createClient } from "@/shared/api/supabase-server-cookie";
-import ButtonToMain from "@/shared/ui/LinkButton/ButtonToMain";
+import { getSupabaseServerCookie } from "@/shared/api/supabase-cookie";
+import { supabaseServer } from "@/shared/api/supabase-server";
+import UserDetailSection from "@/features/user/ui/UserDetailSection";
+import ButtonToBack from "@/shared/ui/LinkButton/ButtonToBack";
 
 export default async function MyItemsPage() {
-  const supabase = await createClient();
+  const supabase = await getSupabaseServerCookie();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const { data: userDetail, error } = await supabaseServer
+    .from("user_profiles")
+    .select("id, username, bio, discord_profile_image, nickname, created_at")
+    .eq("id", user?.id)
+    .single();
+
+  if (error || !user) {
+    return (
+      <div className="flex items-center justify-center lg:max-w-6xl mx-auto lg:px-0 px-4">
+        로그인이 필요합니다.
+      </div>
+    );
+  }
+
   return (
-    <section className="max-w-5xl mx-auto">
-      {!user ? <LoginRequiredMessage /> : <MyItemsContent userId={user.id} />}
-    </section>
+    <div className="lg:max-w-6xl mx-auto lg:px-0 px-4">
+      <h1 className="mb-20 text-3xl font-bold text-center">마이페이지</h1>
+      <ButtonToBack className="mb-0" />
+      <UserDetailSection user={userDetail} />
+    </div>
   );
 }
-
-const LoginRequiredMessage = () => (
-  <>
-    <h2 className="font-bold text-3xl mb-2">내 아이템</h2>
-    <p className="text-gray-500 text-sm mb-4">
-      로그인 후 내 아이템을 확인할 수 있습니다.
-    </p>
-    <ButtonToMain />
-  </>
-);
-
-const ItemSectionHeader = () => (
-  <div className="mb-10 text-center">
-    <h2 className="font-bold text-3xl mb-2">내 아이템</h2>
-    <p className="text-gray-500 text-sm">
-      판매중인 아이템을 조회/수정할 수 있습니다.
-    </p>
-  </div>
-);
-
-const MyItemsContent = ({ userId }: { userId: string }) => (
-  <div className="p-4 md:p-0">
-    <ItemSectionHeader />
-    <ItemCardList userId={userId} />
-  </div>
-);

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { USERS_TABLE_NAME } from "@/shared/config/constants";
+import { USER_PROFILES_TABLE_NAME } from "@/shared/config/constants";
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     }
 
     const { data: existing } = await supabase
-      .from(USERS_TABLE_NAME)
+      .from(USER_PROFILES_TABLE_NAME)
       .select("id")
       .eq("nickname", nickname)
       .maybeSingle();
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const { error } = await supabase.from(USERS_TABLE_NAME).insert([
+    const { error } = await supabase.from(USER_PROFILES_TABLE_NAME).insert([
       {
         id: userData.user.id,
         nickname,

@@ -9,91 +9,71 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/ui/dialog";
-import { Input } from "@/shared/ui/input"; // 새롭게 추가된 Input 컴포넌트
+import {
+  Select,
+  SelectTrigger,
+  SelectItem,
+  SelectValue,
+  SelectContent,
+} from "@/shared/ui/select";
+import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/shared/api/supabase-client";
-import { sanitize } from "@/shared/lib/sanitize";
 import { Siren } from "lucide-react";
 import { useUser } from "@/shared/hooks/useUser";
-
-interface ReportData {
-  item_name: string;
-  discord_id: string;
-  details: string;
-}
-
-const initialReportState: ReportData = {
-  item_name: "",
-  discord_id: "",
-  details: "",
-};
+import { REPORT_CATEGORY } from "@/shared/config/constants";
+import { ReportFormData, reportFormSchema } from "../model/reportFormSchema";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Label } from "@/shared/ui/label";
 
 const CreateReportModal = () => {
-  const [reportData, setReportData] = useState<ReportData>(initialReportState);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const { data: user } = useUser();
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setReportData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const {
+    control,
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting, isValid },
+  } = useForm<ReportFormData>({
+    resolver: zodResolver(reportFormSchema),
+    defaultValues: {
+      report_category: "",
+      item_name: "",
+      discord_id: "",
+      details: "",
+    },
+  });
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
-    if (!reportData.item_name && !reportData.discord_id) {
-      toast.error(
-        "신고 조사를 위해 아이템 이름 또는 신고 대상의 디스코드 아이디 중 최소 하나는 입력해야 합니다."
-      );
-      return;
-    }
-
-    if (!reportData.details.trim()) {
-      toast.error("구체적인 신고 내용을 작성해주세요.");
-      return;
-    }
-
-    setIsSubmitting(true);
-
+  const onSubmit = async (data: ReportFormData) => {
     try {
-      const createdAt = new Date().toISOString();
-
       const { error } = await supabase.from("report").insert([
         {
-          item_name: sanitize(reportData.item_name) || null,
-          discord_id: sanitize(reportData.discord_id) || null, // 신고 대상자 디스코드 ID
-          details: sanitize(reportData.details),
+          report_category: data.report_category,
+          item_name: data.item_name || null,
+          discord_id: data.discord_id || null,
+          details: data.details,
           contact: user?.email,
-          user_id: user?.id, // 신고자 ID 저장 (악성 신고자 대비)
-          created_at: createdAt,
+          user_id: user?.id,
         },
       ]);
 
       if (error) throw error;
 
-      toast.success(
-        "신고가 접수되었습니다. 신속히 검토하겠습니다. 감사합니다."
-      );
-
-      setReportData(initialReportState);
+      toast.success("신고가 접수되었습니다.");
+      reset();
       setIsOpen(false);
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(`신고 실패: ${error.message}`);
+        toast.error(`신고 접수 실패: ${error.message}`);
       } else {
         toast.error("알 수 없는 오류가 발생했습니다.");
       }
       console.error(error);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -109,65 +89,100 @@ const CreateReportModal = () => {
         <DialogHeader className="mb-4">
           <DialogTitle className="text-left">🚨 신고하기</DialogTitle>
           <DialogDescription className="break-keep text-left">
-            구체적으로 입력해 주시면 더 신속한 조치가 가능하며, 허위 신고 시
-            계정이 제재될 수 있습니다.
+            허위 신고 시 계정이 제재될 수 있습니다.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
+
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-6">
+            {/* 카테고리 */}
+            <div className="flex flex-col gap-2">
+              <Label className="text-sm">카테고리</Label>
+              <Controller
+                name="report_category"
+                control={control}
+                render={({ field }) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger className="w-[150px]">
+                      <SelectValue placeholder="선택" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {REPORT_CATEGORY.map((ctg) => (
+                        <SelectItem key={ctg} value={ctg}>
+                          {ctg}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+              {errors.report_category && (
+                <p className="text-red-600 text-sm">
+                  {errors.report_category.message}
+                </p>
+              )}
+            </div>
+
+            {/* 신고 대상 아이템 */}
             <div className="flex flex-col justify-center gap-2">
-              <label htmlFor="item_name" className="text-sm font-medium">
+              <Label htmlFor="item_name" className="text-sm font-medium">
                 신고 대상 아이템
-              </label>
+              </Label>
               <Input
                 id="item_name"
-                name="item_name"
-                value={reportData.item_name}
-                onChange={handleInputChange}
-                placeholder="아이템명 입력"
+                {...register("item_name")}
+                placeholder="아이템명(성별)"
                 className="col-span-3"
-                required
               />
+              {errors.item_name && (
+                <p className="text-red-600 text-sm">
+                  {errors.item_name.message}
+                </p>
+              )}
             </div>
 
+            {/* 신고 대상 디스코드 아이디 */}
             <div className="flex flex-col justify-center gap-2">
-              <label htmlFor="discord_id" className="text-sm font-medium">
+              <Label htmlFor="discord_id" className="text-sm font-medium">
                 신고 대상 디스코드 아이디
-              </label>
+              </Label>
               <Input
                 id="discord_id"
-                name="discord_id"
-                value={reportData.discord_id}
-                onChange={handleInputChange}
-                placeholder="어뷰징 의심 유저의 디스코드 아이디 입력"
+                {...register("discord_id")}
+                placeholder="디스코드 아이디"
                 className="col-span-3"
-                required
               />
+              {errors.discord_id && (
+                <p className="text-red-600 text-sm">
+                  {errors.discord_id.message}
+                </p>
+              )}
             </div>
 
+            {/* 신고 내용 */}
             <div className="flex flex-col gap-2">
-              <label htmlFor="details" className="text-sm font-medium">
+              <Label htmlFor="details" className="text-sm font-medium">
                 신고 내용
-              </label>
+              </Label>
               <Textarea
                 id="details"
-                name="details"
-                placeholder="예: 5분 만에 거래량이 비정상적으로 급증했습니다. 특정 유저가 대량 구매 후 가격을 올리는 행위가 의심됩니다."
-                value={reportData.details}
-                onChange={handleInputChange}
-                rows={5}
-                required
+                {...register("details")}
+                placeholder="내용을 입력해주세요."
+                className="resize-none min-h-24"
               />
+              {errors.details && (
+                <p className="text-red-600 text-sm">{errors.details.message}</p>
+              )}
             </div>
           </div>
 
           <DialogFooter className="mt-6">
             <DialogClose asChild>
-              <Button variant="outline" disabled={isSubmitting}>
+              <Button type="button" variant="outline" disabled={isSubmitting}>
                 닫기
               </Button>
             </DialogClose>
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting || !isValid}>
               {isSubmitting ? "등록 중..." : "등록하기"}
             </Button>
           </DialogFooter>

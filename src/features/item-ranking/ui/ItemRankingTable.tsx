@@ -12,7 +12,7 @@ import ItemImage from "@/shared/ui/ItemImage";
 import { formatDateYMD } from "@/shared/lib/formatters";
 import LoadingSpinner from "@/shared/ui/LoadingSpinner";
 import CreateReportModal from "@/features/report/ui/CreateReportModal";
-import { RankItem } from "@/entities/item/model/types";
+import { RankItem } from "@/features/item/model/itemTypes";
 import { useUser } from "@/shared/hooks/useUser";
 import { useState } from "react";
 import { cn } from "@/shared/lib/utils";

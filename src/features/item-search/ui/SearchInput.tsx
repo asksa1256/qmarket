@@ -1,15 +1,8 @@
 "use client";
 
 import { Input } from "@/shared/ui/input";
-import {
-  ChangeEvent,
-  useEffect,
-  useState,
-  useMemo,
-  InputHTMLAttributes,
-} from "react";
+import { ChangeEvent, useState, useMemo, InputHTMLAttributes } from "react";
 import debounce from "@/shared/lib/debounce";
-import { supabase } from "@/shared/api/supabase-client";
 import {
   Command,
   CommandEmpty,
@@ -17,20 +10,23 @@ import {
   CommandItem,
   CommandList,
 } from "@/shared/ui/command";
-import { ItemCategory } from "@/entities/item/model/types";
+import { cn } from "@/shared/lib/utils";
+import { useItemsQuery } from "@/shared/hooks/useItemsQuery";
+import { useSearchItemQuery } from "@/shared/hooks/useSearchItemQuery";
+import { SearchItemInfo } from "@/features/item/model/itemTypes";
+import RequestItemModal from "@/features/item/ui/RequestItemModal";
+import { Button } from "@/shared/ui/button";
+import { Clock, X, Search } from "lucide-react";
 
 interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
   className?: string;
-  onSearch: (value: string) => void;
-  onSelectSuggestion?: (suggestion: Suggestion) => void;
+  onSearch?: (value: string) => void;
+  onSelectSuggestion?: (suggestion: SearchItemInfo) => void;
 }
 
-interface Suggestion {
-  name: string;
-  item_gender: string | null;
-  category: ItemCategory;
-}
+const RECENT_SEARCHES_KEY = "recentSearches";
+const MAX_RECENT_SEARCHES = 5;
 
 export default function SearchInput({
   value,
@@ -39,114 +35,198 @@ export default function SearchInput({
   onSelectSuggestion,
   ...rest
 }: SearchInputProps) {
-  const [inputValue, setInputValue] = useState(value);
-  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [suggestionOpen, setSuggestionOpen] = useState(false);
-  const [allItems, setAllItems] = useState<Suggestion[]>([]);
 
-  useEffect(() => {
-    // 전체 아이템 초기 로드
-    const fetchItems = async () => {
-      const { data, error } = await supabase.rpc("get_distinct_items");
-      if (!error && data) {
-        setAllItems(data);
-      } else {
-        console.error(error);
-      }
-    };
-    fetchItems();
-  }, []);
-
-  useEffect(() => {
-    setInputValue(value);
-
-    // 기존 값이 이미 있을 경우 (아이템 수정 모달)
-    if (value) {
-      const matched = allItems.find((item) => item.name === value);
-      if (matched) {
-        setSuggestions([matched]); // 기존 값도 검색 결과에 포함
-      }
+  const [recentSearches, setRecentSearches] = useState<SearchItemInfo[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const stored = localStorage.getItem(RECENT_SEARCHES_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch (error) {
+      console.error("최근 검색 불러오기 실패:", error);
+      return [];
     }
-  }, [value, allItems]);
+  });
+
+  const removeRecentSearch = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setRecentSearches((prev) => {
+      const updated = prev.filter((s) => s.id !== id);
+
+      // localStorage에 검색 기록 삭제 반영
+      try {
+        localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
+      } catch (error) {
+        console.error("최근 검색 삭제 실패:", error);
+      }
+
+      return updated;
+    });
+  };
+
+  // 전체 아이템 캐싱
+  const { data: allItems = [] } = useItemsQuery();
+
+  // 검색 캐싱
+  const { data: suggestions = [], refetch } = useSearchItemQuery(
+    value,
+    allItems
+  );
 
   const debouncedSearch = useMemo(
     () =>
       debounce((val: string) => {
-        onSearch(val);
-
-        if (!val.trim()) {
-          setSuggestions([]);
-          return;
-        }
-
-        const results = allItems.filter((item) => {
-          if (item.name === val) return true; // 완전 일치할 경우, true 리턴
-          const nameChars = item.name.split(""); // 아이템 이름 글자 배열
-          const inputChars = val.split(""); // 입력값 글자 배열
-
-          return inputChars.every((c) => nameChars.includes(c));
-        });
-
-        setSuggestions(results);
+        onSearch?.(val);
       }, 300),
-    [allItems, onSearch]
+    [refetch]
   );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
-    setInputValue(val);
-    debouncedSearch(val);
-    if (!open && inputValue.length > 0) setSuggestionOpen(true);
+    onSearch?.(val); // 즉시 부모에게 값 전달 (실시간 업데이트)
+    debouncedSearch(val); // debounced 검색도 수행
+
+    if (!suggestionOpen && val.length > 0) setSuggestionOpen(true);
+    if (suggestionOpen && val.length === 0) setSuggestionOpen(false);
   };
 
-  const handleSelect = (s: Suggestion) => {
-    setInputValue(s.name);
-    onSearch(s.name);
+  const handleSelect = (s: SearchItemInfo) => {
+    // 선택 시 최근 검색에 추가 (중복 제거, 5개까지 표시)
+    setRecentSearches((prev) => {
+      const filtered = prev.filter((item) => item.id !== s.id);
+      const updated = [s, ...filtered].slice(0, MAX_RECENT_SEARCHES);
+
+      // localStorage에 저장
+      try {
+        localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
+      } catch (error) {
+        console.error("최근 검색 저장 실패:", error);
+      }
+
+      return updated;
+    });
+
+    onSearch?.(s.name);
     if (onSelectSuggestion) onSelectSuggestion(s);
     setSuggestionOpen(false);
   };
 
   const handleFocus = () => {
-    setSuggestionOpen(true);
-  };
-
-  const handleBlur = () => {
-    setTimeout(() => setSuggestionOpen(false), 150);
+    if (value.length > 0) setSuggestionOpen(true);
   };
 
   return (
-    <div className="relative w-full">
+    <div className={cn("relative w-full", className)}>
       <Input
         type="text"
         placeholder="아이템명 입력"
-        value={inputValue}
+        value={value}
+        className="bg-background hover:border-blue-300 focus:border-blue-300"
         onChange={handleChange}
         onFocus={handleFocus}
-        onBlur={handleBlur}
-        className={className}
         {...rest}
       />
+      <Search className="absolute text-blue-600 size-5 md:size-6 md:right-6 right-4 top-1/2 -translate-y-1/2 z-[1]" />
 
       {suggestionOpen && (
-        <div className="absolute left-0 right-0 top-full z-10 mt-1 rounded-md border bg-popover text-popover-foreground shadow-md">
-          <Command>
+        <div className="command-wrap md:min-w-[450px] absolute left-0 right-0 top-full z-10 mt-1 rounded-md border bg-popover text-popover-foreground shadow-md">
+          <Command className="border rounded-lg">
             <CommandList>
-              {inputValue.length > 0 && suggestions.length === 0 ? (
-                <CommandEmpty className="text-sm text-gray-400 flex items-center p-3">
-                  검색 결과가 없습니다.
+              {value.length > 0 && suggestions.length === 0 ? (
+                <CommandEmpty className="flex flex-col gap-2 items-center py-4 text-sm text-gray-400 p-3">
+                  <p className="text-center text-gray-500 text-xs">
+                    검색 결과가 없습니다.
+                  </p>
+                  <div className="flex gap-2">
+                    <RequestItemModal itemName={value} />
+                    <Button
+                      variant="outline"
+                      type="button"
+                      onClick={() => setSuggestionOpen(false)}
+                    >
+                      닫기
+                    </Button>
+                  </div>
                 </CommandEmpty>
               ) : (
-                <CommandGroup heading="검색 결과">
-                  {suggestions.map((s, idx) => (
-                    <CommandItem
-                      key={idx}
-                      value={s.name}
-                      onSelect={() => handleSelect(s)}
-                    >
-                      {s.name}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
+                <div className="grid grid-cols-2 divide-x">
+                  {/* 왼쪽: 자동 완성 목록 */}
+                  <CommandGroup heading="검색 결과">
+                    {suggestions.length > 0 ? (
+                      suggestions.map((s) => (
+                        <CommandItem
+                          key={s.id}
+                          value={s.id}
+                          onSelect={() => handleSelect(s)}
+                          className="flex items-center text-left gap-3 py-1 cursor-pointer"
+                        >
+                          <img
+                            src={s.image || "/images/empty.png"}
+                            alt=""
+                            className="w-10 h-12 object-contain"
+                          />
+                          <span className="text-sm">
+                            {s.name} ({s.item_gender})
+                          </span>
+                        </CommandItem>
+                      ))
+                    ) : (
+                      <div className="py-6 text-center text-sm text-gray-400">
+                        검색어를 입력하세요
+                      </div>
+                    )}
+                  </CommandGroup>
+
+                  {/* 오른쪽: 최근 검색 */}
+                  <CommandGroup>
+                    <div className="flex items-center justify-between px-2 py-1.5 mb-1">
+                      <div className="flex items-center gap-1.5 text-xs font-medium text-foreground/50">
+                        <Clock className="w-3.5 h-3.5" />
+                        최근 검색(5개)
+                      </div>
+
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="text-xs px-2 py-1 h-auto"
+                        onClick={() => setSuggestionOpen(false)}
+                      >
+                        닫기
+                      </Button>
+                    </div>
+
+                    {recentSearches && recentSearches.length > 0 ? (
+                      recentSearches.map((s) => (
+                        <CommandItem
+                          key={s.id}
+                          value={s.id}
+                          onSelect={() => handleSelect(s)}
+                          className="flex items-center text-left gap-3 py-1 cursor-pointer group"
+                        >
+                          <img
+                            src={s.image || "/images/empty.png"}
+                            alt=""
+                            className="w-10 h-12 object-contain"
+                          />
+                          <span className="text-sm flex-1">
+                            {s.name} ({s.item_gender})
+                          </span>
+                          <button
+                            onClick={(e) => removeRecentSearch(s.id, e)}
+                            className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-gray-100 rounded"
+                          >
+                            <X className="w-3.5 h-3.5 text-gray-400" />
+                          </button>
+                        </CommandItem>
+                      ))
+                    ) : (
+                      <div className="py-6 text-center text-sm text-gray-400">
+                        검색 내역이 없습니다
+                      </div>
+                    )}
+                  </CommandGroup>
+                </div>
               )}
             </CommandList>
           </Command>

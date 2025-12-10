@@ -33,6 +33,7 @@
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
+  --color-primary-blue: #3b82f6;
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
@@ -51,11 +52,15 @@
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
+  --discord: #5865f2;
+  --discord-hover: #4445e7;
+  --discord-light: ##e0e9ff;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
   --primary: oklch(0.205 0 0);
+  --primary-blue: #3b82f6;
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -126,4 +131,16 @@
   button {
     @apply cursor-pointer;
   }
+
+  ::selection {
+    background-color: var(--primary-blue) !important;
+  }
+  ::-moz-selection {
+    background-color: var(--primary-blue) !important;
+  }
+}
+
+/* 헤더 검색 자동완성 커스텀 */
+header .command-wrap {
+  @apply translate-x-[-15%];
 }
