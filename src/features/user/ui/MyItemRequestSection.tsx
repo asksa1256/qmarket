@@ -37,7 +37,8 @@ export default async function MyItemRequestSection() {
             <Info className="size-4 text-foreground/50" />
           </TooltipTrigger>
           <TooltipContent className="text-sm">
-            검색되지 않는 아이템을 등록 요청하신 내역입니다.
+            검색되지 않는 아이템의 등록 요청 내역입니다. 등록 완료 시 목록에서
+            사라집니다.
           </TooltipContent>
         </Tooltip>
       </SectionTitle>

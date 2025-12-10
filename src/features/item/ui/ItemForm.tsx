@@ -122,7 +122,7 @@ export default function ItemForm({
 
   return (
     <ScrollArea className="max-h-[60vh] pr-4">
-      <form onSubmit={handleSubmit(onSubmit)} className="mb-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="mb-4 item-form">
         <div className="grid gap-8 px-2">
           <div className="grid gap-3">
             <label htmlFor="item_name" className="text-sm">

@@ -140,7 +140,11 @@
   }
 }
 
-/* 헤더 검색 자동완성 커스텀 */
+/* 검색 자동완성 커스텀 */
 header .command-wrap {
   @apply translate-x-[-15%];
+}
+
+.item-form .command-wrap {
+  @apply md:min-w-0;
 }
