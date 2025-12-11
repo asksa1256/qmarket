@@ -4,6 +4,12 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/shared/ui/dropdown-menu";
 
 interface PopularSearch {
   keyword: string;
@@ -33,100 +39,102 @@ export default function RollingPopularSearch({
 
   return (
     <div className="relative flex flex-col items-start gap-2 mt-1">
-      <div className="flex items-center gap-3 w-full max-w-[300px]">
-        <h5 className="shrink-0 text-sm font-semibold text-slate-700">
-          인기 검색어
-        </h5>
+      <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+        <div className="flex items-center gap-3 w-full md:w-[300px]">
+          <h5 className="shrink-0 text-sm font-semibold text-slate-700">
+            인기 검색어
+          </h5>
 
-        {/* 롤링/드롭다운 컨테이너 */}
-        <div className="relative flex-1 h-[32px] overflow-hidden">
-          {!isOpen ? (
-            <div
-              className="transition-transform duration-500 ease-in-out"
-              style={{ transform: `translateY(-${currentIndex * 32}px)` }}
-            >
-              {data.map((item, idx) => {
-                const itemName = item.keyword.split("(")[0];
-                const itemGender = item.keyword.split("(")[1]?.slice(0, 1);
-                return (
+          <DropdownMenuTrigger asChild>
+            <button className="flex-1 flex items-center gap-2 outline-none group cursor-pointer">
+              <div className="relative flex-1 h-[32px] overflow-hidden text-left">
+                {!isOpen ? (
                   <div
-                    key={item.keyword}
-                    className="h-[32px] flex items-center"
+                    className="transition-transform duration-500 ease-in-out"
+                    style={{ transform: `translateY(-${currentIndex * 32}px)` }}
                   >
-                    <Link
-                      href={`/item/${itemName}/${itemGender}`}
-                      className="flex items-center gap-2 group"
-                    >
-                      <span className="text-xs font-bold text-blue-600 w-4">
-                        {idx + 1}
-                      </span>
-                      <span className="text-sm text-slate-600 group-hover:text-blue-600 truncate">
-                        {itemName}{" "}
-                        <span className="text-[10px] opacity-50">
-                          ({itemGender})
-                        </span>
-                      </span>
-                    </Link>
+                    {data.map((item, idx) => {
+                      const itemName = item.keyword.split("(")[0];
+                      const itemGender = item.keyword
+                        .split("(")[1]
+                        ?.slice(0, 1);
+                      return (
+                        <div
+                          key={item.keyword}
+                          className="h-[32px] flex items-center"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-bold text-blue-600 w-4 text-center">
+                              {idx + 1}
+                            </span>
+                            <span className="text-sm text-slate-600 truncate">
+                              {itemName}{" "}
+                              <span className="text-[10px] opacity-50">
+                                ({itemGender})
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
-                );
-              })}
-            </div>
-          ) : (
-            // 드롭다운 활성화 시 placeholder text
-            <div className="h-[32px] flex items-center text-xs text-slate-400">
-              최대 10개 표시
-            </div>
-          )}
+                ) : (
+                  // 드롭다운 열렸을 때 상단 placeholder 텍스트
+                  <div className="h-[32px] flex items-center text-xs text-slate-400 pl-1">
+                    최대 10개
+                  </div>
+                )}
+              </div>
+
+              <div className="p-1 rounded-full group-hover:bg-slate-100 transition-colors text-slate-500">
+                {isOpen ? (
+                  <ChevronUp className="w-4 h-4" />
+                ) : (
+                  <ChevronDown className="w-4 h-4" />
+                )}
+              </div>
+            </button>
+          </DropdownMenuTrigger>
         </div>
 
-        {/* 토글 버튼 */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="p-1 hover:bg-slate-100 rounded-full transition-colors"
+        {/* 4. 드롭다운 컨텐츠 */}
+        <DropdownMenuContent
+          className="md:w-[220px] max-h-[400px] overflow-y-auto rounded-xl p-2"
+          align="start"
+          sideOffset={5}
         >
-          {isOpen ? (
-            <ChevronUp className="w-4 h-4" />
-          ) : (
-            <ChevronDown className="w-4 h-4" />
-          )}
-        </button>
-      </div>
+          {data.map((item, idx) => {
+            const itemName = item.keyword.split("(")[0];
+            const itemGender = item.keyword.split("(")[1]?.slice(0, 1);
 
-      {/* 드롭다운 펼침 목록 */}
-      {isOpen && (
-        <div className="absolute top-full left-0 z-50 w-full min-w-[200px] mt-1 p-2 bg-white border rounded-xl shadow-lg animate-in fade-in zoom-in-95 duration-200">
-          <ul className="flex flex-col gap-1">
-            {data.map((item, idx) => {
-              const itemName = item.keyword.split("(")[0];
-              const itemGender = item.keyword.split("(")[1]?.slice(0, 1);
-              return (
-                <li key={item.keyword}>
-                  <Link
-                    href={`/item/${itemName}/${itemGender}`}
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-50 transition-colors"
+            return (
+              <DropdownMenuItem key={item.keyword} asChild>
+                <Link
+                  href={`/item/${itemName}/${itemGender}`}
+                  className="flex items-center gap-3 p-2 rounded-lg cursor-pointer focus:bg-blue-50 focus:text-slate-900"
+                >
+                  <span
+                    className={cn(
+                      "text-xs font-bold w-4 text-center",
+                      idx < 3 ? "text-blue-600" : "text-slate-400"
+                    )}
                   >
-                    <span
-                      className={cn(
-                        "text-xs font-bold w-4",
-                        idx < 3 ? "text-blue-600" : "text-slate-400"
-                      )}
-                    >
-                      {idx + 1}
+                    {idx + 1}
+                  </span>
+                  <div className="flex items-center gap-1 flex-1">
+                    <span className="text-sm font-medium text-slate-700">
+                      {itemName}
                     </span>
-                    <div className="flex items-center gap-0.5">
-                      <span className="text-sm text-slate-700">{itemName}</span>
-                      <span className="text-xs text-slate-400">
-                        ({itemGender})
-                      </span>
-                    </div>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      )}
+                    <span className="text-xs text-slate-400">
+                      ({itemGender})
+                    </span>
+                  </div>
+                </Link>
+              </DropdownMenuItem>
+            );
+          })}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }
