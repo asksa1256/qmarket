@@ -15,8 +15,10 @@ import { useState } from "react";
 import { FilterParams } from "@/features/items/model/types";
 import LoadingSpinner from "@/shared/ui/LoadingSpinner";
 import SectionTitle from "@/shared/ui/SectionTitle";
+import SellingItemCreateModal from "./SellingItemCreateModal";
+import PurchaseItemCreateModal from "./PurchaseItemCreateModal";
 
-interface ItemDetail {
+export interface ItemDetail {
   id: string;
   name: string;
   item_gender: ItemGender;
@@ -62,13 +64,11 @@ export default function ItemDetailClient({
             <SectionTitle>아이템 정보</SectionTitle>
 
             <div className="flex flex-col items-center">
-              {item.image && (
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-36 h-40 object-cover rounded-xl border border-gray-200 p-1 mb-4"
-                />
-              )}
+              <img
+                src={item.image || "/images/empty.png"}
+                alt={item.name}
+                className="w-36 h-40 object-cover rounded-xl border border-gray-200 p-1 mb-4"
+              />
 
               <h1 className="text-2xl font-extrabold text-gray-800 mb-4 text-center">
                 {item.name}({item.item_gender})
@@ -126,6 +126,12 @@ export default function ItemDetailClient({
                   <span>{item.category}</span>
                 </li>
               </ul>
+            </div>
+
+            {/* actions */}
+            <div className="flex flex-col gap-1 mt-4">
+              <SellingItemCreateModal initialItem={item} />
+              <PurchaseItemCreateModal initialItem={item} />
             </div>
           </div>
         </div>

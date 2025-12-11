@@ -16,8 +16,13 @@ import { useState } from "react";
 import { getDailyItemCountAction } from "@/app/actions/item-actions";
 import ItemForm from "./ItemForm";
 import { useQuery } from "@tanstack/react-query";
+import { ItemDetail } from "./ItemDetailClient";
 
-export default function PurchaseItemCreateModal() {
+export default function PurchaseItemCreateModal({
+  initialItem,
+}: {
+  initialItem?: ItemDetail;
+}) {
   const [open, setOpen] = useState(false);
   const { data: user } = useUser();
 
@@ -71,7 +76,10 @@ export default function PurchaseItemCreateModal() {
         </Tooltip>
       )}
 
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent
+        className="sm:max-w-[425px]"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <DialogHeader className="mb-4">
           <DialogTitle>구매 아이템 등록</DialogTitle>
           <DialogDescription className="flex flex-col">
@@ -81,6 +89,7 @@ export default function PurchaseItemCreateModal() {
 
         <ItemForm
           isForSale={false}
+          initialItem={initialItem}
           onSuccess={() => setOpen(false)}
           onClose={() => setOpen(false)}
         />

@@ -17,16 +17,18 @@ import {
   useCreateItemMutation,
   useUpdateItemMutation,
 } from "../model/itemMutations";
-import { useState } from "react";
 import { FieldError } from "react-hook-form";
+import { ItemDetail } from "./ItemDetailClient";
 
 interface ItemFormProps {
   isForSale: boolean;
-  initialData?: ItemFormType;
+  initialData?: ItemFormType; // 아이템 수정 데이터
+  initialItem?: ItemDetail; // 아이템 상세 페이지에서 바로 등록할 아이템 정보
   onSuccess?: () => void;
   onClose?: () => void;
 }
 
+// 수정 모드에서 db의 item_source, item_gender, category에 한글로 등록된 값을 key(영어)로 변환 (필드 유효성 검사용)
 const getKeyByValue = <T extends Record<string, string>>(
   map: T,
   value: string
@@ -38,35 +40,57 @@ const getKeyByValue = <T extends Record<string, string>>(
 export default function ItemForm({
   isForSale,
   initialData,
+  initialItem,
   onSuccess,
   onClose,
 }: ItemFormProps) {
-  // initialData가 있을 때 한글 값을 key로 변환
   const getDefaultValues = () => {
-    if (!initialData) {
+    // initialData가 있으면 수정 모드
+    if (initialData) {
       return {
-        item_name: "",
-        image: "/images/empty.png",
+        ...initialData,
+        item_source:
+          getKeyByValue(ITEM_SOURCES_MAP, initialData.item_source) ||
+          initialData.item_source,
+        item_gender:
+          getKeyByValue(ITEM_GENDER_MAP, initialData.item_gender) ||
+          initialData.item_gender,
+        category:
+          getKeyByValue(ITEM_CATEGORY_MAP, initialData.category) ||
+          initialData.category,
+      };
+    }
+
+    // initialItem이 있으면 해당 값으로 일부 필드 채우기
+    if (initialItem) {
+      return {
+        item_name: initialItem.name,
+        image: initialItem.image ?? "/images/empty.png",
         price: 0,
-        item_source: "gatcha" as const,
-        item_gender: "m" as const,
+        item_source:
+          getKeyByValue(ITEM_SOURCES_MAP, initialItem.item_source) ||
+          ("gatcha" as const),
+        item_gender:
+          getKeyByValue(ITEM_GENDER_MAP, initialItem.item_gender) ||
+          ("m" as const),
         is_sold: false,
-        category: "hair" as const,
+        category:
+          getKeyByValue(ITEM_CATEGORY_MAP, initialItem.category) ||
+          ("hair" as const),
         message: "",
       };
     }
 
+    // 둘 다 없으면 빈 폼
     return {
-      ...initialData,
-      item_source:
-        getKeyByValue(ITEM_SOURCES_MAP, initialData.item_source) ||
-        initialData.item_source,
-      item_gender:
-        getKeyByValue(ITEM_GENDER_MAP, initialData.item_gender) ||
-        initialData.item_gender,
-      category:
-        getKeyByValue(ITEM_CATEGORY_MAP, initialData.category) ||
-        initialData.category,
+      item_name: "",
+      image: "/images/empty.png",
+      price: 0,
+      item_source: "gatcha" as const,
+      item_gender: "m" as const,
+      is_sold: false,
+      category: "hair" as const,
+      message: "",
     };
   };
 
