@@ -104,13 +104,13 @@ export default function RollingPopularSearch({
           sideOffset={5}
         >
           {data.map((item, idx) => {
-            const itemName = item.keyword.split("(")[0];
-            const lastOpenParentheses = item.keyword.lastIndexOf("(");
-            const lastCloseParentheses = item.keyword.lastIndexOf(")");
-            const itemGender = item.keyword.slice(
-              lastOpenParentheses + 1,
-              lastCloseParentheses
-            );
+            let itemName;
+            const open = item.keyword.lastIndexOf("(");
+            const close = item.keyword.lastIndexOf(")");
+            if (open !== -1 && close > open) {
+              itemName = item.keyword.slice(0, open); // 마지막 '(' 기준으로 앞부분만
+            }
+            const itemGender = item.keyword.slice(open + 1, close);
 
             return (
               <DropdownMenuItem key={item.keyword} asChild>
