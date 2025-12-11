@@ -17,6 +17,7 @@ import { SearchItemInfo } from "@/features/item/model/itemTypes";
 import RequestItemModal from "@/features/item/ui/RequestItemModal";
 import { Button } from "@/shared/ui/button";
 import { Clock, X, Search } from "lucide-react";
+import { logSearchKeywordAction } from "@/app/actions/search-actions";
 
 interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
@@ -108,6 +109,11 @@ export default function SearchInput({
 
     onSearch?.(s.name);
     if (onSelectSuggestion) onSelectSuggestion(s);
+
+    // 검색어 1점 증가
+    logSearchKeywordAction(s.name, s.item_gender);
+
+    // 자동완성 닫기
     setSuggestionOpen(false);
   };
 

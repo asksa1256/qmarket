@@ -1,6 +1,7 @@
 # Q-Market
 
 ## 페이지 구조
+
 ```
 src/app/
 ├── (core) # 핵심 기능 그룹
@@ -13,17 +14,21 @@ src/app/
 │ │ └──── page.tsx # 유저 상세 (SSR)
 │ ├── mypage/
 │ │ └── page.tsx # 내 아이템/찜 목록 (SSR, Auth)
-│ ├── register/
-│ └──── page.tsx # 구매/판매 아이템 등록 (CSR)
 ├── (static) # 부가/정적 기능 그룹
 │ ├── faq/
 │ │ └── page.tsx # FAQ (SSG)
 │ ├── notice/
 │ │ └── page.tsx # 공지사항 (SSG)
-│ ├── contact/
-│ └──── page.tsx # 문의하기 (SSG + Client Form)
 ├── layout.tsx # 메인 레이아웃 (Nav, Header, Footer)
 └── page.tsx # 홈 화면
+```
+
+## DB 세팅
+
+```
+- Supabase DB: 아이템 판매/구매 현황, 아이템 등록 요청 목록, 거래 내역, 유저 데이터 등
+- Supabase Storage: 아이템 미리보기 이미지
+- Redis Upstash: 일일 아이템 등록 횟수, 인기 검색어 순위
 ```
 
 ## Getting Started
@@ -36,8 +41,6 @@ npm run dev
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

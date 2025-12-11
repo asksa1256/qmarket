@@ -115,7 +115,6 @@ export default function ItemForm({
   };
 
   const watchedImage = form.watch("image");
-  const watchedItemName = form.watch("item_name");
 
   const isPending =
     createItemMutation.isPending || updateItemMutation.isPending;

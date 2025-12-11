@@ -3,6 +3,8 @@ import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import SearchBar from "@/features/item-search/ui/SearchBar";
 import ItemList from "@/features/items/ui/ItemList";
+import RollingPopularSearch from "@/features/item-search/ui/RollingPopularSearch";
+import { getPopularSearchesAction } from "../actions/search-actions";
 
 export default async function Home() {
   const now = new Date();
@@ -17,6 +19,9 @@ export default async function Home() {
 
   const formattedMonth = String(month).padStart(2, "0");
   const formattedLastMonth = String(lastMonth).padStart(2, "0");
+
+  // 인기 검색어 로드
+  const data = await getPopularSearchesAction();
 
   return (
     <main className="flex mt-8">
@@ -34,6 +39,9 @@ export default async function Home() {
           </div>
 
           <SearchBar className="w-full [&_input]:!max-w-none [&_input]:rounded-full md:[&_input]:!text-lg [&_input]:h-auto md:[&_input]:!px-6 md:[&_input]:!py-4" />
+
+          {/* 인기 검색어 TOP 5 */}
+          <RollingPopularSearch data={data} />
         </section>
 
         {/* 이번 달 로테이션 */}

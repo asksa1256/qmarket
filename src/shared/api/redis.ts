@@ -16,7 +16,7 @@ function getRedisClient() {
   });
 }
 
-// 일일 등록 가능 횟수 조회
+/* 일일 등록 가능 횟수 조회 */
 export async function getDailyItemCount(userId: string): Promise<number> {
   const redis = getRedisClient();
   const today = new Date().toISOString().slice(0, 10);
@@ -26,7 +26,7 @@ export async function getDailyItemCount(userId: string): Promise<number> {
   return current;
 }
 
-// 횟수 제한 확인 함수
+/* 횟수 제한 확인 함수 */
 export async function checkAndIncrementDailyItemLimit(
   userId: string
 ): Promise<number> {
@@ -62,7 +62,7 @@ export async function checkAndIncrementDailyItemLimit(
   return newCount;
 }
 
-// 등록 횟수 갱신까지 남은 시간 리턴 함수
+/* 등록 횟수 갱신까지 남은 시간 리턴 함수 */
 export async function getRemainingTime(userId: string): Promise<number> {
   const redis = getRedisClient();
   const today = new Date().toISOString().slice(0, 10);
@@ -73,7 +73,7 @@ export async function getRemainingTime(userId: string): Promise<number> {
   return ttl > 0 ? ttl : 0;
 }
 
-// 아이템 삭제 시 등록 횟수 1회 복구
+/* 아이템 삭제 시 등록 횟수 1회 복구 */
 export async function restoreDailyItemCount(userId: string): Promise<void> {
   const redis = getRedisClient();
   const today = new Date().toISOString().slice(0, 10);
@@ -84,5 +84,71 @@ export async function restoreDailyItemCount(userId: string): Promise<void> {
   // 카운트 음수 방지
   if (currentCount && currentCount > 0) {
     await redis.decr(rateLimitKey);
+  }
+}
+
+/* 검색어 점수 증가 */
+const BASE_SEARCH_KEY = "search:rank";
+
+/* 특정 시간별 redis 키 생성 */
+const getHourlyKey = (date: Date) => {
+  const dateStr = date.toISOString().replace(/[-T:]/g, "").slice(0, 10);
+  return `${BASE_SEARCH_KEY}:${dateStr}`;
+};
+
+export async function logSearchKeyword(keyword: string, itemGender: string) {
+  if (!keyword || !itemGender) return;
+
+  const redis = getRedisClient();
+
+  // 현재 시간 기준 키 생성
+  const hourlyKey = getHourlyKey(new Date());
+
+  try {
+    await redis.zincrby(hourlyKey, 1, `${keyword}(${itemGender})`);
+    // 키의 유효기간을 25시간으로 설정 (조회 로직이 작동하는 동안 해당 시간대의 키가 살아있음을 보장하기 위해 유효기간을 1시간 추가)
+    await redis.expire(hourlyKey, 25 * 60 * 60);
+  } catch (error) {
+    console.error("Redis 기록 에러:", error);
+  }
+}
+
+/* 인기 검색어 top N 집계 */
+export async function getPopularSearches() {
+  const redis = getRedisClient();
+
+  const now = new Date();
+  // 최근 24시간 키 생성
+  const keys = Array.from({ length: 24 }, (_, i) =>
+    getHourlyKey(new Date(now.getTime() - i * 60 * 60 * 1000))
+  );
+
+  // 임시 키 이름 생성 (고유값, 키 충돌 방지)
+  const tempUnionKey = `${BASE_SEARCH_KEY}:24h_union_temp`;
+
+  try {
+    // 1. 최근 24개 키 합산
+    await redis.zunionstore(tempUnionKey, keys.length, keys);
+    // 2. 임시 키는 1분 뒤 삭제
+    await redis.expire(tempUnionKey, 60);
+
+    // 3. Top N 가져오기
+    const rank = await redis.zrange(tempUnionKey, 0, 9, {
+      rev: true,
+      withScores: true,
+    });
+
+    const formatted = [];
+    for (let i = 0; i < rank.length; i += 2) {
+      formatted.push({
+        keyword: rank[i] as string,
+        score: rank[i + 1] as number,
+      });
+    }
+
+    return formatted;
+  } catch (error) {
+    console.error("인기 검색어 조회 에러:", error);
+    return [];
   }
 }
