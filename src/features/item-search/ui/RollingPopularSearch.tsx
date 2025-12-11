@@ -5,7 +5,16 @@ import Link from "next/link";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 
-export default function RollingPopularSearch({ data }: { data: any[] }) {
+interface PopularSearch {
+  keyword: string;
+  score: number;
+}
+
+export default function RollingPopularSearch({
+  data,
+}: {
+  data: PopularSearch[];
+}) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
 
