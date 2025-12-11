@@ -3,8 +3,7 @@ import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import SearchBar from "@/features/item-search/ui/SearchBar";
 import ItemList from "@/features/items/ui/ItemList";
-// import PopularSearches from "@/features/item-search/ui/PopularSearches";
-import RollingPopularSearch from "@/features/item-search/ui/PopularSearches";
+import RollingPopularSearch from "@/features/item-search/ui/RollingPopularSearch";
 import { getPopularSearchesAction } from "../actions/search-actions";
 
 export default async function Home() {
