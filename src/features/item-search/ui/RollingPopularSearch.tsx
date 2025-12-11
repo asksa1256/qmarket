@@ -97,15 +97,20 @@ export default function RollingPopularSearch({
           </DropdownMenuTrigger>
         </div>
 
-        {/* 4. 드롭다운 컨텐츠 */}
+        {/* 드롭다운 컨텐츠 */}
         <DropdownMenuContent
           className="md:w-[220px] max-h-[400px] overflow-y-auto rounded-xl p-2"
           align="start"
           sideOffset={5}
         >
           {data.map((item, idx) => {
-            const itemName = item.keyword.split("(")[0];
-            const itemGender = item.keyword.split("(")[1]?.slice(0, 1);
+            let itemName;
+            const open = item.keyword.lastIndexOf("(");
+            const close = item.keyword.lastIndexOf(")");
+            if (open !== -1 && close > open) {
+              itemName = item.keyword.slice(0, open); // 마지막 '(' 기준으로 앞부분만
+            }
+            const itemGender = item.keyword.slice(open + 1, close);
 
             return (
               <DropdownMenuItem key={item.keyword} asChild>
