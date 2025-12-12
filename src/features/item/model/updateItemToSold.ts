@@ -7,8 +7,8 @@ export const updateItemToSold = async (
   transactionImageUrl?: string
 ) => {
   const { data, error } = await supabase
-    // .from(ITEMS_TABLE_NAME)
-    .from("items_test")
+    .from(ITEMS_TABLE_NAME)
+    // .from("items_test")
     .update({ is_sold: true, transaction_image: transactionImageUrl || null })
     .eq("id", itemId)
     .select();

@@ -25,8 +25,8 @@ export const GET = async (req: Request) => {
     const sold = searchParams.get("sold");
 
     let query = supabaseServer
-      // .from(ITEMS_TABLE_NAME)
-      .from("items_test")
+      .from(ITEMS_TABLE_NAME)
+      // .from("items_test")
       .select(SELECT_ITEM_COLUMNS)
       .neq("nickname", "관리자")
       // .neq("nickname", "빙기")
