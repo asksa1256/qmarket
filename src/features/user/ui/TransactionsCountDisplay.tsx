@@ -1,7 +1,7 @@
 import { getTransactionsCount } from "../model/getTransactionsCount";
 import { useQuery } from "@tanstack/react-query";
 import CheckBadgeIcon from "@/shared/ui/Icon/CheckBadge";
-import { CheckCircle2 } from "lucide-react";
+import CheckCircle from "@/shared/ui/Icon/CheckCircle";
 import { Badge } from "@/shared/ui/badge";
 
 export default function TransactionCountDisplay({
@@ -50,7 +50,7 @@ export default function TransactionCountDisplay({
 
         <div className="flex gap-0.5">
           <h6 className="flex items-center gap-0.5">
-            <CheckCircle2 className="size-4 text-blue-600" />
+            <CheckCircle className="size-3.5 text-blue-600" />
             거래 완료:
           </h6>
           <span className="font-medium">{counts.isSoldCount ?? 0}건</span>
