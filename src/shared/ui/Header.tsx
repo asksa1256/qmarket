@@ -4,7 +4,6 @@ import { Button } from "@/shared/ui/button";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/shared/hooks/useUser";
 import { toast } from "sonner";
-import CreateReportModal from "@/features/report/ui/CreateReportModal";
 import { login, logout } from "@/features/auth/signin/model/actions";
 import DiscordIcon from "@/shared/assets/icons/DiscordIcon";
 import Image from "next/image";
@@ -16,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
 import { useQueryClient } from "@tanstack/react-query";
-import { BadgeQuestionMark, Menu, LogOut, FileDiff } from "lucide-react";
+import { BadgeQuestionMark, Menu, LogOut, BookPlus } from "lucide-react";
 import SearchBar from "@/features/item-search/ui/SearchBar";
 import Link from "next/link";
 import dynamic from "next/dynamic";
@@ -99,7 +98,7 @@ export default function Header() {
                 setIsSidebarOpen(false);
               }}
             >
-              <FileDiff />
+              <BookPlus />
             </Button>
 
             {user ? (
