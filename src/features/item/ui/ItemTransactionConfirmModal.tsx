@@ -45,6 +45,9 @@ export default function ItemTransactionConfirmModal({
       queryClient.invalidateQueries({ queryKey: ["my-items", userId] });
       queryClient.invalidateQueries({ queryKey: ["filtered-items"] });
       queryClient.invalidateQueries({ queryKey: ["item-sale-history"] });
+      queryClient.invalidateQueries({
+        queryKey: ["user-transaction-counts", userId],
+      });
     },
     onError: (err) => {
       toast.error(`${forSaleText} 처리 오류: ${err.message}`);
