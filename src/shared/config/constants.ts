@@ -57,7 +57,7 @@ export const ITEM_IS_SOLD_MAP = {
 };
 
 export const SELECT_ITEM_COLUMNS =
-  "id, item_name, category, price, image, is_for_sale, item_source, nickname, is_sold, user_id, item_gender, discord_id, created_at, message";
+  "id, item_name, category, price, image, is_for_sale, item_source, nickname, is_sold, user_id, item_gender, discord_id, created_at, message, transaction_image";
 
 export const INQUIRY_CATEGORY = ["문의", "건의", "아이템 정보 수정", "기타"];
 

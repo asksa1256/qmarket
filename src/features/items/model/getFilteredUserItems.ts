@@ -9,6 +9,7 @@ interface Props {
 
 const getFilteredUserItems = async ({ userId, isForSale, isSold }: Props) => {
   let query = supabase.from(ITEMS_TABLE_NAME).select("*").eq("user_id", userId);
+  // let query = supabase.from("items_test").select("*").eq("user_id", userId);
 
   // 삽니다/팝니다 구분
   query = query.eq("is_for_sale", isForSale);

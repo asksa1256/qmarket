@@ -6,11 +6,13 @@ import UserBioForm from "./UserBioForm";
 import { copyToClipboard } from "@/shared/lib/copyToClipboard";
 import { Button } from "@/shared/ui/button";
 import { getDailyItemCountAction } from "@/app/actions/item-actions";
-import DailyLimitDisplay from "@/features/item/ui/DailyLimitDisplay";
+import DailyLimitDisplay from "@/features/user/ui/DailyLimitDisplay";
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "@/shared/hooks/useUser";
 import { usePathname } from "next/navigation";
 import { Copy } from "lucide-react";
+import TransactionCountDisplay from "./TransactionsCountDisplay";
+import { Badge } from "@/shared/ui/badge";
 
 export default function UserProfileCard({ user }: { user: UserDetail }) {
   const { data: loginUser } = useUser();
@@ -84,6 +86,9 @@ export default function UserProfileCard({ user }: { user: UserDetail }) {
           />
         </div>
       )}
+
+      {/* 인증 횟수 / 거래 완료 횟수 */}
+      <TransactionCountDisplay userId={user.id} />
 
       <span className="block text-sm text-gray-400 pt-3 mt-4 border-t border-gray-200">
         가입일: {user.created_at.slice(0, 10)}

@@ -1,10 +1,15 @@
 import { supabase } from "@/shared/api/supabase-client";
 import { ITEMS_TABLE_NAME } from "@/shared/config/constants";
 
-export const updateItemToSold = async (itemId: number, isForSale: boolean) => {
+export const updateItemToSold = async (
+  itemId: number,
+  isForSale: boolean,
+  transactionImageUrl?: string
+) => {
   const { data, error } = await supabase
     .from(ITEMS_TABLE_NAME)
-    .update({ is_sold: true })
+    // .from("items_test")
+    .update({ is_sold: true, transaction_image: transactionImageUrl || null })
     .eq("id", itemId)
     .select();
 

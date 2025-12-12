@@ -55,7 +55,6 @@ export const useCreateItemMutation = (props: UseCreateItemMutationProps) => {
       queryClient.invalidateQueries({ queryKey: ["items"] });
       queryClient.invalidateQueries({ queryKey: ["my-items", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["filtered-items"] });
-      queryClient.refetchQueries({ queryKey: ["filtered-items"] }); // 해당 쿼리 키는 자동 refetch 옵션이 꺼져있으므로, 아이템 등록 후 강제 refetch (요청 최적화를 위해 자동 refetch 옵션 해제 상태)
       queryClient.invalidateQueries({
         queryKey: ["item-create-limit-count", user?.id],
       });
@@ -109,7 +108,6 @@ export const useUpdateItemMutation = (props: UseUpdateItemMutationProps) => {
       queryClient.invalidateQueries({ queryKey: ["items"] });
       queryClient.invalidateQueries({ queryKey: ["my-items", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["filtered-items"] });
-      queryClient.refetchQueries({ queryKey: ["filtered-items"] });
 
       props?.onSuccessCallback?.();
     },

@@ -45,6 +45,7 @@ export async function createItem(values: ItemFormValues) {
 
   const { data, error } = await supabase
     .from(ITEMS_TABLE_NAME)
+    // .from("items_test")
     .insert([{ ...values, user_id: user.id }])
     .select();
 
