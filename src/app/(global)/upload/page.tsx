@@ -5,7 +5,6 @@ import { getUploadUrl } from "@/app/actions/s3-actions";
 import { supabase } from "@/shared/api/supabase-client";
 import { toast } from "sonner";
 
-// DB 테이블 구조에 맞춘 타입 정의
 interface UploadedImage {
   id: number;
   transaction_image: string;

@@ -12,6 +12,7 @@ import Link from "next/link";
 import { formatRelativeTime } from "@/shared/lib/formatters";
 import { ExternalLink } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
+import CheckBadgeIcon from "@/shared/ui/Icon/CheckBadge";
 
 interface ItemCardProps {
   item: Item;
@@ -55,10 +56,21 @@ const ItemCard = ({ item, userId }: ItemCardProps) => {
               href={`/item/${encodedItemName}/${encodedItemGender}`}
               className="hover:font-medium hover:underline hover:underline-offset-2 hover:text-blue-600"
             >
-              {item.item_name}
-              <span className="text-gray-500 text-xs">
-                ({item.item_gender})
+              <span className="inline-flex items-center">
+                {item.transaction_image && (
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <CheckBadgeIcon className="size-4 mr-0.5 text-green-700" />
+                    </TooltipTrigger>
+                    <TooltipContent>거래 인증 완료</TooltipContent>
+                  </Tooltip>
+                )}
+                {item.item_name}
+                <span className="text-gray-500 text-xs">
+                  ({item.item_gender})
+                </span>
               </span>
+
               {item.item_source && (
                 <Badge
                   variant="outline"
@@ -84,6 +96,17 @@ const ItemCard = ({ item, userId }: ItemCardProps) => {
               </TooltipTrigger>
               <TooltipContent side="bottom" className="whitespace-pre-line">
                 {item.message}
+                {item.is_sold && item.transaction_image && (
+                  <div className="mb-1">
+                    <hr className="my-2 opacity-50" />
+                    <span className="block mb-2">✅ 거래 완료 인증샷:</span>
+                    <img
+                      src={item.transaction_image}
+                      alt="거래 인증 이미지"
+                      className="max-w-[300px] object-contain"
+                    />
+                  </div>
+                )}
               </TooltipContent>
             </Tooltip>
           )}

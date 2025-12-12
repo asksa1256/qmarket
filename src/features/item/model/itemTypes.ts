@@ -30,6 +30,7 @@ export interface Item {
   created_at: string; // 아이템 등록일
   updated_at?: string; // 아이템 등록일
   message: string; // 유저 메시지
+  transaction_image?: string; // 거래 완료 인증 이미지 url
 }
 
 export interface SearchItemInfo {
