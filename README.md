@@ -26,9 +26,10 @@ src/app/
 ## DB 세팅
 
 ```
-- Supabase DB: 아이템 판매/구매 현황, 아이템 등록 요청 목록, 거래 내역, 유저 데이터 등
+- Supabase DB: 아이템 판매/구매 현황, 아이템 등록 요청 목록, 거래 내역, 유저 데이터, 게임 아이템 정보
 - Supabase Storage: 아이템 미리보기 이미지
 - Redis Upstash: 일일 아이템 등록 횟수, 인기 검색어 순위
+- AWS S3: 유저 이미지 업로드 (거래 인증샷)
 ```
 
 ## Getting Started
