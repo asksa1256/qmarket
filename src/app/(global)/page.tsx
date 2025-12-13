@@ -110,7 +110,7 @@ export default async function Home() {
               <h3 className="md:text-lg font-bold text-base">
                 판매해요
                 <span className="text-sm text-foreground/50 font-normal">
-                  (10개)
+                  (최대 10개)
                 </span>
               </h3>
               <ItemList
@@ -126,12 +126,44 @@ export default async function Home() {
               <h3 className="md:text-lg font-bold text-base">
                 구매해요
                 <span className="text-sm text-foreground/50 font-normal">
-                  (10개)
+                  (최대 10개)
                 </span>
               </h3>
               <ItemList
                 isForSale={false}
                 isSold={false}
+                limit={10}
+                className="pb-0"
+              />
+            </div>
+
+            {/* 판매완료 */}
+            <div className="flex flex-col gap-2 mt-4">
+              <h3 className="md:text-lg font-bold text-base">
+                판매완료
+                <span className="text-sm text-foreground/50 font-normal">
+                  (최대 10개)
+                </span>
+              </h3>
+              <ItemList
+                isForSale={true}
+                isSold={true}
+                limit={10}
+                className="pb-0"
+              />
+            </div>
+
+            {/* 구매완료 */}
+            <div className="flex flex-col gap-2 mt-4">
+              <h3 className="md:text-lg font-bold text-base">
+                구매완료
+                <span className="text-sm text-foreground/50 font-normal">
+                  (최대 10개)
+                </span>
+              </h3>
+              <ItemList
+                isForSale={false}
+                isSold={true}
                 limit={10}
                 className="pb-0"
               />

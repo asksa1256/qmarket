@@ -19,7 +19,7 @@ export async function getRegItemsByCategory(
         apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!}`,
       },
-      cache: "force-cache", // SSG
+      cache: "no-cache",
     }
   );
 
