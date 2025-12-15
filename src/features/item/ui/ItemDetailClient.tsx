@@ -17,7 +17,7 @@ import LoadingSpinner from "@/shared/ui/LoadingSpinner";
 import SectionTitle from "@/shared/ui/SectionTitle";
 import SellingItemCreateModal from "./SellingItemCreateModal";
 import PurchaseItemCreateModal from "./PurchaseItemCreateModal";
-
+import { Badge } from "@/shared/ui/badge";
 export interface ItemDetail {
   id: string;
   name: string;
@@ -32,11 +32,13 @@ export interface ItemDetail {
 interface ItemDetailProps {
   item: ItemDetail;
   marketPrice: number;
+  expectMarketPrice?: number;
 }
 
 export default function ItemDetailClient({
   item,
   marketPrice,
+  expectMarketPrice,
 }: ItemDetailProps) {
   const [filterParams, setFilterParams] = useState<FilterParams>({
     sortBy: "created_at" as "created_at" | "price",
@@ -81,7 +83,16 @@ export default function ItemDetailClient({
                     {item.item_source ? item.item_source : "-"}{" "}
                     {item.rotation_date && (
                       <em className="text-xs not-italic">
-                        (로테이션: {item.rotation_date})
+                        (로테이션: {item.rotation_date},{" "}
+                        {item.rotation_degree && (
+                          <Badge
+                            variant="secondary"
+                            className="px-1 py-0 text-[11px] rounded-xs"
+                          >
+                            {item.rotation_degree}차
+                          </Badge>
+                        )}
+                        )
                       </em>
                     )}
                   </span>
@@ -95,6 +106,13 @@ export default function ItemDetailClient({
                     원{/* <span className="ml-1 text-xs">(최근 10건)</span> */}
                   </span>
                 </li>
+                {expectMarketPrice && (
+                  <li className="flex justify-between border-b pb-1 last:border-b-0">
+                    <span className="font-semibold">예상 호가:</span>
+                    <span>{expectMarketPrice.toLocaleString("ko-KR")}원</span>
+                  </li>
+                )}
+
                 <li className="flex flex-col gap-1 border-b pb-1 last:border-b-0">
                   <div className="flex justify-between">
                     <span className="font-semibold">최근 거래가:</span>
