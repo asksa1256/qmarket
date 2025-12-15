@@ -3,7 +3,7 @@
 import { ITEMS_TABLE_NAME } from "@/shared/config/constants";
 import { supabaseServer } from "@/shared/api/supabase-server";
 
-// 예상 호가 조회 함수 (서버 데이터)
+// 예상 시세 조회 함수 (서버 데이터)
 export const getExpectMarketPrice = async (
   itemName: string,
   itemGender: string

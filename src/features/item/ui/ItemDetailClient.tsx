@@ -108,7 +108,7 @@ export default function ItemDetailClient({
                 </li>
                 {expectMarketPrice && (
                   <li className="flex justify-between border-b pb-1 last:border-b-0">
-                    <span className="font-semibold">예상 호가:</span>
+                    <span className="font-semibold">예상 시세:</span>
                     <span>{expectMarketPrice.toLocaleString("ko-KR")}원</span>
                   </li>
                 )}
