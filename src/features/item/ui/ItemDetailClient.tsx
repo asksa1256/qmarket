@@ -83,7 +83,7 @@ export default function ItemDetailClient({
                     {item.item_source ? item.item_source : "-"}{" "}
                     {item.rotation_date && (
                       <em className="text-xs not-italic">
-                        (로테이션: {item.rotation_date},{" "}
+                        (로테이션: {item.rotation_date}{" "}
                         {item.rotation_degree && (
                           <Badge
                             variant="secondary"

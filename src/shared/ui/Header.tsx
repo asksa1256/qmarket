@@ -65,11 +65,13 @@ export default function Header() {
 
         {/* Desktop View */}
         <div className="hidden md:flex flex-1 items-center justify-between">
-          <SearchBar
-            className={cn("mx-auto w-full max-w-xs [&_svg]:md:right-4", {
-              hidden: pathname === "/",
-            })}
-          />
+          {pathname !== "/" && (
+            <SearchBar
+              className={cn("mx-auto w-full max-w-xs [&_svg]:md:right-4", {
+                hidden: pathname === "/",
+              })}
+            />
+          )}
 
           <div
             className={cn("flex gap-2 shrink-0 justify-end", {

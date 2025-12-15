@@ -25,7 +25,7 @@ export default async function Home() {
   const data = await getPopularSearchesAction();
 
   return (
-    <main className="flex mt-8">
+    <main className="flex">
       <PatchNotePopup />
 
       <div className="flex flex-col w-full gap-8 items-center">
