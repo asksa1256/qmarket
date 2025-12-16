@@ -8,6 +8,7 @@ import { getPopularSearchesAction } from "../actions/search-actions";
 import { PatchNotePopup } from "@/features/popup/ui/PatchNotePopup";
 import GoToItemsModal from "@/features/items/ui/GoToItemsModal";
 import SignInToast from "@/features/auth/signin/ui/SignInToast";
+import GoToMyItemsModal from "@/features/user/ui/GoToMyItemsModal";
 
 export default async function Home({
   params,
@@ -93,7 +94,7 @@ export default async function Home({
                 isForSale={true}
                 isSold={true}
                 limit={2}
-                className="pb-0 [&>div]:h-[180px]"
+                className="pb-0 [&>div]:h-[176px]"
               />
             </div>
 
@@ -104,7 +105,7 @@ export default async function Home({
                 isForSale={false}
                 isSold={true}
                 limit={2}
-                className="pb-0 [&>div]:h-[180px]"
+                className="pb-0 [&>div]:h-[176px]"
               />
             </div>
           </div>
@@ -164,16 +165,7 @@ export default async function Home({
 
         {/* 하단 그리드 메뉴 */}
         <section className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl">
-          <Link href="/my-items" className="h-full">
-            <div className="h-full p-6 rounded-2xl bg-card border hover:border-primary/50 transition-colors break-keep">
-              <h3 className="text-lg font-semibold mb-2 flex items-center gap-1">
-                구매/판매 아이템 등록 <ExternalLink className="size-4" />
-              </h3>
-              <p className="text-muted-foreground">
-                구매하거나 판매하고 싶은 아이템을 등록할 수 있습니다.
-              </p>
-            </div>
-          </Link>
+          <GoToMyItemsModal />
 
           <Link href="/rotation-items/last" className="h-full">
             <div className="h-full p-6 rounded-2xl bg-card border hover:border-primary/50 transition-colors break-keep">
