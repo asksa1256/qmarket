@@ -106,13 +106,12 @@ export default function ItemDetailClient({
                     원{/* <span className="ml-1 text-xs">(최근 10건)</span> */}
                   </span>
                 </li>
-                {expectMarketPrice && (
+                {/* {expectMarketPrice && (
                   <li className="flex justify-between border-b pb-1 last:border-b-0">
                     <span className="font-semibold">예상 시세:</span>
                     <span>{expectMarketPrice.toLocaleString("ko-KR")}원</span>
                   </li>
-                )}
-
+                )} */}
                 <li className="flex flex-col gap-1 border-b pb-1 last:border-b-0">
                   <div className="flex justify-between">
                     <span className="font-semibold">최근 거래가:</span>
