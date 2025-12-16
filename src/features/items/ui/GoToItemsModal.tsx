@@ -47,7 +47,7 @@ export default function GoToItemsModal() {
         className="w-full text-base mt-4 p-6"
         onClick={handleGoToItems}
       >
-        거래 전체 조회 · 등록하기
+        거래 현황 전체보기
         <ArrowRight className="size-5" />
       </Button>
 
@@ -55,16 +55,16 @@ export default function GoToItemsModal() {
         <DialogContent className="text-center">
           <DialogHeader>
             <DialogTitle className="text-center">
-              거래 전체 조회 · 등록
+              거래 현황 전체보기
             </DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
 
-          <ul className="mb-4 text-[15px]">
-            <li>- 추가 가입 없이 디스코드 계정으로 바로 이용 가능합니다.</li>
+          <ul className="mb-4 text-[15px] text-foreground/60">
             <li>
-              - <b>로그인 후 전체 거래 현황과 구매·판매 등록</b>이 가능합니다.
+              - <b>로그인 후 큐마켓의 전체 거래 현황을 보실 수 있습니다.</b>
             </li>
+            <li>- 추가 가입 없이 디스코드 계정으로 이용 가능합니다.</li>
           </ul>
 
           <Button

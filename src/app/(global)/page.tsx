@@ -163,7 +163,7 @@ export default async function Home({
         </section>
 
         {/* 하단 그리드 메뉴 */}
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl">
+        <section className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl">
           <Link href="/my-items" className="h-full">
             <div className="h-full p-6 rounded-2xl bg-card border hover:border-primary/50 transition-colors break-keep">
               <h3 className="text-lg font-semibold mb-2 flex items-center gap-1">
@@ -186,9 +186,18 @@ export default async function Home({
               </p>
             </div>
           </Link>
-        </div>
+        </section>
+
+        {/* 안내 섹션 */}
+        <section className="px-8 py-4 bg-muted-foreground/5 rounded-2xl text-foreground/50">
+          <p className="text-center text-sm break-keep">
+            큐마켓은 가격을 결정하지 않으며, 가격 판단을 돕는 참고 정보를
+            제공합니다.
+          </p>
+        </section>
       </div>
 
+      {/* auth guard: 권한 필요 페이지에서 메인으로 리디렉션 시 표시될 토스트 */}
       {auth_reason === "login_required" && <SignInToast />}
     </main>
   );
