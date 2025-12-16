@@ -59,7 +59,7 @@ export default async function Home({
         <section className="w-full max-w-4xl mb-12">
           <div className="mb-4">
             <h2 className="text-2xl font-bold tracking-tight mb-2">
-              ⭐ 최근 거래 현황
+              ⭐ 거래 현황
             </h2>
           </div>
 
@@ -109,6 +109,7 @@ export default async function Home({
             </div>
           </div>
 
+          {/* 전체 거래 현황 보기 CTA */}
           <GoToItemsModal />
         </section>
 

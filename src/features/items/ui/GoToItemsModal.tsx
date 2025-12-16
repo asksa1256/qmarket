@@ -47,7 +47,7 @@ export default function GoToItemsModal() {
         className="w-full text-base mt-4 p-6"
         onClick={handleGoToItems}
       >
-        거래 아이템 전체 조회
+        거래 전체 조회 · 등록하기
         <ArrowRight className="size-5" />
       </Button>
 
@@ -55,7 +55,7 @@ export default function GoToItemsModal() {
         <DialogContent className="text-center">
           <DialogHeader>
             <DialogTitle className="text-center">
-              거래 아이템 전체 조회
+              거래 전체 조회 · 등록
             </DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
