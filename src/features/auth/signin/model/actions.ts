@@ -3,14 +3,15 @@
 import { getSupabaseServerCookie } from "@/shared/api/supabase-cookie";
 import { DiscordGuild } from "./discord";
 
-export async function login() {
+export async function login(returnTo: string = "/") {
   const supabase = await getSupabaseServerCookie();
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  const encodedReturnTo = encodeURIComponent(returnTo);
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "discord",
     options: {
-      redirectTo: `${baseUrl}/api/auth/discord-callback`,
+      redirectTo: `${baseUrl}/api/auth/discord-callback?returnTo=${encodedReturnTo}`,
       scopes: "identify email guilds",
     },
   });

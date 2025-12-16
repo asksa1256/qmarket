@@ -50,6 +50,11 @@ export default function Header() {
       await queryClient.invalidateQueries({ queryKey: ["user"] });
       toast.success("로그아웃 되었습니다.");
       router.refresh();
+
+      // auth 가드 페이지일 경우, 메인 페이지로 리디렉션
+      if (pathname === "/items" || pathname === "/my-items") {
+        router.replace("/");
+      }
     } catch (error) {
       console.log(error);
       toast.error("로그아웃에 실패했습니다. 다시 시도해주세요.");

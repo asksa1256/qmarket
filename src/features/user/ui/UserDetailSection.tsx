@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import { getSupabaseServerCookie } from "@/shared/api/supabase-cookie";
 import UserItemList from "@/features/user/ui/UserItemList";
 import UserProfileCard from "./UserProfileCard";
 import { UserDetail } from "../model/userTypes";
@@ -17,11 +16,6 @@ export default async function UserDetailSection({
   user,
   isMyPage,
 }: UserDetailProps) {
-  const supabase = await getSupabaseServerCookie();
-  const {
-    data: { user: loginUser },
-  } = await supabase.auth.getUser();
-
   const BuySellListSection = () => (
     <div className="md:pl-8">
       <SectionTitle>📋 판매 / 구매 목록</SectionTitle>

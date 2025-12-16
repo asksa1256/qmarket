@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getSupabaseServerCookie } from "@/shared/api/supabase-cookie";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js"; // 관리자 클라이언트 생성용
 import { DiscordGuild } from "@/features/auth/signin/model/discord";
+import { ALLOWED_RETURN_TO } from "@/shared/config/constants";
 
 const TARGET_GUILD_ID = "1303996406268428288";
 
@@ -36,6 +37,13 @@ function createAdminClient() {
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const code = url.searchParams.get("code");
+
+  let returnTo = "/";
+  const rawReturnTo = url.searchParams.get("returnTo");
+
+  if (rawReturnTo && ALLOWED_RETURN_TO.has(rawReturnTo)) {
+    returnTo = rawReturnTo;
+  }
 
   if (!code)
     return NextResponse.redirect(toAbsoluteUrl(req, "/signin?error=no_code"));
@@ -127,8 +135,8 @@ export async function GET(req: Request) {
       return NextResponse.redirect(toAbsoluteUrl(req, "/discord-join"));
     }
 
-    // 길드까지 모두 가입된 유저는 메인 페이지로 이동
-    return NextResponse.redirect(toAbsoluteUrl(req, "/"));
+    // 길드까지 모두 가입된 유저는 로그인 처리 후 리디렉션
+    return NextResponse.redirect(new URL(returnTo, url.origin));
   } catch (e) {
     // 그외 에러 (네트워크, DB 등)
     console.error("Critical API Route Error:", e);

@@ -78,4 +78,6 @@ export const PROFANITY_LIST = [
   "ㅂㅅ",
 ];
 
+export const ALLOWED_RETURN_TO = new Set(["/items", "/profile", "/mypage"]);
+
 export const TABLET_MIN_WIDTH = 768;

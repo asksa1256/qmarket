@@ -1,14 +1,23 @@
+import { redirect } from "next/navigation";
+import { getSupabaseServerCookie } from "@/shared/api/supabase-cookie";
 import ItemList from "@/features/items/ui/ItemList";
 import SectionTitle from "@/shared/ui/SectionTitle";
 import ButtonToBack from "@/shared/ui/LinkButton/ButtonToBack";
 import SellingItemCreateModal from "@/features/item/ui/SellingItemCreateModal";
 import PurchaseItemCreateModal from "@/features/item/ui/PurchaseItemCreateModal";
 
-export default function ItemsPage() {
+export default async function ItemsPage() {
+  const supabase = await getSupabaseServerCookie();
+  const { data: user } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/");
+  }
+
   return (
     <section className="w-full lg:max-w-6xl mx-auto">
       <ButtonToBack />
-      <SectionTitle>🧾 전체 판매/구매 현황</SectionTitle>
+      <SectionTitle>🧾 거래 전체 현황</SectionTitle>
 
       <div className="flex gap-4 md:flex-row flex-col">
         <div className="shrink-0 md:min-w-[264px]">
@@ -26,13 +35,21 @@ export default function ItemsPage() {
           {/* 팝니다 */}
           <div className="w-[50%]">
             <h3 className="md:text-lg font-bold mb-2 text-base">판매해요</h3>
-            <ItemList isForSale={true} isSold={false} />
+            <ItemList
+              isForSale={true}
+              isSold={false}
+              className="[&>div]:h-[580px]"
+            />
           </div>
 
           {/* 삽니다 */}
           <div className="w-[50%]">
             <h3 className="md:text-lg font-bold mb-2 text-base">구매해요</h3>
-            <ItemList isForSale={false} isSold={false} />
+            <ItemList
+              isForSale={false}
+              isSold={false}
+              className="[&>div]:h-[580px]"
+            />
           </div>
         </div>
       </div>
