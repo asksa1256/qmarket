@@ -10,7 +10,7 @@ import {
 
 interface QueryProviderProps {
   children: ReactNode;
-  dehydratedState: DehydratedState;
+  dehydratedState?: DehydratedState;
 }
 
 export function QueryProvider({
