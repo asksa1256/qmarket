@@ -2,9 +2,9 @@ import { redirect } from "next/navigation";
 import { getSupabaseServerCookie } from "@/shared/api/supabase-cookie";
 import ItemList from "@/features/items/ui/ItemList";
 import SectionTitle from "@/shared/ui/SectionTitle";
-import ButtonToBack from "@/shared/ui/LinkButton/ButtonToBack";
 import SellingItemCreateModal from "@/features/item/ui/SellingItemCreateModal";
 import PurchaseItemCreateModal from "@/features/item/ui/PurchaseItemCreateModal";
+import ButtonToMain from "@/shared/ui/LinkButton/ButtonToMain";
 
 export default async function ItemsPage() {
   const supabase = await getSupabaseServerCookie();
@@ -16,7 +16,7 @@ export default async function ItemsPage() {
 
   return (
     <section className="w-full lg:max-w-6xl mx-auto">
-      <ButtonToBack />
+      <ButtonToMain />
       <SectionTitle>🧾 거래 전체 현황</SectionTitle>
 
       <div className="flex gap-4 md:flex-row flex-col">
