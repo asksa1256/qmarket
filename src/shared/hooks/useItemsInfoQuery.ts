@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/shared/api/supabase-client";
 
-export const useItemsQuery = () => {
+// 검색 자동완성 쿼리 (클라이언트 컴포넌트에서 사용됨)
+export const useItemsInfoQuery = () => {
   return useQuery({
     queryKey: ["items_info"],
     queryFn: async () => {
@@ -12,8 +13,7 @@ export const useItemsQuery = () => {
       if (error) throw error;
       return data;
     },
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    refetchOnMount: false,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
   });
 };

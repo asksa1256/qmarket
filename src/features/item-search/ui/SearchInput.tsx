@@ -1,7 +1,13 @@
 "use client";
 
 import { Input } from "@/shared/ui/input";
-import { ChangeEvent, useState, useMemo, InputHTMLAttributes } from "react";
+import {
+  ChangeEvent,
+  useState,
+  useMemo,
+  InputHTMLAttributes,
+  MouseEvent,
+} from "react";
 import debounce from "@/shared/lib/debounce";
 import {
   Command,
@@ -11,7 +17,7 @@ import {
   CommandList,
 } from "@/shared/ui/command";
 import { cn } from "@/shared/lib/utils";
-import { useItemsQuery } from "@/shared/hooks/useItemsQuery";
+import { useItemsInfoQuery } from "@/shared/hooks/useItemsInfoQuery";
 import { useSearchItemQuery } from "@/shared/hooks/useSearchItemQuery";
 import { SearchItemInfo } from "@/features/item/model/itemTypes";
 import RequestItemModal from "@/features/item/ui/RequestItemModal";
@@ -38,6 +44,7 @@ export default function SearchInput({
 }: SearchInputProps) {
   const [suggestionOpen, setSuggestionOpen] = useState(false);
 
+  // 최근 검색 기록
   const [recentSearches, setRecentSearches] = useState<SearchItemInfo[]>(() => {
     if (typeof window === "undefined") return [];
     try {
@@ -49,7 +56,8 @@ export default function SearchInput({
     }
   });
 
-  const removeRecentSearch = (id: string, e: React.MouseEvent) => {
+  // 최근 검색 기록 삭제
+  const removeRecentSearch = (id: string, e: MouseEvent) => {
     e.stopPropagation();
     setRecentSearches((prev) => {
       const updated = prev.filter((s) => s.id !== id);
@@ -65,8 +73,8 @@ export default function SearchInput({
     });
   };
 
-  // 전체 아이템 캐싱
-  const { data: allItems = [] } = useItemsQuery();
+  // 아이템 목록 캐싱
+  const { data: allItems = [] } = useItemsInfoQuery();
 
   // 검색 캐싱
   const { data: suggestions = [], refetch } = useSearchItemQuery(
