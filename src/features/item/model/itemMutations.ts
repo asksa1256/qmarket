@@ -47,9 +47,7 @@ export const useCreateItemMutation = (props: UseCreateItemMutationProps) => {
     },
     onSuccess: async () => {
       toast.success(
-        props.isForSale
-          ? "판매 아이템을 등록했습니다."
-          : "아이템 구매 요청을 등록했습니다."
+        `${props.isForSale ? "판매" : "구매"} 아이템을 등록했습니다.`
       );
 
       queryClient.invalidateQueries({ queryKey: ["items"] });

@@ -11,8 +11,6 @@ import { ITEMS_TABLE_NAME } from "@/shared/config/constants";
 import preventCreateExistingItem from "@/features/item/model/preventCreateExistingItem";
 import { getUserServer } from "@/shared/api/get-supabase-user-server";
 import { supabaseServer } from "@/shared/api/supabase-server";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 interface ItemFormValues {
   id?: number;
@@ -54,9 +52,6 @@ export async function createItem(values: ItemFormValues) {
   // 아이템 등록 잔여 횟수 차감
   const currentCount = await checkAndIncrementDailyItemLimit(user.id);
   const remaining = DAILY_LIMIT - currentCount;
-
-  revalidatePath("/items");
-  revalidatePath("/my-items");
 
   return { data, remaining };
 }

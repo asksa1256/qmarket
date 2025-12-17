@@ -13,25 +13,15 @@ interface Props {
 }
 
 export default function UserItemList({ userId, isForSale, isSold }: Props) {
-  const { data: allItems, isPending: isLoadingItems } = useQuery({
+  const { data: allItems } = useQuery({
     queryKey: ["my-items", userId],
     queryFn: () => getMyItems(userId),
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    refetchOnMount: false,
   });
 
   const { data: filteredItems, isPending: isLoadingFiltered } = useQuery({
     queryKey: ["filtered-items", userId, isForSale, isSold],
     queryFn: () => getFilteredUserItems({ userId, isForSale, isSold }),
     enabled: !!allItems,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    refetchOnMount: false,
   });
 
   return (
