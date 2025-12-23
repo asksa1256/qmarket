@@ -134,6 +134,14 @@ export default function EntryUploadModal() {
     }
   };
 
+  const handleOpen = () => {
+    if (!user) {
+      toast.error("로그인 후 등록 가능합니다!");
+      return;
+    }
+    setOpen(true);
+  };
+
   return (
     <Dialog
       open={open}
@@ -146,15 +154,14 @@ export default function EntryUploadModal() {
         }
       }}
     >
-      <DialogTrigger asChild>
-        <Button
-          size="lg"
-          className="w-full max-w-[250px] md:max-w-[500px] bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-6 md:py-8 text-base md:text-2xl rounded-2xl shadow-lg transition-all transform hover:scale-105"
-        >
-          <CheckCircle2 className="md:size-7 mr-1" />
-          컨테스트 참여하기
-        </Button>
-      </DialogTrigger>
+      <Button
+        size="lg"
+        onClick={handleOpen}
+        className="w-full max-w-[250px] md:max-w-[500px] bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-6 md:py-8 text-base md:text-2xl rounded-2xl shadow-lg transition-all transform hover:scale-105"
+      >
+        <CheckCircle2 className="md:size-7 mr-1" />
+        컨테스트 참여하기
+      </Button>
 
       <DialogContent className="sm:max-w-[425px] bg-white/95 backdrop-blur-xl border-none shadow-2xl">
         <form onSubmit={handleSubmit(onSubmit)}>
