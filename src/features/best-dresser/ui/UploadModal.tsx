@@ -11,26 +11,49 @@ import {
   DialogFooter,
 } from "@/shared/ui/dialog";
 import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
+import { Textarea } from "@/shared/ui/textarea";
 import { Label } from "@/shared/ui/label";
 import { Camera, Loader2, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { getUploadUrl } from "@/app/actions/s3-actions";
 import { useUser } from "@/shared/hooks/useUser";
+import { DialogDescription } from "@radix-ui/react-dialog";
+import { useForm, Controller } from "react-hook-form";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
-interface UploadModalProps {
-  onUploadSuccess?: (image_url: string) => void;
+interface DresserFormValues {
+  imageFile: File | null;
+  description: string;
 }
 
-export default function UploadModal({ onUploadSuccess }: UploadModalProps) {
+export default function BestDresserUploadModal({
+  onUploadSuccess,
+}: {
+  onUploadSuccess: (v: string) => void;
+}) {
   const [open, setOpen] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false);
   const [isSucceeded, setIsSucceeded] = useState(false);
+
   const { data: user } = useUser();
+
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    reset,
+    formState: { isSubmitting },
+  } = useForm<DresserFormValues>({
+    defaultValues: {
+      imageFile: null,
+      description: "",
+    },
+  });
+
+  // 이미지 파일 미리보기
+  const imageFile = watch("imageFile");
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -42,55 +65,56 @@ export default function UploadModal({ onUploadSuccess }: UploadModalProps) {
     }
 
     if (selectedFile) {
-      setFile(selectedFile);
+      setValue("imageFile", selectedFile);
       setPreviewUrl(URL.createObjectURL(selectedFile));
       setIsSucceeded(false);
     }
   };
 
-  const handleUpload = async () => {
+  const onSubmit = async (values: DresserFormValues) => {
     if (!user) {
       toast.error("로그인이 필요합니다.");
       return;
     }
 
-    if (!file) {
+    if (!values.imageFile) {
       toast.error("이미지를 등록해주세요.");
       return;
     }
 
-    setUploading(true);
-    setIsSucceeded(false);
-
     try {
-      const { signedUrl, fileUrl } = await getUploadUrl(file.name, file.type);
+      const { signedUrl, fileUrl } = await getUploadUrl(
+        values.imageFile.name,
+        values.imageFile.type
+      );
 
-      const res = await fetch(signedUrl, {
+      await fetch(signedUrl, {
         method: "PUT",
-        body: file,
-        headers: { "Content-Type": file.type },
+        body: values.imageFile,
+        headers: { "Content-Type": values.imageFile.type },
       });
 
-      // if (res.ok) {
-      //   onUploadSuccess?.(fileUrl);
-      //   toast.success("거래 인증 등록에 성공했습니다.");
-      // }
-
-      const { data, error } = await supabase.from("best_dresser").insert({
+      const { error } = await supabase.from("best_dresser").insert({
         image_url: fileUrl,
         user_id: user.id,
-        nickname: user.user_metadata.custom_claims.global_name,
+        nickname: user.user_metadata.custom_claims?.global_name,
         votes: 0,
+        description: values.description,
       });
 
-      toast.success("이달의 베스트 드레서 후보로 등록되었습니다!");
+      if (error) throw error;
+
+      toast.success("컨테스트에 참가되었습니다!");
       setIsSucceeded(true);
-      setOpen(false);
+
+      setTimeout(() => {
+        setOpen(false);
+        reset();
+        setPreviewUrl(null);
+      }, 1500);
     } catch (error) {
       console.error("실패:", error);
       toast.error("등록 중 오류가 발생했습니다.");
-    } finally {
-      setUploading(false);
     }
   };
 
@@ -100,87 +124,116 @@ export default function UploadModal({ onUploadSuccess }: UploadModalProps) {
       onOpenChange={(val) => {
         setOpen(val);
         if (!val) {
-          // 모달 닫힐 때 상태 초기화 (선택사항)
           setIsSucceeded(false);
-          setFile(null);
+          reset();
           setPreviewUrl(null);
         }
       }}
     >
       <DialogTrigger asChild>
         <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-6 px-8 rounded-2xl shadow-lg transition-all transform hover:scale-105">
-          <Camera className="mr-2 h-5 w-5" />내 아바타 뽐내기
+          <Camera className="mr-2 h-5 w-5" />
+          컨테스트 참여하기
         </Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[425px] bg-white/95 backdrop-blur-xl border-none shadow-2xl">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-gray-800">
-            📸 아바타 등록하기
-          </DialogTitle>
-        </DialogHeader>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-gray-800">
+              📸 아바타 등록
+            </DialogTitle>
+            <DialogDescription className="text-foreground/50 text-sm">
+              배경까지 포함된 아바타 이미지를 등록해주세요!
+            </DialogDescription>
+          </DialogHeader>
 
-        <div className="grid gap-6 py-4">
-          <div className="grid gap-2">
-            <Label htmlFor="photo" className="text-gray-600 font-medium">
-              아바타 스크린샷 (Max 2MB)
-            </Label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              disabled={uploading || isSucceeded}
-              className="block w-full text-sm text-gray-500
-                file:mr-4 file:py-2 file:px-4
-                file:rounded-full file:border-0
-                file:text-sm file:font-semibold
-                file:bg-pink-50 file:text-pink-700
-                hover:file:bg-pink-100
-                disabled:opacity-50 cursor-pointer"
-            />
+          <div className="flex flex-col gap-6 py-4">
+            {/* 이미지 필드 */}
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="photo" className="text-foreground font-medium">
+                아바타 스크린샷 (최대 2MB)
+              </Label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                disabled={isSubmitting || isSucceeded}
+                className="block w-full text-sm text-gray-500
+                  file:mr-4 file:py-2 file:px-4
+                  file:rounded-full file:border-0
+                  file:text-sm file:font-semibold
+                  file:bg-pink-50 file:text-pink-700
+                  hover:file:bg-pink-100
+                  disabled:opacity-50 cursor-pointer"
+              />
 
-            {previewUrl && (
-              <div className="mt-2 rounded-xl overflow-hidden border-2 border-pink-100 aspect-square relative shadow-inner bg-gray-50">
-                <img
-                  src={previewUrl}
-                  alt="Preview"
-                  className="object-cover w-full h-full transition-opacity duration-300"
-                />
-                {isSucceeded && (
-                  <div className="absolute inset-0 bg-white/60 flex items-center justify-center backdrop-blur-[2px]">
-                    <CheckCircle2 className="w-12 h-12 text-green-500" />
-                  </div>
+              {previewUrl && (
+                <div className="relative mt-2 p-2 rounded-xl w-[75%] mx-auto overflow-hidden bg-gradient-to-b from-[#53A0DA] to-[#2359B6] border-2 border-[#002656] shadow-lg">
+                  <img
+                    src={previewUrl}
+                    alt="미리보기"
+                    className="block mx-auto rounded-lg object-contain w-full h-auto transition-opacity duration-300"
+                  />
+                  {isSucceeded && (
+                    <div className="absolute inset-0 bg-white/60 flex items-center justify-center backdrop-blur-[2px]">
+                      <CheckCircle2 className="w-12 h-12 text-green-500" />
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* 설명 필드 */}
+            <div className="flex flex-col gap-2">
+              <Label
+                htmlFor="description"
+                className="text-foreground font-medium"
+              >
+                설명
+              </Label>
+              <Controller
+                name="description"
+                control={control}
+                render={({ field }) => (
+                  <Textarea
+                    {...field}
+                    id="description"
+                    placeholder="코디 컨셉을 설명해주세요! (선택)"
+                    disabled={isSubmitting || isSucceeded}
+                    className="resize-none focus-visible:ring-pink-400"
+                  />
                 )}
-              </div>
-            )}
+              />
+            </div>
           </div>
-        </div>
 
-        <DialogFooter>
-          <Button
-            onClick={handleUpload}
-            disabled={uploading || !file || isSucceeded}
-            className={`w-full py-6 rounded-xl font-bold transition-all ${
-              isSucceeded
-                ? "bg-green-500 hover:bg-green-600"
-                : "bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90"
-            } text-white`}
-          >
-            {uploading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                업로드 중...
-              </>
-            ) : isSucceeded ? (
-              <>
-                <CheckCircle2 className="mr-2 h-4 w-4" />
-                등록 완료
-              </>
-            ) : (
-              "컨테스트 참가하기"
-            )}
-          </Button>
-        </DialogFooter>
+          <DialogFooter>
+            <Button
+              type="submit"
+              disabled={isSubmitting || !imageFile || isSucceeded}
+              className={`w-full py-6 rounded-xl font-bold transition-all ${
+                isSucceeded
+                  ? "bg-green-500 hover:bg-green-600"
+                  : "bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90"
+              } text-white`}
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  업로드 중...
+                </>
+              ) : isSucceeded ? (
+                <>
+                  <CheckCircle2 className="mr-2 h-4 w-4" />
+                  등록 완료
+                </>
+              ) : (
+                "컨테스트 참가하기"
+              )}
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

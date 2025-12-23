@@ -5,6 +5,7 @@ export interface BestDresserEntry {
   user_id: string | null;
   nickname: string | null;
   votes: number;
+  description?: string;
 }
 
 export type BestDresserInsert = Omit<BestDresserEntry, "id" | "created_at">;

@@ -26,7 +26,6 @@ export default function BestDresserPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-yellow-50 to-purple-50 py-12 px-4">
       <div className="max-w-6xl mx-auto">
-        {/* 헤더 섹션 */}
         <header className="text-center mb-16">
           <h1 className="text-5xl font-extrabold text-gray-800 mb-4 tracking-tight">
             🌈 이달의 베스트 드레서 🌈
@@ -36,17 +35,17 @@ export default function BestDresserPage() {
           </p>
         </header>
 
-        {/* 업로드 섹션 - 상단 고정 또는 모달 버튼 */}
+        {/* 업로드 */}
         <div className="flex justify-center mb-12">
           <UploadModal onUploadSuccess={fetchEntries} />
         </div>
 
-        {/* 컨테스트 리스트 (그리드) */}
+        {/* 컨테스트 참가자 목록 */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {entries.map((entry) => (
             <EntryCard
               key={entry.id}
-              entry={entry}
+              data={entry}
               onVoteSuccess={fetchEntries}
             />
           ))}
