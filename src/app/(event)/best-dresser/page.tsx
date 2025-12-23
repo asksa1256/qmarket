@@ -105,6 +105,10 @@ export default async function BestDresserPage() {
               계정당 3회까지 코디 등록이 가능합니다.
             </p>
             <p className="flex items-center justify-center gap-2">
+              <span className="text-blue-500">✓</span>
+              동점일 경우, 등록일이 더 빠른 참가자 순으로 랭킹이 집계됩니다.
+            </p>
+            <p className="flex items-center justify-center gap-2">
               <span className="text-yellow-500">★</span>
               베스트 드레서 1, 2, 3등은 메인에 게재됩니다.
             </p>
@@ -119,7 +123,7 @@ export default async function BestDresserPage() {
         {/* 컨테스트 참가자 목록 */}
         <EntryList user={user} />
 
-        <div className="border rounded-xl border-border p-6 text-sm">
+        <div className="border rounded-xl border-border p-6 text-sm mt-12">
           <p className="text-sm text-foreground/60">
             * 중복 참가 이미지, 컨테스트와 관련 없는 이미지는 별도의 공지 없이
             삭제됩니다.

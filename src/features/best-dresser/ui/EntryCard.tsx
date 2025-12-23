@@ -21,19 +21,19 @@ interface EntryCardProps {
   rank: number;
 }
 
-// rank 값에 따른 스타일 분기
-const getRankStyles = (r: number | undefined) => {
-  switch (r) {
-    case 0: // 1위
-      return "ring-4 ring-yellow-400 shadow-[0_0_25px_rgba(250,204,21,0.5)] bg-gradient-to-b from-yellow-50 to-white scale-[1.02] z-10";
-    case 1: // 2위
-      return "ring-4 ring-slate-300 shadow-[0_0_20px_rgba(148,163,184,0.3)] bg-gradient-to-b from-slate-50 to-white";
-    case 2: // 3위
-      return "ring-4 ring-amber-900/30 shadow-[0_0_15px_rgba(134, 75, 36, 0.2)] bg-gradient-to-b from-amber-50 to-white";
-    default:
-      return "bg-white/70 border border-white/50";
-  }
-};
+// rank 값에 따른 스타일 분기: 컨테스트 마감 후 결과 페이지에서 적용
+// const getRankStyles = (r: number | undefined) => {
+//   switch (r) {
+//     case 0: // 1위
+//       return "ring-4 ring-yellow-400 shadow-[0_0_25px_rgba(250,204,21,0.5)] bg-gradient-to-b from-yellow-50 to-white scale-[1.02] z-10";
+//     case 1: // 2위
+//       return "ring-4 ring-slate-300 shadow-[0_0_20px_rgba(148,163,184,0.3)] bg-gradient-to-b from-slate-50 to-white";
+//     case 2: // 3위
+//       return "ring-4 ring-amber-900/30 shadow-[0_0_15px_rgba(134, 75, 36, 0.2)] bg-gradient-to-b from-amber-50 to-white";
+//     default:
+//       return "bg-white/70 border border-white/50";
+//   }
+// };
 
 export default function EntryCard({ data, user, rank }: EntryCardProps) {
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -111,7 +111,10 @@ export default function EntryCard({ data, user, rank }: EntryCardProps) {
 
   const { mutate: toggleVoteMutation } = useMutation({
     mutationFn: async () => {
-      if (!user) throw new Error("로그인이 필요합니다.");
+      if (!user) {
+        toast.error("로그인이 필요합니다.");
+        return;
+      }
 
       if (isVoted) {
         const { error: deleteError } = await supabase
@@ -200,29 +203,22 @@ export default function EntryCard({ data, user, rank }: EntryCardProps) {
       return;
     }
     toggleVoteMutation();
-
-    // if (!isVoted) {
-    //   confetti({
-    //     particleCount: 40,
-    //     spread: 70,
-    //     origin: { y: 0.7 }
-    //   });
-    // }
   };
 
-  const isTopRank = rank >= 0 && rank <= 2;
-  const rankLabels = ["🥇 1등", "🥈 2등", "🥉 3등"];
+  // const isTopRank = rank >= 0 && rank <= 2;
+  // const rankLabels = ["🥇 1등", "🥈 2등", "🥉 3등"];
 
   return (
     <>
       <Link href={`/best-dresser/${data.id}`}>
         <div
-          className={`hover:scale-105 transition-transform w-[270px] mx-auto md:w-auto md:mx-0 p-3 backdrop-blur-md rounded-2xl shadow-xl ${getRankStyles(
-            rank
-          )}`}
+          // className={`hover:scale-105 transition-transform w-[270px] mx-auto md:w-auto md:mx-0 p-3 backdrop-blur-md rounded-2xl shadow-xl ${getRankStyles(
+          //   rank
+          // )}`}
+          className="bg-white hover:scale-105 transition-transform w-[270px] mx-auto md:w-auto md:mx-0 p-3 backdrop-blur-md rounded-2xl shadow-xl"
         >
           {/* 1, 2, 3위 뱃지 */}
-          {isTopRank && (
+          {/* {isTopRank && (
             <span
               className={`absolute -top-8.5 left-4 px-3 pb-1 pt-1.5 rounded-tl-xl rounded-tr-xl text-sm font-black ${
                 rank === 0
@@ -234,7 +230,7 @@ export default function EntryCard({ data, user, rank }: EntryCardProps) {
             >
               {rankLabels[rank]}
             </span>
-          )}
+          )} */}
 
           {/* 이미지 */}
           <div className="relative w-[184px] h-[236px] mx-auto">
