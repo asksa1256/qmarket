@@ -1,5 +1,5 @@
 import { supabaseServer } from "@/shared/api/supabase-server";
-import CommentSection from "@/features/comment/CommentSection";
+import CommentSection from "@/features/comment/ui/CommentSection";
 
 export default async function EntryDetailPage({
   params,
