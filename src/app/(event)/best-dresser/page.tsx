@@ -91,11 +91,11 @@ export default async function BestDresserPage() {
 
           <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl p-4 mb-6 max-w-md mx-auto border-2 border-yellow-300/50 shadow-md">
             <p className="text-lg font-bold text-orange-600 flex items-center justify-center gap-2">
-              🎁 참여만 해도 기프티콘 팡팡!
+              🎁 참여만 해도 기프티콘 제공!
             </p>
             <p className="text-sm text-gray-700 mt-1">
-              추첨을 통해 <span className="font-bold text-orange-600">3명</span>
-              에게 제공됩니다.
+              추첨을 통해 <span className="font-bold text-orange-600">3분</span>
+              께 드립니다.
             </p>
           </div>
 
