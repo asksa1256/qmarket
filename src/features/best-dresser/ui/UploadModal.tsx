@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, ChangeEvent } from "react";
-import { supabase } from "@/shared/api/supabase-client";
+import { useState, ChangeEvent, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -20,6 +19,10 @@ import { useUser } from "@/shared/hooks/useUser";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { useForm, Controller } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
+import {
+  registerBestDresser,
+  getRemainingEntryCount,
+} from "@/app/actions/best-dresser-actions";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
@@ -32,6 +35,7 @@ export default function BestDresserUploadModal() {
   const [open, setOpen] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isSucceeded, setIsSucceeded] = useState(false);
+  const [remainingCount, setRemainingCount] = useState<number | null>(null);
 
   const { data: user } = useUser();
   const queryClient = useQueryClient();
@@ -69,6 +73,22 @@ export default function BestDresserUploadModal() {
     }
   };
 
+  // 남은 참가 횟수 조회
+  useEffect(() => {
+    const fetchRemainingCount = async () => {
+      if (!user) return;
+
+      const result = await getRemainingEntryCount();
+      if (result.success && result.remainingCount !== undefined) {
+        setRemainingCount(result.remainingCount);
+      }
+    };
+
+    if (open && user) {
+      fetchRemainingCount();
+    }
+  }, [open, user]);
+
   const onSubmit = async (values: DresserFormValues) => {
     if (!user) {
       toast.error("로그인이 필요합니다.");
@@ -92,29 +112,37 @@ export default function BestDresserUploadModal() {
         headers: { "Content-Type": values.imageFile.type },
       });
 
-      const { error } = await supabase.from("best_dresser").insert({
-        image_url: fileUrl,
-        user_id: user.id,
-        nickname: user.user_metadata.custom_claims?.global_name,
-        votes: 0,
-        description: values.description,
-      });
+      // 참가 등록 횟수 체크 후 등록
+      const result = await registerBestDresser(fileUrl, values.description);
 
-      if (error) throw error;
+      if (!result.success) {
+        toast.error(result.error || "등록 중 오류가 발생했습니다.");
+        return;
+      }
 
       await queryClient.invalidateQueries({
         queryKey: ["best_dresser"],
       });
 
-      toast.success("컨테스트에 참가되었습니다!");
+      if (result.remainingCount !== undefined) {
+        setRemainingCount(result.remainingCount);
+        toast.success(
+          `컨테스트에 참가되었습니다! (남은 횟수: ${result.remainingCount}회)`
+        );
+      } else {
+        toast.success("컨테스트에 참가되었습니다!");
+      }
 
       // 참가 폼 초기화
       reset();
       setPreviewUrl(null);
-      setIsSucceeded(false);
+      setIsSucceeded(true);
 
-      // 모달 닫기
-      setOpen(false);
+      // 2초 후 모달 닫기
+      setTimeout(() => {
+        setOpen(false);
+        setIsSucceeded(false);
+      }, 2000);
     } catch (error) {
       console.error("실패:", error);
       toast.error("등록 중 오류가 발생했습니다.");
@@ -151,6 +179,12 @@ export default function BestDresserUploadModal() {
             </DialogTitle>
             <DialogDescription className="text-foreground/50 text-sm">
               배경까지 포함된 아바타 이미지를 등록해주세요!
+              {remainingCount !== null && (
+                <span className="inline-block rounded-lg mt-1 px-4 py-2 text-purple-600 bg-purple-100">
+                  <b>{user?.user_metadata.custom_claims?.global_name}</b>님의
+                  남은 참가 횟수: <b>{remainingCount}회</b>
+                </span>
+              )}
             </DialogDescription>
           </DialogHeader>
 
@@ -164,7 +198,7 @@ export default function BestDresserUploadModal() {
                 type="file"
                 accept="image/*"
                 onChange={handleFileChange}
-                disabled={isSubmitting || isSucceeded}
+                disabled={isSubmitting || isSucceeded || remainingCount === 0}
                 className="block w-full text-sm text-gray-500
                   file:mr-4 file:py-2 file:px-4
                   file:rounded-full file:border-0
@@ -173,6 +207,12 @@ export default function BestDresserUploadModal() {
                   hover:file:bg-pink-100
                   disabled:opacity-50 cursor-pointer"
               />
+
+              {remainingCount === 0 && (
+                <p className="text-sm text-red-500 font-medium">
+                  참가 횟수를 모두 사용했습니다.
+                </p>
+              )}
 
               {previewUrl && (
                 <div className="relative mt-2 p-2 rounded-xl w-[75%] mx-auto overflow-hidden bg-gradient-to-b from-[#53A0DA] to-[#2359B6] border-2 border-[#002656] shadow-lg">
@@ -206,7 +246,9 @@ export default function BestDresserUploadModal() {
                     {...field}
                     id="description"
                     placeholder="코디 컨셉을 설명해주세요! (선택)"
-                    disabled={isSubmitting || isSucceeded}
+                    disabled={
+                      isSubmitting || isSucceeded || remainingCount === 0
+                    }
                     className="resize-none focus-visible:ring-pink-400"
                   />
                 )}
@@ -217,7 +259,12 @@ export default function BestDresserUploadModal() {
           <DialogFooter>
             <Button
               type="submit"
-              disabled={isSubmitting || !imageFile || isSucceeded}
+              disabled={
+                isSubmitting ||
+                !imageFile ||
+                isSucceeded ||
+                remainingCount === 0
+              }
               className={`w-full py-6 rounded-xl font-bold transition-all ${
                 isSucceeded
                   ? "bg-green-500 hover:bg-green-600"

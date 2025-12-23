@@ -152,3 +152,36 @@ export async function getPopularSearches() {
     return [];
   }
 }
+
+const MAX_ENTRIES_PER_USER = 3;
+const REDIS_KEY_PREFIX = "best_dresser:entries:";
+
+export async function checkUserEntryLimit(userId: string): Promise<{
+  canEnter: boolean;
+  currentCount: number;
+  remainingCount: number;
+}> {
+  const redis = getRedisClient();
+  const key = `${REDIS_KEY_PREFIX}${userId}`;
+  const count = (await redis.get<number>(key)) || 0;
+
+  return {
+    canEnter: count < MAX_ENTRIES_PER_USER,
+    currentCount: count,
+    remainingCount: Math.max(0, MAX_ENTRIES_PER_USER - count),
+  };
+}
+
+export async function incrementUserEntryCount(userId: string): Promise<void> {
+  const redis = getRedisClient();
+  const key = `${REDIS_KEY_PREFIX}${userId}`;
+  await redis.incr(key);
+  // 선택사항: 만료 시간 설정 (예: 30일)
+  // await redis.expire(key, 60 * 60 * 24 * 30)
+}
+
+export async function getUserEntryCount(userId: string): Promise<number> {
+  const redis = getRedisClient();
+  const key = `${REDIS_KEY_PREFIX}${userId}`;
+  return (await redis.get<number>(key)) || 0;
+}

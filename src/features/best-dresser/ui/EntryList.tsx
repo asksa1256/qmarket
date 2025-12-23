@@ -22,6 +22,7 @@ export default function EntryList({ user }: { user: User | null }) {
           .from("best_dresser")
           .select("*")
           .order("votes", { ascending: false })
+          .order("created_at", { ascending: false })
           .range(from, to);
 
         if (error) throw error;

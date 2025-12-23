@@ -17,15 +17,19 @@ export default async function BestDresserPage() {
             </span>
             🩳
           </h1>
-          <p className="text-lg text-foreground mb-4">
-            2025년 연말 결산! 올해 큐플레이를 빛내준 나만의 코디를 뽐내보세요!
+          <p className="text-lg mb-4">
+            2025년 연말 결산! 올해 큐플레이를 빛내준 베스트 드레서를
+            선택해주세요!
           </p>
-          <p className="text-sm text-foreground/60">
-            * 계정당 3회까지 참여 가능합니다.
+          <ul className="text-lg mb-4">
+            <li>참여 및 투표 기간: 2025.12.24 ~ 2025.12.30</li>
+            <li>결과 발표: 2025.12.31</li>
+          </ul>
+          <p className="text-sm text-foreground">
+            * 계정당 3회까지 참가자로 등록 가능합니다.
           </p>
-          <p className="text-sm text-foreground/60">
-            * 중복 참가 이미지, 아바타 코디와 관련 없는 이미지는 별도의 공지
-            없이 삭제됩니다.
+          <p className="text-sm text-foreground">
+            * 1, 2, 3등은 메인 페이지에 게재됩니다.
           </p>
         </header>
 
@@ -36,9 +40,16 @@ export default async function BestDresserPage() {
 
         {/* 컨테스트 참가자 목록 */}
         <EntryList user={user} />
+
+        <div className="border rounded-xl border-border p-6 text-sm mt-40">
+          <p className="text-sm text-foreground/60">
+            * 중복 참가 이미지, 아바타 코디와 관련 없는 이미지는 별도의 공지
+            없이 삭제됩니다.
+          </p>
+        </div>
       </div>
 
-      <Footer className="mt-20" />
+      <Footer className="md:pt-12" />
     </main>
   );
 }
