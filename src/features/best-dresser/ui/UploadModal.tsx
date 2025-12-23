@@ -19,6 +19,7 @@ import { getUploadUrl } from "@/app/actions/s3-actions";
 import { useUser } from "@/shared/hooks/useUser";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { useForm, Controller } from "react-hook-form";
+import { useQueryClient } from "@tanstack/react-query";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
@@ -27,16 +28,13 @@ interface DresserFormValues {
   description: string;
 }
 
-export default function BestDresserUploadModal({
-  onUploadSuccess,
-}: {
-  onUploadSuccess: () => void;
-}) {
+export default function BestDresserUploadModal() {
   const [open, setOpen] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isSucceeded, setIsSucceeded] = useState(false);
 
   const { data: user } = useUser();
+  const queryClient = useQueryClient();
 
   const {
     handleSubmit,
@@ -104,11 +102,12 @@ export default function BestDresserUploadModal({
 
       if (error) throw error;
 
+      await queryClient.invalidateQueries({
+        queryKey: ["best_dresser"],
+      });
+
       toast.success("컨테스트에 참가되었습니다!");
       setIsSucceeded(true);
-
-      // 참가 후 컨테스트 참가 목록 리페치 트리거
-      onUploadSuccess();
 
       // 모달 닫기
       setOpen(false);
