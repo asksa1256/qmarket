@@ -19,7 +19,7 @@ export default async function EntryDetailPage({
 
   return (
     <div className="max-w-4xl mx-auto py-12 px-4 mt-20">
-      <ButtonToBack />
+      <ButtonToBack className="hover:bg-pink-100" />
 
       <div className="mb-8 flex flex-col justify-center items-center">
         <img
