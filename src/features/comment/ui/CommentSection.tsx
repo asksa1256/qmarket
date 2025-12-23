@@ -71,6 +71,7 @@ export default function CommentSection({ entryId }: { entryId: number }) {
     onSuccess: () => {
       reset();
       queryClient.invalidateQueries({ queryKey: ["comments", entryId] });
+      queryClient.invalidateQueries({ queryKey: ["best_dresser"] });
     },
   });
 

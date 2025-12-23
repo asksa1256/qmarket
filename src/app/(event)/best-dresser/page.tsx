@@ -43,8 +43,8 @@ export default async function BestDresserPage() {
 
         <div className="border rounded-xl border-border p-6 text-sm mt-40">
           <p className="text-sm text-foreground/60">
-            * 중복 참가 이미지, 아바타 코디와 관련 없는 이미지는 별도의 공지
-            없이 삭제됩니다.
+            * 중복 참가 이미지, 컨테스트와 관련 없는 이미지는 별도의 공지 없이
+            삭제됩니다.
           </p>
         </div>
       </div>
