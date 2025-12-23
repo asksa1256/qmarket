@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/shared/api/supabase-client";
 import { BestDresserEntry } from "../model/bestDresserType";
 import { Button } from "@/shared/ui/button";
+import { InfiniteData } from "@tanstack/react-query";
 
 interface EntryCardProps {
   data: BestDresserEntry;
@@ -23,16 +24,24 @@ export default function EntryCard({ data }: EntryCardProps) {
     onMutate: async (newVotes) => {
       await queryClient.cancelQueries({ queryKey: ["best_dresser"] });
 
-      const previousEntries = queryClient.getQueryData<BestDresserEntry[]>([
-        "best_dresser",
-      ]);
+      const previousEntries = queryClient.getQueryData(["best_dresser"]);
 
-      queryClient.setQueryData<BestDresserEntry[]>(["best_dresser"], (old) => {
-        if (!old) return [];
-        return old.map((entry) =>
-          entry.id === data.id ? { ...entry, votes: newVotes } : entry
-        );
-      });
+      // useInfiniteQuery 리턴 데이터에 맞춰 구조 설정
+      queryClient.setQueryData<InfiniteData<BestDresserEntry[]>>(
+        ["best_dresser"],
+        (old) => {
+          if (!old) return old;
+
+          return {
+            ...old,
+            pages: old.pages.map((page) =>
+              page.map((entry) =>
+                entry.id === data.id ? { ...entry, votes: newVotes } : entry
+              )
+            ),
+          };
+        }
+      );
 
       // 실패 시 onError에서 처리하기 위해 이전 데이터 반환
       return { previousEntries };
@@ -57,7 +66,7 @@ export default function EntryCard({ data }: EntryCardProps) {
   return (
     <div className="bg-white/70 p-3 backdrop-blur-md rounded-2xl overflow-hidden shadow-xl transition-transform hover:scale-[1.03] border border-white/50">
       {/* 이미지 */}
-      <div className="relative w-[80%] mx-auto">
+      <div className="relative w-[184px] h-[236px] mx-auto">
         <img
           src={data.image_url}
           alt="Avatar"
@@ -86,8 +95,9 @@ export default function EntryCard({ data }: EntryCardProps) {
 
         <Button
           type="button"
+          size="lg"
           onClick={handleVote}
-          className="mt-2 w-full bg-gradient-to-r from-pink-400 to-purple-400 text-white py-2 rounded-full font-semibold hover:shadow-md transition-all active:scale-95"
+          className="mt-2 w-full bg-gradient-to-r from-pink-400 to-purple-400 text-white py-2 font-semibold hover:shadow-md transition-all active:scale-95"
         >
           투표하기
         </Button>

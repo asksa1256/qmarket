@@ -1,10 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { supabase } from "@/shared/api/supabase-client";
 import EntryCard from "@/features/best-dresser/ui/EntryCard";
 import UploadModal from "@/features/best-dresser/ui/UploadModal";
-import { BestDresserEntry } from "@/features/best-dresser/model/bestDresserType";
 import Footer from "@/shared/ui/Footer";
 import useInfiniteScroll from "@/shared/hooks/useInfiniteScroll";
 import { Loader2 } from "lucide-react";
@@ -13,35 +11,27 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 const ITEMS_PER_PAGE = 12;
 
 export default function BestDresserPage() {
-  const [entries, setEntries] = useState<BestDresserEntry[]>([]);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isPending } =
+    useInfiniteQuery({
+      queryKey: ["best_dresser"],
+      queryFn: async ({ pageParam = 0 }) => {
+        const from = (pageParam as number) * ITEMS_PER_PAGE;
+        const to = from + ITEMS_PER_PAGE + 1;
 
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isPending,
-    refetch,
-  } = useInfiniteQuery({
-    queryKey: ["best_dresser"],
-    queryFn: async ({ pageParam = 0 }) => {
-      const from = (pageParam as number) * ITEMS_PER_PAGE;
-      const to = from + ITEMS_PER_PAGE + 1;
+        const { data, error } = await supabase
+          .from("best_dresser")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .range(from, to);
 
-      const { data, error } = await supabase
-        .from("best_dresser")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .range(from, to);
-
-      if (error) throw error;
-      return data;
-    },
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, allPages) => {
-      return lastPage.length === ITEMS_PER_PAGE ? allPages.length : undefined;
-    },
-  });
+        if (error) throw error;
+        return data;
+      },
+      initialPageParam: 0,
+      getNextPageParam: (lastPage, allPages) => {
+        return lastPage.length === ITEMS_PER_PAGE ? allPages.length : undefined;
+      },
+    });
 
   const { loadMoreRef } = useInfiniteScroll({
     fetchNextPage,
@@ -67,7 +57,8 @@ export default function BestDresserPage() {
             * 계정당 3회까지 참여 가능합니다.
           </p>
           <p className="text-sm text-foreground/60">
-            * 중복 참가 이미지는 별도의 공지 없이 삭제됩니다.
+            * 중복 참가 이미지, 아바타 코디와 관련 없는 이미지는 별도의 공지
+            없이 삭제됩니다.
           </p>
         </header>
 
@@ -77,7 +68,7 @@ export default function BestDresserPage() {
         </div>
 
         {/* 컨테스트 참가자 목록 */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-4">
           {data?.pages.map((page) =>
             page.map((entry) => <EntryCard key={entry.id} data={entry} />)
           )}

@@ -109,12 +109,12 @@ export default function BestDresserUploadModal() {
       toast.success("컨테스트에 참가되었습니다!");
       setIsSucceeded(true);
 
-      // 모달 닫기
-      setOpen(false);
-
       // 참가 폼 초기화
       reset();
       setPreviewUrl(null);
+
+      // 모달 닫기
+      setOpen(false);
     } catch (error) {
       console.error("실패:", error);
       toast.error("등록 중 오류가 발생했습니다.");
