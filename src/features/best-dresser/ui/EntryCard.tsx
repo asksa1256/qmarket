@@ -137,7 +137,7 @@ export default function EntryCard({ data, user }: EntryCardProps) {
   };
 
   return (
-    <div className="bg-white/70 p-3 backdrop-blur-md rounded-2xl shadow-xl border border-white/50">
+    <div className="w-[270px] mx-auto md:w-auto md:mx-0 bg-white/70 p-3 backdrop-blur-md rounded-2xl shadow-xl border border-white/50">
       {/* 이미지 */}
       <div className="relative w-[184px] h-[236px] mx-auto">
         <img

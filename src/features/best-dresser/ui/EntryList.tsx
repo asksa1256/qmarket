@@ -21,7 +21,7 @@ export default function EntryList({ user }: { user: User | null }) {
         const { data, error } = await supabase
           .from("best_dresser")
           .select("*")
-          .order("created_at", { ascending: false })
+          .order("votes", { ascending: false })
           .range(from, to);
 
         if (error) throw error;
@@ -41,7 +41,7 @@ export default function EntryList({ user }: { user: User | null }) {
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
         {data?.pages.map((page) =>
           page.map((entry) => (
             <EntryCard key={entry.id} data={entry} user={user} />
