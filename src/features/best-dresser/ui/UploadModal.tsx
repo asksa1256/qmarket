@@ -30,7 +30,7 @@ interface DresserFormValues {
 export default function BestDresserUploadModal({
   onUploadSuccess,
 }: {
-  onUploadSuccess: (v: string) => void;
+  onUploadSuccess: () => void;
 }) {
   const [open, setOpen] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -107,11 +107,15 @@ export default function BestDresserUploadModal({
       toast.success("컨테스트에 참가되었습니다!");
       setIsSucceeded(true);
 
-      setTimeout(() => {
-        setOpen(false);
-        reset();
-        setPreviewUrl(null);
-      }, 1500);
+      // 참가 후 컨테스트 참가 목록 리페치 트리거
+      onUploadSuccess();
+
+      // 모달 닫기
+      setOpen(false);
+
+      // 참가 폼 초기화
+      reset();
+      setPreviewUrl(null);
     } catch (error) {
       console.error("실패:", error);
       toast.error("등록 중 오류가 발생했습니다.");
@@ -131,8 +135,11 @@ export default function BestDresserUploadModal({
       }}
     >
       <DialogTrigger asChild>
-        <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-6 px-8 rounded-2xl shadow-lg transition-all transform hover:scale-105">
-          <Camera className="mr-2 h-5 w-5" />
+        <Button
+          size="lg"
+          className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-6 text-base rounded-2xl shadow-lg transition-all transform hover:scale-105"
+        >
+          <Camera className="size-5" />
           컨테스트 참여하기
         </Button>
       </DialogTrigger>

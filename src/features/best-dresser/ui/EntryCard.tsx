@@ -9,7 +9,6 @@ interface EntryCardProps {
 
 export default function EntryCard({ data, onVoteSuccess }: EntryCardProps) {
   const handleVote = async () => {
-    // 단순화된 투표 로직 (RPC 또는 직접 update)
     const { error } = await supabase
       .from("best_dresser")
       .update({ votes: data.votes + 1 })
@@ -19,32 +18,39 @@ export default function EntryCard({ data, onVoteSuccess }: EntryCardProps) {
   };
 
   return (
-    <div className="bg-white/70 p-2 backdrop-blur-md rounded-2xl overflow-hidden shadow-xl transition-transform hover:scale-105 border border-white/50">
-      <div className="relative overflow-hidden rounded-xl">
+    <div className="bg-white/70 p-3 backdrop-blur-md rounded-2xl overflow-hidden shadow-xl transition-transform hover:scale-[1.03] border border-white/50">
+      {/* 이미지 */}
+      <div className="relative w-[80%] mx-auto">
         <img
           src={data.image_url}
           alt="Avatar"
-          className="object-contain w-full h-full"
+          className="object-contain w-full h-full rounded-xl overflow-hidden"
         />
       </div>
-      <div className="my-4 flex flex-col gap-2 items-center">
-        <p className="text-center text-sm p-4 bg-gray-100 rounded-xl">
+
+      {/* 콘텐츠 */}
+      <div className="mt-4 flex flex-col gap-3">
+        <p className="text-sm text-gray-700 leading-relaxed px-3 py-2 bg-gray-100/80 rounded-lg text-center">
           {data.description}
         </p>
-        <div className="flex items-center justify-between w-full">
-          <span className="text-xs">
-            참가자:{" "}
-            <span className="font-bold text-gray-800">{data.nickname}</span>
+
+        <div className="flex items-center justify-between px-1">
+          <span className="text-xs text-gray-500">
+            닉네임:
+            <span className="ml-0.5 font-medium text-gray-800">
+              {data.nickname}
+            </span>
           </span>
-          <p className="text-sm text-pink-500 font-semibold">
-            💖 {data.votes}표
-          </p>
+
+          <span className="text-sm font-semibold text-pink-500 flex items-center gap-1">
+            💖 {data.votes}
+          </span>
         </div>
 
         <Button
           type="button"
           onClick={handleVote}
-          className="mt-4 bg-gradient-to-r from-pink-400 to-purple-400 text-white px-4 py-2 rounded-full font-bold hover:shadow-lg transition-all active:scale-95"
+          className="mt-2 w-full bg-gradient-to-r from-pink-400 to-purple-400 text-white py-2 rounded-full font-semibold hover:shadow-md transition-all active:scale-95"
         >
           투표하기
         </Button>
