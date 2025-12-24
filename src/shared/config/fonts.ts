@@ -21,3 +21,15 @@ export const pretendard = localFont({
   display: "swap",
   variable: "--font-pretendard",
 });
+
+export const galmuri9 = localFont({
+  src: [
+    {
+      path: "../../../public/fonts/Galmuri9.woff2",
+      weight: "400",
+      style: "normal",
+    },
+  ],
+  display: "swap",
+  variable: "--font-galmuri9",
+});

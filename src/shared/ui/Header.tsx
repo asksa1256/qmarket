@@ -110,7 +110,7 @@ export default function Header() {
             </Button>
 
             {user ? (
-              <DropdownMenu>
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger className="shrink-0 bg-discord hover:bg-discord-hover flex gap-1 px-3 rounded-md items-center border-discord text-white text-sm">
                   <figure className="overflow-hidden rounded-full w-6 h-6">
                     <Image

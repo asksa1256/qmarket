@@ -152,3 +152,70 @@ export async function getPopularSearches() {
     return [];
   }
 }
+
+/* 베스트 드레서 참가 횟수 카운트 */
+const MAX_ENTRIES_PER_USER = 3;
+const REDIS_KEY_PREFIX = "best_dresser:entries:";
+
+// 유저별 잔여 횟수, 최대 등록 횟수 지정
+export async function checkUserEntryLimit(userId: string): Promise<{
+  canEnter: boolean;
+  currentCount: number;
+  remainingCount: number;
+}> {
+  const redis = getRedisClient();
+  const key = `${REDIS_KEY_PREFIX}${userId}`;
+  const count = (await redis.get<number>(key)) || 0;
+
+  return {
+    canEnter: count < MAX_ENTRIES_PER_USER,
+    currentCount: count,
+    remainingCount: Math.max(0, MAX_ENTRIES_PER_USER - count),
+  };
+}
+
+// 참가 등록 후 잔여 횟수 카운트
+export async function incrementUserEntryCount(userId: string): Promise<void> {
+  const redis = getRedisClient();
+  const key = `${REDIS_KEY_PREFIX}${userId}`;
+  await redis.incr(key);
+}
+
+// 유저별 잔여 횟수 불러오기
+export async function getUserEntryCount(userId: string): Promise<number> {
+  const redis = getRedisClient();
+  const key = `${REDIS_KEY_PREFIX}${userId}`;
+  return (await redis.get<number>(key)) || 0;
+}
+
+// 게시글 삭제 시 잔여 횟수 복원
+export async function restoreEntryCount(userId: string) {
+  const redis = getRedisClient();
+  const key = `${REDIS_KEY_PREFIX}${userId}`;
+
+  try {
+    const currentCount = await redis.get<number>(key);
+
+    // 기록이 없거나 이미 0이라면 복원하지 않음
+    if (currentCount === null || currentCount <= 0) {
+      return { success: true, remainingCount: MAX_ENTRIES_PER_USER };
+    }
+
+    // 사용 횟수 1 감소 (잔여 횟수 1 복원)
+    const updatedCount = await redis.decr(key);
+
+    // 사용 횟수 음수 방지
+    if (updatedCount < 0) {
+      await redis.set(key, 0);
+      return { success: true, remainingCount: MAX_ENTRIES_PER_USER };
+    }
+
+    return {
+      success: true,
+      remainingCount: Math.max(0, MAX_ENTRIES_PER_USER - updatedCount),
+    };
+  } catch (error) {
+    console.error("Redis 복원 에러:", error);
+    return { success: false, error: "횟수 복원에 실패했습니다." };
+  }
+}

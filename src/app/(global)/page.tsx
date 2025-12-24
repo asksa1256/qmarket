@@ -53,6 +53,45 @@ export default async function Home({
           <RollingPopularSearch data={data} />
         </section>
 
+        {/* 이벤트 섹션 */}
+        <section className="mb-12 w-full max-w-4xl">
+          <h3 className="font-bold text-2xl flex items-center gap-2 mb-4">
+            🎉 이벤트 🎉
+          </h3>
+
+          <Link href="/best-dresser" className="group block">
+            {/* 좌측 상단 배경 그라데이션 */}
+            <div className="relative overflow-hidden p-8 rounded-3xl bg-gradient-to-br from-pink-400 via-yellow-300 to-blue-400 border border-purple-300 transition-all duration-300 shadow-lg hover:shadow-primary/15 hover:-translate-y-1">
+              {/* 우측 상단 배경 그라데이션 */}
+              <div className="absolute top-0 right-0 -mt-10 -mr-10 w-32 h-32 bg-blue-200 rounded-full blur-3xl" />
+
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                  <span className="inline-block px-3 py-1 mb-3 text-xs font-bold text-primary bg-pink-500 rounded-full border border-primary/20">
+                    EVENT
+                  </span>
+
+                  <h3 className="text-2xl md:text-3xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors">
+                    {year}년 큐플레이 베스트 드레서 컨테스트
+                    <ExternalLink className="inline-block size-5 md:hidden" />
+                  </h3>
+
+                  <p className="text-foreground break-keep max-w-xl">
+                    올해 큐플레이를 빛내준 베스트 드레서를 투표해보세요!
+                    <br />
+                    <span className="text-xs">(2025.12.24 ~ 2025.12.30)</span>
+                  </p>
+                </div>
+
+                {/* CTA */}
+                <div className="hidden md:flex items-center justify-center size-12 rounded-full bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                  <ExternalLink className="size-6" />
+                </div>
+              </div>
+            </div>
+          </Link>
+        </section>
+
         {/* 최근 판매/구매 현황 */}
         <section className="w-full max-w-4xl mb-12">
           <div className="mb-4">
@@ -140,7 +179,7 @@ export default async function Home({
                   </p>
                 </div>
 
-                {/* 오른쪽 화살표 아이콘 (CTA 강조) */}
+                {/* CTA */}
                 <div className="hidden md:flex items-center justify-center size-12 rounded-full bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all">
                   <ExternalLink className="size-6" />
                 </div>
