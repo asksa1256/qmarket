@@ -99,6 +99,7 @@ export default function CommentSection({ entryId }: { entryId: number }) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments", entryId] });
+      queryClient.invalidateQueries({ queryKey: ["best_dresser"] });
     },
   });
 
@@ -200,7 +201,7 @@ export default function CommentSection({ entryId }: { entryId: number }) {
                           </button>
                           <button
                             onClick={() =>
-                              confirm("삭제하시겠습니까?") &&
+                              confirm("댓글을 삭제하시겠습니까?") &&
                               deleteComment(comment.id)
                             }
                             className="text-[11px] text-gray-400 hover:text-red-500"
