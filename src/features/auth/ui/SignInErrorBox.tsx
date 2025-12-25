@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import ButtonToMain from "@/shared/ui/LinkButton/ButtonToMain";
 
 export default function SignInErrorBox({
@@ -8,6 +10,14 @@ export default function SignInErrorBox({
   errorMessage: string | string[];
 }) {
   console.log(errorMessage);
+
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.history.replaceState(null, "", pathname);
+    }
+  }, [pathname]);
 
   return (
     <div className="min-h-screen flex flex-col gap-2 items-center justify-center">
