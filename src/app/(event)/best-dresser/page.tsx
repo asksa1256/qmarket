@@ -15,29 +15,7 @@ function isContestClosed(): boolean {
 
 export default async function BestDresserPage() {
   const user = await getUserServer();
-  const closed = isContestClosed();
-
-  if (closed) {
-    return (
-      <main className="min-h-screen flex items-center justify-center px-6">
-        <div className="text-center max-w-xl">
-          <div className="text-6xl mb-6">🎉</div>
-          <h1 className="text-3xl md:text-4xl font-black mb-4">
-            2025 큐플레이 베스트 드레서
-            <br />
-            컨테스트가 마감되었습니다!
-          </h1>
-          <p className="text-lg text-gray-600 leading-relaxed">
-            참여해주셔서 감사합니다.
-            <br />
-            <span className="font-bold text-purple-600">
-              12월 31일에 당첨자 발표를 확인해주세요!
-            </span>
-          </p>
-        </div>
-      </main>
-    );
-  }
+  const isClosed = isContestClosed();
 
   return (
     <main>
@@ -45,7 +23,7 @@ export default async function BestDresserPage() {
         <div className="text-center mb-12">
           <div className="inline-block mb-6 px-6 py-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full border border-purple-300/30">
             <span className="text-sm font-semibold text-purple-600">
-              🎉 2025 연말 이벤트
+              🎉 2025 큐마켓 연말 이벤트
             </span>
           </div>
 
@@ -117,11 +95,11 @@ export default async function BestDresserPage() {
 
         {/* 참여하기 */}
         <div className="flex justify-center mb-40">
-          <EntryUploadModal />
+          <EntryUploadModal disabled={isClosed} />
         </div>
 
         {/* 컨테스트 참가자 목록 */}
-        <EntryList user={user} />
+        <EntryList user={user} disabled={isClosed} />
 
         <div className="border rounded-xl border-border p-6 text-sm mt-12">
           <p className="text-sm text-foreground/60">

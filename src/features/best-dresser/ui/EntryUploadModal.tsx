@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogFooter,
 } from "@/shared/ui/dialog";
 import { Button } from "@/shared/ui/button";
@@ -25,7 +24,11 @@ import { useRemainingCount } from "@/shared/hooks/useRemainingCount";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
-export default function EntryUploadModal() {
+export default function EntryUploadModal({
+  disabled = false,
+}: {
+  disabled?: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isSucceeded, setIsSucceeded] = useState(false);
@@ -154,14 +157,20 @@ export default function EntryUploadModal() {
         }
       }}
     >
-      <Button
-        size="lg"
-        onClick={handleOpen}
-        className="w-full max-w-[250px] md:max-w-[500px] bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-6 md:py-8 text-base md:text-2xl rounded-2xl shadow-lg transition-all transform hover:scale-105"
-      >
-        <CheckCircle2 className="md:size-7 mr-1" />
-        컨테스트 참여하기
-      </Button>
+      <div className="flex flex-col gap-2 items-center">
+        <Button
+          size="lg"
+          onClick={handleOpen}
+          disabled={disabled}
+          className="w-full max-w-[250px] md:w-[500px] md:max-w-[500px] bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-6 md:py-8 text-base md:text-2xl rounded-2xl shadow-lg transition-all transform hover:scale-105"
+        >
+          <CheckCircle2 className="md:size-7 mr-1" />
+          컨테스트 참여하기
+        </Button>
+        {disabled && (
+          <p className="text-sm text-red-500">컨테스트가 마감되었습니다.</p>
+        )}
+      </div>
 
       <DialogContent className="sm:max-w-[425px] bg-white/95 backdrop-blur-xl border-none shadow-2xl">
         <form onSubmit={handleSubmit(onSubmit)}>

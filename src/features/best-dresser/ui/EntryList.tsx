@@ -13,7 +13,12 @@ const ITEMS_PER_PAGE = 12;
 
 type SortType = "latest" | "votes";
 
-export default function EntryList({ user }: { user: User | null }) {
+interface EntryListProps {
+  user: User | null;
+  disabled?: boolean;
+}
+
+export default function EntryList({ user, disabled = false }: EntryListProps) {
   const [sort, setSort] = useState<SortType>("latest");
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isPending } =
@@ -109,7 +114,6 @@ export default function EntryList({ user }: { user: User | null }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-16">
           {data?.pages.map((page, pageIndex) =>
             page.map((entry, entryIndex) => {
-              // 첫번째 페이지의 1,2,3번째 요소에만 스타일 추가 (무한 스크롤 시 각 페이지별 1,2,3번째 요소 스타일 방지)
               const rank =
                 sort === "votes" && pageIndex === 0 ? entryIndex : -1;
 
@@ -119,6 +123,7 @@ export default function EntryList({ user }: { user: User | null }) {
                   data={entry}
                   user={user}
                   rank={rank}
+                  disabled={disabled}
                 />
               );
             })
@@ -126,7 +131,7 @@ export default function EntryList({ user }: { user: User | null }) {
 
           <div
             ref={loadMoreRef}
-            className="h-20 flex items-center justify-center mt-10"
+            className="h-20 w-full flex items-center justify-center mt-10"
           >
             {isFetchingNextPage && (
               <Loader2 className="animate-spin text-pink-500" />
