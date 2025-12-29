@@ -168,7 +168,9 @@ export default function EntryUploadModal({
           컨테스트 참여하기
         </Button>
         {disabled && (
-          <p className="text-sm text-red-500">컨테스트가 마감되었습니다.</p>
+          <p className="text-sm text-foreground/50">
+            컨테스트가 마감되었습니다.
+          </p>
         )}
       </div>
 
