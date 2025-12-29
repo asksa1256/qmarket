@@ -7,9 +7,10 @@ import ItemList from "@/features/items/ui/ItemList";
 import RollingPopularSearch from "@/features/item-search/ui/RollingPopularSearch";
 import { getPopularSearchesAction } from "../actions/search-actions";
 import GoToItemsModal from "@/features/items/ui/GoToItemsModal";
-import SignInToast from "@/features/auth/signin/ui/SignInToast";
 import GoToMyItemsModal from "@/features/user/ui/GoToMyItemsModal";
 import UrlCleaner from "@/shared/lib/UrlCleaner";
+import BestDresserList from "@/features/best-dresser/ui/BestDresserList";
+import ButtonToBestDresserPage from "@/features/best-dresser/ui/ButtonToBestDresserPage";
 
 export default async function Home({
   params,
@@ -199,7 +200,7 @@ export default async function Home({
           {/* 아이템 카테고리 메뉴 */}
           <section className="w-full max-w-4xl">
             <h2 className="text-2xl font-bold tracking-tight mb-4">
-              🧭 아이템 카테고리별 조회
+              🧭 아이템 카테고리별
             </h2>
 
             <div className="p-4 md:p-6 rounded-3xl bg-card border shadow-sm flex justify-center items-center">
@@ -230,6 +231,18 @@ export default async function Home({
               큐마켓은 가격을 결정하지 않으며, 가격 판단을 돕는 참고 정보를
               제공합니다.
             </p>
+          </section>
+
+          {/* 베스트 드레서 섹션 */}
+          <section>
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-bold tracking-tight">
+                ✨ 2025 큐플레이 베스트 드레서
+              </h2>
+              <ButtonToBestDresserPage />
+            </div>
+
+            <BestDresserList />
           </section>
         </div>
       </main>
