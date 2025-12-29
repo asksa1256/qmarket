@@ -80,4 +80,17 @@ export const PROFANITY_LIST = [
 
 export const ALLOWED_RETURN_TO = new Set(["/items", "/my-items"]);
 
+export const CUSTOM_TAGS = (rank: number) => {
+  switch (rank) {
+    case 1:
+      return "#웨딩 #약혼 #클래식";
+    case 2:
+      return "#백설공주";
+    case 3:
+      return "#산타 #크리스마스";
+    default:
+      return "";
+  }
+};
+
 export const TABLET_MIN_WIDTH = 768;

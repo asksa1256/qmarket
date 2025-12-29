@@ -9,16 +9,19 @@ import { InfiniteData } from "@tanstack/react-query";
 import { User } from "@supabase/supabase-js";
 import { toast } from "sonner";
 import { Heart, MessageCircleMoreIcon, Pencil, Trash2 } from "lucide-react";
+import HeartFill from "@/shared/ui/Icon/HeartFill";
 import { formatRelativeTime } from "@/shared/lib/formatters";
 import Link from "next/link";
 import EntryEditModal from "./EntryEditModal";
 import { deleteS3Image } from "@/app/actions/best-dresser-actions";
 import { restoreEntryCountAction } from "@/app/actions/best-dresser-actions";
+import { cn } from "@/shared/lib/utils";
 
 interface EntryCardProps {
   data: BestDresserEntry;
   user: User | null;
   rank: number;
+  disabled?: boolean;
 }
 
 // rank 값에 따른 스타일 분기: 컨테스트 마감 후 결과 페이지에서 적용
@@ -35,7 +38,12 @@ interface EntryCardProps {
 //   }
 // };
 
-export default function EntryCard({ data, user, rank }: EntryCardProps) {
+export default function EntryCard({
+  data,
+  user,
+  rank,
+  disabled,
+}: EntryCardProps) {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const queryClient = useQueryClient();
 
@@ -281,17 +289,25 @@ export default function EntryCard({ data, user, rank }: EntryCardProps) {
                 e.stopPropagation();
                 handleVote();
               }}
-              className={`absolute z-1 -top-10 -right-5 w-auto max-w-[56px] px-4 py-8 mt-2 rounded-full font-bold transition-all flex flex-col items-center justify-center gap-1 border-2 active:scale-95 focus-visible:bg-blue-500 hover:bg-blue-500 ${
-                isVoted
-                  ? "bg-blue-500 border-blue-500 text-white shadow-lg shadow-blue-200"
-                  : "bg-white border-blue-100 text-blue-500 hover:bg-blue-50 hover:border-blue-200"
-              }`}
+              disabled={disabled}
+              className={cn(
+                "absolute z-1 -top-10 -right-5 w-auto max-w-[56px] px-4 py-8 mt-2 rounded-full font-bold transition-all flex flex-col items-center justify-center gap-1 border-2 active:scale-95 focus-visible:bg-blue-500 bg-white border-blue-100 text-blue-500 hover:bg-blue-50 hover:border-blue-200 disabled:opacity-100",
+                {
+                  "bg-blue-500 border-blue-500 text-white shadow-lg shadow-blue-200":
+                    isVoted,
+                }
+              )}
             >
-              <Heart
-                className={`size-5 transition-transform ${
-                  isVoted ? "fill-current scale-110" : "scale-100"
-                }`}
-              />
+              {!disabled ? (
+                <Heart
+                  className={cn("size-5 transition-transform", {
+                    "fill-current scale-110": isVoted,
+                  })}
+                />
+              ) : (
+                <HeartFill className="size-5 text-blue-500" />
+              )}
+
               <span className="tracking-tight">{data.votes}</span>
             </Button>
 
