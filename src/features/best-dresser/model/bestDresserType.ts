@@ -15,3 +15,7 @@ export interface EntryFormValues {
   imageFile: File | null;
   description?: string;
 }
+
+export interface BestDresserRanked extends BestDresserEntry {
+  rank: number;
+}

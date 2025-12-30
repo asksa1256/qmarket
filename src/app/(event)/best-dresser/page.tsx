@@ -2,6 +2,7 @@ import EntryUploadModal from "@/features/best-dresser/ui/EntryUploadModal";
 import Footer from "@/shared/ui/Footer";
 import { getUserServer } from "@/shared/api/get-supabase-user-server";
 import EntryList from "@/features/best-dresser/ui/EntryList";
+import BestDresserSection from "@/features/best-dresser/ui/BestDresserSection";
 
 function isContestClosed(): boolean {
   // 현재 UTC 시간
@@ -97,6 +98,9 @@ export default async function BestDresserPage() {
         <div className="flex justify-center mb-40">
           <EntryUploadModal disabled={isClosed} />
         </div>
+
+        {/* 베스트 드레서 섹션 */}
+        <BestDresserSection />
 
         {/* 컨테스트 참가자 목록 */}
         <EntryList user={user} disabled={isClosed} />

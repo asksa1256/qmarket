@@ -80,14 +80,18 @@ export const PROFANITY_LIST = [
 
 export const ALLOWED_RETURN_TO = new Set(["/items", "/my-items"]);
 
-export const CUSTOM_TAGS = (rank: number) => {
-  switch (rank) {
+export const CUSTOM_ENTRY_TAGS = (idx: number) => {
+  switch (idx) {
+    case 0:
+      return "#웨딩 #큐앤";
     case 1:
-      return "#웨딩 #약혼 #클래식";
-    case 2:
       return "#백설공주";
-    case 3:
+    case 2:
       return "#산타 #크리스마스";
+    case 3:
+      return "#군고구마 #사세요";
+    case 4:
+      return "#봄 #따뜻함";
     default:
       return "";
   }

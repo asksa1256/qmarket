@@ -9,7 +9,7 @@ import { getPopularSearchesAction } from "../actions/search-actions";
 import GoToItemsModal from "@/features/items/ui/GoToItemsModal";
 import GoToMyItemsModal from "@/features/user/ui/GoToMyItemsModal";
 import UrlCleaner from "@/shared/lib/UrlCleaner";
-import BestDresserList from "@/features/best-dresser/ui/BestDresserList";
+import BestDresserSection from "@/features/best-dresser/ui/BestDresserSection";
 import ButtonToBestDresserPage from "@/features/best-dresser/ui/ButtonToBestDresserPage";
 
 export default async function Home({
@@ -242,7 +242,7 @@ export default async function Home({
               <ButtonToBestDresserPage />
             </div>
 
-            <BestDresserList />
+            <BestDresserSection />
           </section> */}
         </div>
       </main>
