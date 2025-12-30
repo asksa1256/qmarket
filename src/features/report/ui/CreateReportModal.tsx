@@ -23,7 +23,6 @@ import { Textarea } from "@/shared/ui/textarea";
 import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/shared/api/supabase-client";
-import { Siren } from "lucide-react";
 import { useUser } from "@/shared/hooks/useUser";
 import { REPORT_CATEGORY } from "@/shared/config/constants";
 import { ReportFormData, reportFormSchema } from "../model/reportFormSchema";

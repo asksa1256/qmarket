@@ -1,24 +1,23 @@
 import { Send, Crown } from "lucide-react";
-import { BestDresserEntry } from "@/features/best-dresser/model/bestDresserType";
+import { BestDresserRanked } from "@/features/best-dresser/model/bestDresserType";
 import HeartFill from "./Icon/HeartFill";
 import Image from "next/image";
 import Link from "next/link";
 import { getRankStyles } from "@/features/best-dresser/model/getRankStyles";
-import { CUSTOM_TAGS } from "../config/constants";
+import { CUSTOM_ENTRY_TAGS } from "../config/constants";
 
 interface InstaCardProps {
-  data: BestDresserEntry;
+  data: BestDresserRanked;
   idx: number;
 }
 
 export default function InstaCard({ data, idx }: InstaCardProps) {
-  const rankIdx = idx + 1;
-  const rankStyles = getRankStyles(rankIdx);
+  const rankStyles = getRankStyles(data.rank);
 
   return (
     <div
       className={`
-      max-w-[320px] h-full rounded-xl border-2 transition-transform hover:scale-[1.02] duration-300 shadow-2xl
+      max-w-[320px] h-full mx-auto rounded-xl border-2 shadow-2xl
       ${rankStyles.cardBg} ${rankStyles.border}
     `}
     >
@@ -30,11 +29,11 @@ export default function InstaCard({ data, idx }: InstaCardProps) {
             <span
               className={`w-8 h-8 flex items-center justify-center rounded-full font-bold text-xs shadow-sm ${rankStyles.badge}`}
             >
-              {rankIdx}
+              {data.rank}
             </span>
             <div className="flex items-center gap-1">
               <span className="font-semibold text-sm">{data.nickname}</span>
-              {rankIdx <= 3 && (
+              {data.rank <= 3 && (
                 <Crown
                   className={`size-3.5 ${rankStyles.crown}`}
                   fill="currentColor"
@@ -45,7 +44,7 @@ export default function InstaCard({ data, idx }: InstaCardProps) {
         </div>
 
         {/* 이미지 */}
-        <div className="relative w-[184px] h-[236px] mx-auto rounded-md overflow-hidden my-2 border border-gray-100 shadow-inner">
+        <div className="relative w-[184px] h-[236px] mx-auto rounded-md overflow-hidden my-2 border border-gray-100 shadow-inner hover:scale-105 transition-all">
           <Image src={data.image_url} alt="" fill className="object-cover" />
           <div
             className={`absolute top-2 left-2 px-2 py-0.5 rounded text-[10px] font-bold ${rankStyles.badge} shadow-md`}
@@ -73,7 +72,7 @@ export default function InstaCard({ data, idx }: InstaCardProps) {
               {data.description}
             </div>
             <span className="text-blue-800 mt-1 text-sm">
-              {CUSTOM_TAGS(rankIdx)}
+              {CUSTOM_ENTRY_TAGS(idx)}
             </span>
           </div>
         </div>

@@ -128,15 +128,15 @@ export default function EntryList({ user, disabled = false }: EntryListProps) {
               );
             })
           )}
+        </div>
 
-          <div
-            ref={loadMoreRef}
-            className="h-20 w-full flex items-center justify-center mt-10"
-          >
-            {isFetchingNextPage && (
-              <Loader2 className="animate-spin text-pink-500" />
-            )}
-          </div>
+        <div
+          ref={loadMoreRef}
+          className="h-20 w-full flex items-center justify-center mt-10"
+        >
+          {isFetchingNextPage && (
+            <Loader2 className="animate-spin text-pink-500" />
+          )}
         </div>
       </div>
     </>

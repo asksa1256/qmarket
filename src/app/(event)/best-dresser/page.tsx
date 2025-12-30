@@ -2,6 +2,7 @@ import EntryUploadModal from "@/features/best-dresser/ui/EntryUploadModal";
 import Footer from "@/shared/ui/Footer";
 import { getUserServer } from "@/shared/api/get-supabase-user-server";
 import EntryList from "@/features/best-dresser/ui/EntryList";
+import BestDresserSection from "@/features/best-dresser/ui/BestDresserSection";
 
 function isContestClosed(): boolean {
   // 현재 UTC 시간
@@ -94,12 +95,59 @@ export default async function BestDresserPage() {
         </div>
 
         {/* 참여하기 */}
-        <div className="flex justify-center mb-40">
+        <div className="flex justify-center mb-16">
           <EntryUploadModal disabled={isClosed} />
         </div>
 
+        {/* 베스트 드레서 섹션 */}
+        {/* <section>
+          <h2 className="mb-12 text-4xl md:text-6xl break-keep font-black leading-tight flex items-center justify-center gap-4">
+            <span className="inline-block animate-bounce text-4xl md:text-5xl">
+              🎉
+            </span>
+            <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-yellow-400 bg-clip-text text-transparent">
+              수상자
+            </div>
+            <span className="inline-block animate-bounce text-4xl md:text-5xl">
+              🎉
+            </span>
+          </h2>
+          <BestDresserSection />
+        </section> */}
+
+        {/* 당첨자 섹션 */}
+        {/* <section>
+          <h2 className="mb-12 text-4xl md:text-6xl break-keep font-black leading-tight flex items-center justify-center gap-4">
+            <span className="inline-block animate-bounce text-4xl md:text-5xl">
+              🎉
+            </span>
+            <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-yellow-400 bg-clip-text text-transparent">
+              당첨자
+            </div>
+            <span className="inline-block animate-bounce text-4xl md:text-5xl">
+              🎉
+            </span>
+          </h2>
+
+          <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl p-4 mb-6 max-w-md mx-auto border-2 border-yellow-300/50 shadow-md text-center break-keep">
+            <p className="flex justify-center gap-1 text-gray-700 mt-1">
+              🎁
+              <span className="font-bold text-orange-600">가나디</span>
+              <span className="font-bold text-orange-600">붕어빵</span>
+              <span className="font-bold text-orange-600">루루</span>
+              🎁
+            </p>
+            <p className="text-sm text-foreground/70 mt-3">
+              당첨자 분들께는 <b>디스코드 DM으로 기프티콘</b>이 발송될 예정이니{" "}
+              <b>DM 수신 허용 여부</b>를 확인해주세요!
+            </p>
+          </div>
+        </section> */}
+
         {/* 컨테스트 참가자 목록 */}
-        <EntryList user={user} disabled={isClosed} />
+        <div className="mt-24">
+          <EntryList user={user} disabled={isClosed} />
+        </div>
 
         <div className="border rounded-xl border-border p-6 text-sm mt-12">
           <p className="text-sm text-foreground/60">

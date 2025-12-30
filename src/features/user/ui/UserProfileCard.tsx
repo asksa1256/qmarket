@@ -12,7 +12,6 @@ import { useUser } from "@/shared/hooks/useUser";
 import { usePathname } from "next/navigation";
 import { Copy } from "lucide-react";
 import TransactionCountDisplay from "./TransactionsCountDisplay";
-import { Badge } from "@/shared/ui/badge";
 
 export default function UserProfileCard({ user }: { user: UserDetail }) {
   const { data: loginUser } = useUser();
