@@ -8,6 +8,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { BestDresserRanked } from "../model/bestDresserType";
 import InstaCard from "@/shared/ui/InstaCard";
+import { TABLET_MIN_WIDTH } from "@/shared/config/constants";
 
 export default function BestDresserCarousel({
   data,
@@ -17,7 +18,17 @@ export default function BestDresserCarousel({
   SwiperCore.use([Navigation, Scrollbar, Autoplay]);
 
   return (
-    <Swiper spaceBetween={20} slidesPerView={3} navigation={true}>
+    <Swiper
+      spaceBetween={20}
+      navigation={true}
+      slidesPerView={1}
+      breakpoints={{
+        [TABLET_MIN_WIDTH]: {
+          slidesPerView: 3,
+          spaceBetween: 20,
+        },
+      }}
+    >
       {data.map((entry, i) => (
         <SwiperSlide key={entry.id}>
           <li key={entry.id}>

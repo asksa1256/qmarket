@@ -5,11 +5,7 @@ import { BestDresserRanked } from "./bestDresserType";
 import { applyBestDresserRank } from "./applyBestDresserRank";
 
 export const getBestDressers = async (): Promise<BestDresserRanked[]> => {
-  const { data, error } = await supabase
-    .from("best_dresser")
-    .select("*")
-    .order("votes", { ascending: false })
-    .limit(5);
+  const { data, error } = await supabase.rpc("get_top_3_ranks");
 
   if (error) {
     console.error(error);

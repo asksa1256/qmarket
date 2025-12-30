@@ -100,6 +100,17 @@ export default async function BestDresserPage() {
         </div>
 
         {/* 베스트 드레서 섹션 */}
+        <h2 className="mb-12 text-4xl md:text-6xl break-keep font-black leading-tight flex items-center justify-center gap-4">
+          <span className="inline-block animate-bounce text-4xl md:text-5xl">
+            🎉
+          </span>
+          <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-yellow-400 bg-clip-text text-transparent">
+            수상자
+          </div>
+          <span className="inline-block animate-bounce text-4xl md:text-5xl">
+            🎉
+          </span>
+        </h2>
         <BestDresserSection />
 
         {/* 컨테스트 참가자 목록 */}

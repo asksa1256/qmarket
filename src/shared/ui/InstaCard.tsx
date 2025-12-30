@@ -17,7 +17,7 @@ export default function InstaCard({ data, idx }: InstaCardProps) {
   return (
     <div
       className={`
-      max-w-[320px] h-full rounded-xl border-2 transition-transform hover:scale-[1.02] duration-300 shadow-2xl
+      max-w-[320px] h-full mx-auto rounded-xl border-2 transition-transform hover:scale-[1.02] duration-300 shadow-2xl
       ${rankStyles.cardBg} ${rankStyles.border}
     `}
     >
