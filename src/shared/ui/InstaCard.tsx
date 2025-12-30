@@ -17,7 +17,7 @@ export default function InstaCard({ data, idx }: InstaCardProps) {
   return (
     <div
       className={`
-      max-w-[320px] h-full mx-auto rounded-xl border-2 transition-transform hover:scale-[1.02] duration-300 shadow-2xl
+      max-w-[320px] h-full mx-auto rounded-xl border-2 shadow-2xl
       ${rankStyles.cardBg} ${rankStyles.border}
     `}
     >
@@ -44,7 +44,7 @@ export default function InstaCard({ data, idx }: InstaCardProps) {
         </div>
 
         {/* 이미지 */}
-        <div className="relative w-[184px] h-[236px] mx-auto rounded-md overflow-hidden my-2 border border-gray-100 shadow-inner">
+        <div className="relative w-[184px] h-[236px] mx-auto rounded-md overflow-hidden my-2 border border-gray-100 shadow-inner hover:scale-105 transition-all">
           <Image src={data.image_url} alt="" fill className="object-cover" />
           <div
             className={`absolute top-2 left-2 px-2 py-0.5 rounded text-[10px] font-bold ${rankStyles.badge} shadow-md`}
