@@ -3,6 +3,8 @@ import Footer from "@/shared/ui/Footer";
 import { getUserServer } from "@/shared/api/get-supabase-user-server";
 import EntryList from "@/features/best-dresser/ui/EntryList";
 import BestDresserSection from "@/features/best-dresser/ui/BestDresserSection";
+import Link from "next/link";
+import { ExternalLink } from "lucide-react";
 
 function isContestClosed(): boolean {
   // 현재 UTC 시간
@@ -135,7 +137,7 @@ export default async function BestDresserPage() {
             </span>
           </h2>
 
-          <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl p-4 mb-6 max-w-md mx-auto border-2 border-yellow-300/50 shadow-md text-center break-keep">
+          <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl p-4 mb-6 max-w-md mx-auto border-2 border-yellow-300/50 shadow-md text-center break-keep text-sm text-foreground/70">
             <p className="text-center text-gray-700 mt-1">
               <span className="inline-block mr-1">🎁</span>
               <span className="font-bold text-orange-600">
@@ -143,9 +145,24 @@ export default async function BestDresserPage() {
               </span>
               <span className="ml-1">🎁</span>
             </p>
-            <p className="text-sm text-foreground/70 mt-3">
-              당첨자 분들께는 <b>디스코드 DM으로 기프티콘</b>이 발송될 예정이니{" "}
-              <b>DM 수신 허용 여부</b>를 확인해주세요!
+            <p className="mt-3">
+              당첨자 분들은 <b>디스코드 DM으로 기프티콘</b>이 발송될 예정이니
+              <br />
+              1. <b>DM 수신 허용 여부</b>를 확인해주시고, <br />
+              2.{" "}
+              <Link
+                href="https://discord.com/channels/1303996406268428288/1453245139064455229/1455852769326923881"
+                target="_blank"
+                className="text-blue-600 font-bold underline underline-offset-1"
+              >
+                이벤트 공지
+                <ExternalLink className="inline-block size-4" />
+              </Link>
+              를 확인해주세요!
+            </p>
+            <p className="text-xs mt-2">
+              * 공지를 확인하지 않으실 경우, 기프티콘이 발송되지 않을 수
+              있습니다.
             </p>
           </div>
         </section>
