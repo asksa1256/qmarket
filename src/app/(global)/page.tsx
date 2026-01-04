@@ -11,6 +11,7 @@ import GoToMyItemsModal from "@/features/user/ui/GoToMyItemsModal";
 import UrlCleaner from "@/shared/lib/UrlCleaner";
 import BestDresserSection from "@/features/best-dresser/ui/BestDresserSection";
 import ButtonToBestDresserPage from "@/features/best-dresser/ui/ButtonToBestDresserPage";
+import ItemPriceChangesSection from "@/features/market/ui/ItemPriceChangesSection";
 
 export default async function Home() {
   const now = new Date();
@@ -111,6 +112,11 @@ export default async function Home() {
 
             {/* 전체 거래 현황 보기 CTA */}
             <GoToItemsModal />
+          </section>
+
+          {/* 시세 변동 내역 */}
+          <section>
+            <ItemPriceChangesSection />
           </section>
 
           {/* 이번 달 로테이션 */}
