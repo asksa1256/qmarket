@@ -14,7 +14,7 @@ export default async function ItemPriceChangesTable({
   const today = new Date().toISOString().split("T")[0];
 
   return (
-    <div className="w-full max-h-[400px] overflow-y-auto">
+    <div className="w-full max-h-[500px] overflow-y-auto">
       <table className="w-full border-separate border-spacing-0 text-left">
         <thead>
           <tr className="border-b border-gray-200 text-sm text-gray-500">
