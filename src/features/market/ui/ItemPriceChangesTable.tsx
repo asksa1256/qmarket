@@ -15,22 +15,22 @@ export default async function ItemPriceChangesTable({
 
   return (
     <div className="w-full max-h-[500px] overflow-y-auto">
-      <table className="w-full border-separate border-spacing-0 text-left">
+      <table className="w-full border-collapse text-left">
         <thead>
-          <tr className="border-b border-gray-200 text-sm text-gray-500">
-            <th className="sticky top-0 z-1 bg-background shadow-sm p-2 font-medium">
+          <tr className="text-sm text-gray-500">
+            <th className="sticky top-0 z-1 bg-background p-2 font-medium">
               아이템
             </th>
-            <th className="sticky top-0 z-1 bg-background shadow-sm p-2 font-medium">
+            <th className="sticky top-0 z-1 bg-background p-2 font-medium">
               현재 시세
             </th>
-            <th className="sticky top-0 z-1 bg-background shadow-sm p-2 font-medium">
+            <th className="sticky top-0 z-1 bg-background p-2 font-medium">
               이전 시세
             </th>
-            <th className="sticky top-0 z-1 bg-background shadow-sm p-2 font-medium text-center">
+            <th className="sticky top-0 z-1 bg-background p-2 font-medium text-center">
               변동률
             </th>
-            <th className="sticky top-0 z-1 bg-background shadow-sm p-2 font-medium text-right">
+            <th className="sticky top-0 z-1 bg-background p-2 font-medium text-right">
               최근 거래일
             </th>
           </tr>
