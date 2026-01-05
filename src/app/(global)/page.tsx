@@ -13,6 +13,7 @@ import ItemPriceChangesTable from "@/features/market/ui/ItemPriceChangesTable";
 import GoToItemsButton from "@/features/items/ui/GoToItemsButton";
 import GoToMyItemsButton from "@/features/user/ui/GoToMyItemsButton";
 import GoToItemPriceChangesButton from "@/features/market/ui/GoToItemPriceChangesButton";
+import ItemPriceChangesSection from "@/features/market/ui/ItemPriceChangesSection";
 
 export default async function Home() {
   const now = new Date();
@@ -125,18 +126,6 @@ export default async function Home() {
 
             {/* 전체 시세 변동 내역 보기 CTA */}
             <GoToItemPriceChangesButton />
-          </section>
-
-          {/* 시세 변동 내역 */}
-          <section className="mb-12 w-full max-w-4xl">
-            <h2 className="text-2xl font-bold tracking-tight mb-4">
-              📊 이번 주 시세 변동 내역
-            </h2>
-
-            <ItemPriceChangesSection limit={3} />
-
-            {/* 전체 시세 변동 내역 보기 CTA */}
-            <GoToItemsModal />
           </section>
 
           {/* 이번 달 로테이션 */}

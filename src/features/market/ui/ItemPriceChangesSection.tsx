@@ -1,8 +1,9 @@
-import { getItemPriceChanges } from "../model/getItemPriceChanges";
+import ItemPriceChangesTable from "./ItemPriceChangesTable";
 
-export default async function ItemPriceChangesSection() {
-  const priceChanges = await getItemPriceChanges();
-  console.log("최근 7일 시세 변동 내역:", priceChanges);
-
-  return <div>시세 변동 내역: {priceChanges.length}건</div>;
+export default async function ItemPriceChangesSection({
+  limit,
+}: {
+  limit?: number;
+}) {
+  return <ItemPriceChangesTable limit={limit} />;
 }
