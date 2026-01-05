@@ -18,19 +18,19 @@ export default async function ItemPriceChangesTable({
       <table className="w-full border-separate border-spacing-0 text-left">
         <thead>
           <tr className="border-b border-gray-200 text-sm text-gray-500">
-            <th className="sticky top-0 z-1 bg-background shadow-sm py-2 font-medium">
+            <th className="sticky top-0 z-1 bg-background shadow-sm p-2 font-medium">
               아이템
             </th>
-            <th className="sticky top-0 z-1 bg-background shadow-sm py-2 font-medium">
+            <th className="sticky top-0 z-1 bg-background shadow-sm p-2 font-medium">
               현재 시세
             </th>
-            <th className="sticky top-0 z-1 bg-background shadow-sm py-2 font-medium">
+            <th className="sticky top-0 z-1 bg-background shadow-sm p-2 font-medium">
               이전 시세
             </th>
-            <th className="sticky top-0 z-1 bg-background shadow-sm py-2 font-medium text-center">
+            <th className="sticky top-0 z-1 bg-background shadow-sm p-2 font-medium text-center">
               변동률
             </th>
-            <th className="sticky top-0 z-1 bg-background shadow-sm py-2 font-medium text-right">
+            <th className="sticky top-0 z-1 bg-background shadow-sm p-2 font-medium text-right">
               최근 거래일
             </th>
           </tr>
@@ -51,7 +51,7 @@ export default async function ItemPriceChangesTable({
             return (
               <tr key={item.id} className="hover:bg-gray-50 transition-colors">
                 {/* 아이템 정보 */}
-                <td className="py-1">
+                <td className="py-1 px-2">
                   <div className="flex items-center gap-3">
                     <div className="relative w-12 h-14 bg-gray-50 flex-shrink-0">
                       <Image
@@ -76,19 +76,19 @@ export default async function ItemPriceChangesTable({
                 </td>
 
                 {/* 최근 시세 */}
-                <td className="py-4 font-semibold text-gray-900">
+                <td className="py-4 px-2 font-semibold text-gray-900">
                   {item.cur_price.toLocaleString("ko-KR")}
                 </td>
 
                 {/* 직전 시세 */}
-                <td className="py-4 text-gray-500">
+                <td className="py-4 px-2 text-gray-500">
                   {item.prev_price
                     ? Math.floor(item.prev_price).toLocaleString("ko-KR")
                     : "-"}
                 </td>
 
                 {/* 변동률 & 비교 기준 */}
-                <td className="py-4 text-center">
+                <td className="py-4 px-2 text-center">
                   <div className="flex flex-col items-center justify-center gap-1">
                     <span
                       className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${
@@ -116,7 +116,7 @@ export default async function ItemPriceChangesTable({
                 </td>
 
                 {/* 최근 거래일 */}
-                <td className="py-4 text-right text-sm text-gray-400">
+                <td className="py-4 px-2 text-right text-sm text-gray-400">
                   {formatRelativeTime(item.log_date)}
                 </td>
               </tr>
