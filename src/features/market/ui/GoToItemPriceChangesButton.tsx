@@ -32,7 +32,7 @@ export default function GoToItemPriceChangesButton() {
 
   const handleSignIn = async () => {
     try {
-      const res = await login("/items-price-changes");
+      const res = await login("/item-price-changes");
       window.location.href = res.url;
     } catch (err) {
       toast.error("로그인에 실패했습니다. 다시 시도해주세요.");

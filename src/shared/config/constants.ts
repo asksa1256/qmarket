@@ -78,7 +78,11 @@ export const PROFANITY_LIST = [
   "ㅂㅅ",
 ];
 
-export const ALLOWED_RETURN_TO = new Set(["/items", "/my-items"]);
+export const ALLOWED_RETURN_TO = new Set([
+  "/items",
+  "/my-items",
+  "/item-price-changes",
+]);
 
 export const CUSTOM_ENTRY_TAGS = (idx: number) => {
   switch (idx) {

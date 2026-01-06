@@ -1,7 +1,15 @@
 import ItemPriceChangesTable from "@/features/market/ui/ItemPriceChangesTable";
 import ButtonToBack from "@/shared/ui/LinkButton/ButtonToBack";
+import { redirect } from "next/navigation";
+import { getUserServer } from "@/shared/api/get-supabase-user-server";
 
 export default async function ItemPriceChangesPage() {
+  const user = await getUserServer();
+
+  if (!user) {
+    redirect("/");
+  }
+
   return (
     <section className="w-full max-w-4xl mx-auto space-y-16">
       <ButtonToBack />
