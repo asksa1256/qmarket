@@ -1,3 +1,16 @@
+import { startOfWeek, endOfWeek } from "date-fns";
+
+export const getWeekStart = (date: Date) => {
+  return startOfWeek(date, { weekStartsOn: 1 });
+};
+
+export const getWeekRange = (weekStart: Date) => {
+  return {
+    start: weekStart,
+    end: endOfWeek(weekStart, { weekStartsOn: 1 }),
+  };
+};
+
 export const formatDate = (targetDate: string) => {
   if (!targetDate) return "";
 
@@ -21,7 +34,7 @@ export const formatDate = (targetDate: string) => {
   return finalFormatted;
 };
 
-export const formatDateYMD = (targetDate: string) => {
+export const formatDateYMD = (targetDate: string | Date) => {
   if (!targetDate) return "";
 
   const date = new Date(targetDate);

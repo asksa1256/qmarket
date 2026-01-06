@@ -1,35 +1,35 @@
 import { supabase } from "@/shared/api/supabase-client";
 
-export async function getItemPriceChanges(limit?: number) {
+export async function getItemPriceChanges({
+  limit,
+  startDate,
+  endDate,
+}: {
+  limit?: number;
+  startDate: Date;
+  endDate: Date;
+}) {
   let query = supabase
     .from("item_price_changes")
     .select(
       `
       *,
-      items_info (
-        image
-      )
+      items_info ( image )
     `
     )
+    .neq("change_rate", 0)
+    .gte("log_date", startDate.toISOString().slice(0, 10))
+    .lte("log_date", endDate.toISOString().slice(0, 10))
     .order("log_date", { ascending: false })
     .order("change_rate", { ascending: false });
 
-  if (limit) {
-    query = query.limit(limit);
-  }
+  if (limit) query = query.limit(limit);
 
   const { data, error } = await query;
+  if (error) return [];
 
-  if (error) {
-    console.error("시세 변동 내역 조회 오류:", error);
-    return [];
-  }
-
-  return data.map((item) => {
-    const { items_info, ...rest } = item; // items_info 객체 분리
-    return {
-      ...rest, // items_info를 제외한 나머지 데이터
-      image: items_info?.image || null,
-    };
-  });
+  return data.map(({ items_info, ...rest }) => ({
+    ...rest,
+    image: items_info?.image ?? null,
+  }));
 }
