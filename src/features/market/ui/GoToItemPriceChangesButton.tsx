@@ -62,8 +62,7 @@ export default function GoToItemPriceChangesButton() {
 
           <ul className="mb-4 text-[15px] text-foreground/60">
             <li>
-              -{" "}
-              <b>로그인 후 큐마켓의 전체 시세 변동 내역을 보실 수 있습니다.</b>
+              - <b>로그인 후 전체 시세 변동 내역을 보실 수 있습니다.</b>
             </li>
             <li>- 추가 가입 없이 디스코드 계정으로 이용 가능합니다.</li>
           </ul>

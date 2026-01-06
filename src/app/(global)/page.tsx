@@ -118,7 +118,7 @@ export default async function Home() {
           {/* 시세 변동 내역 */}
           <section className="mb-12 w-full max-w-4xl">
             <h2 className="text-2xl font-bold tracking-tight mb-4">
-              📊 시세 변동 내역
+              📊 이번주 시세 변동
             </h2>
 
             <ItemPriceChangesTable limit={3} />
