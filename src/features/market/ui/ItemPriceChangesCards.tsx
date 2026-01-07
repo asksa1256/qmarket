@@ -32,7 +32,7 @@ export default function ItemPriceChangesCards({
   }
 
   return (
-    <ul className="flex flex-col gap-3">
+    <ul className="flex flex-col gap-2">
       {items.map((item) => {
         const isRising = item.change_rate > 0;
         const isFalling = item.change_rate < 0;

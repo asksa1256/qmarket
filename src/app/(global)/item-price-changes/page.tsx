@@ -23,6 +23,7 @@ export default async function ItemPriceChangesPage() {
           <li>변동률은 최근 거래일 기준 n일 전 대비 변동률입니다.</li>
         </ul>
 
+        {/* 시세 변동 내역 */}
         <ItemPriceChangesTable />
       </section>
     </section>

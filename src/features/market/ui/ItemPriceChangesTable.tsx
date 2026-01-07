@@ -25,6 +25,7 @@ import ChevronUpDown from "@/shared/ui/Icon/ChevronUpDown";
 import { cn } from "@/shared/lib/utils";
 import ItemPriceChangesCards from "./ItemPriceChangesCards";
 import { ChangeRateSortOrder } from "../model/itemPriceChangeTypes";
+import ItemPriceChangesSummary from "./ItemPriceChangeSummary";
 
 interface Props {
   limit?: number;
@@ -65,7 +66,7 @@ export default function ItemPriceChangesTable({
     isPending,
     isFetching,
   } = useQuery({
-    queryKey: ["itemPriceChanges", formatDateYMD(start), sortOrder],
+    queryKey: ["item-price-changes", formatDateYMD(start), sortOrder],
     queryFn: () =>
       getItemPriceChanges({
         limit,
@@ -377,6 +378,9 @@ export default function ItemPriceChangesTable({
           </div>
         )}
       </div>
+
+      {/* 시세 변동 요약 */}
+      <ItemPriceChangesSummary items={priceChanges} />
     </>
   );
 }
