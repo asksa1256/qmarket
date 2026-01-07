@@ -47,7 +47,7 @@ export default async function Home() {
                 큐플레이 아이템 거래 현황 · 시세 조회
               </h2>
               <p className="text-foreground/50 text-sm max-w-[70%] mx-auto md:max-w-none md:mx-0 break-keep">
-                최근 거래 · 시세 확인 · 아이템 정보
+                구매/판매 · 시세 확인 · 아이템 정보
               </p>
             </div>
 
