@@ -1,14 +1,16 @@
 import { supabase } from "@/shared/api/supabase-client";
+import { addWeeks } from "date-fns";
+import { formatDateYMD } from "@/shared/lib/formatters";
 
 export async function getItemPriceChanges({
   limit,
   startDate,
-  endDate,
 }: {
   limit?: number;
   startDate: Date;
-  endDate: Date;
 }) {
+  const nextWeekStart = addWeeks(startDate, 1);
+
   let query = supabase
     .from("item_price_changes")
     .select(
@@ -18,8 +20,8 @@ export async function getItemPriceChanges({
     `
     )
     .neq("change_rate", 0)
-    .gte("log_date", startDate.toISOString().slice(0, 10))
-    .lte("log_date", endDate.toISOString().slice(0, 10))
+    .gte("log_date", formatDateYMD(startDate))
+    .lt("log_date", formatDateYMD(nextWeekStart))
     .order("log_date", { ascending: false });
 
   if (limit) query = query.limit(limit);

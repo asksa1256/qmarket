@@ -68,7 +68,6 @@ export default function ItemPriceChangesTable({
       getItemPriceChanges({
         limit,
         startDate: start,
-        endDate: end,
       }),
   });
 
@@ -87,7 +86,7 @@ export default function ItemPriceChangesTable({
   const filteredAndSortedPriceChanges = useMemo(() => {
     let list = [...priceChanges];
 
-    // 1️⃣ 상승 / 하락 필터
+    // 상승 / 하락 필터
     if (filter === "up") {
       list = list.filter((item) => item.change_rate > 0);
     }
@@ -96,9 +95,9 @@ export default function ItemPriceChangesTable({
       list = list.filter((item) => item.change_rate < 0);
     }
 
-    // 2️⃣ 정렬
+    // 정렬
     if (sortOrder === "default") {
-      // 최근 거래일 순 (최신이 위)
+      // 최근 거래 순
       list.sort(
         (a, b) =>
           new Date(b.log_date).getTime() - new Date(a.log_date).getTime()
@@ -142,11 +141,11 @@ export default function ItemPriceChangesTable({
               }
             )}
           >
-            <span className="text-sm text-foreground/80 font-bold">
+            {/* <span className="text-sm text-foreground/80 font-bold">
               {format(start, "M")}월 {getWeekOfMonth(start)}주차
-            </span>
+            </span> */}
 
-            <span className="text-xs text-foreground/50">
+            <span className="text-sm text-foreground text-medium">
               {format(start, "yyyy.MM.dd")} ~ {format(end, "MM.dd")}
             </span>
           </div>
@@ -167,37 +166,39 @@ export default function ItemPriceChangesTable({
           </Button>
         </div>
 
-        <div className="flex items-center gap-2 mb-3">
-          <button
-            onClick={() => setFilter("all")}
-            className={cn("px-3 py-1 text-xs rounded-full", {
-              "bg-gray-900 text-white": filter === "all",
-              "bg-gray-100 text-gray-600": filter !== "all",
-            })}
-          >
-            변동률 전체
-          </button>
+        {!preview && (
+          <div className="flex items-center gap-2 mb-3">
+            <button
+              onClick={() => setFilter("all")}
+              className={cn("px-3 py-1 text-xs rounded-full", {
+                "bg-gray-900 text-white": filter === "all",
+                "bg-gray-100 text-gray-600": filter !== "all",
+              })}
+            >
+              변동률 전체
+            </button>
 
-          <button
-            onClick={() => setFilter("up")}
-            className={cn("px-3 py-1 text-xs rounded-full", {
-              "bg-red-500 text-white": filter === "up",
-              "bg-red-50 text-red-500": filter !== "up",
-            })}
-          >
-            상승
-          </button>
+            <button
+              onClick={() => setFilter("up")}
+              className={cn("px-3 py-1 text-xs rounded-full", {
+                "bg-red-500 text-white": filter === "up",
+                "bg-red-50 text-red-500": filter !== "up",
+              })}
+            >
+              상승
+            </button>
 
-          <button
-            onClick={() => setFilter("down")}
-            className={cn("px-3 py-1 text-xs rounded-full", {
-              "bg-blue-500 text-white": filter === "down",
-              "bg-blue-50 text-blue-500": filter !== "down",
-            })}
-          >
-            하락
-          </button>
-        </div>
+            <button
+              onClick={() => setFilter("down")}
+              className={cn("px-3 py-1 text-xs rounded-full", {
+                "bg-blue-500 text-white": filter === "down",
+                "bg-blue-50 text-blue-500": filter !== "down",
+              })}
+            >
+              하락
+            </button>
+          </div>
+        )}
       </div>
 
       {/* 테이블 본문 */}
@@ -214,7 +215,7 @@ export default function ItemPriceChangesTable({
             <LoadingSpinner />
           </div>
         ) : (
-          <table className="w-full border-collapse text-left">
+          <table className="w-full border-collapse text-left text-sm">
             <thead>
               <tr className="text-sm text-gray-500">
                 <th className="sticky top-0 z-1 bg-background px-2 py-3 font-medium">
@@ -345,7 +346,7 @@ export default function ItemPriceChangesTable({
                       </td>
 
                       {/* 최근 거래일 */}
-                      <td className="py-3 px-2 text-right text-sm text-gray-400">
+                      <td className="py-3 px-2 text-right text-gray-400">
                         {formatRelativeTime(item.log_date)}
                       </td>
                     </tr>
