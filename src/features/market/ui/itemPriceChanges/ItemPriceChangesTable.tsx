@@ -54,7 +54,7 @@ export default function ItemPriceChangesTable({
     if (sortOrder === "default") {
       list.sort(
         (a, b) =>
-          new Date(b.log_date).getTime() - new Date(a.log_date).getTime()
+          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
       );
     } else if (sortOrder === "desc") {
       // 변동률 정렬
@@ -145,6 +145,7 @@ export default function ItemPriceChangesTable({
                     key={item.id}
                     className="hover:bg-gray-50 transition-colors"
                   >
+                    {/* 아이템 정보 */}
                     <td className="py-1 px-2">
                       <div className="flex items-center gap-3">
                         <div className="relative w-12 h-14 bg-gray-50 flex-shrink-0">
@@ -169,16 +170,19 @@ export default function ItemPriceChangesTable({
                       </div>
                     </td>
 
+                    {/* 현재 시세 */}
                     <td className="py-3 px-2 font-semibold text-gray-900">
                       {item.cur_price.toLocaleString("ko-KR")}
                     </td>
 
+                    {/* 이전 시세 */}
                     <td className="py-3 px-2 text-gray-500">
                       {item.prev_price
                         ? Math.floor(item.prev_price).toLocaleString("ko-KR")
                         : "-"}
                     </td>
 
+                    {/* 변동률 */}
                     <td className="py-3 px-2 text-center">
                       <div className="flex flex-col items-center justify-center gap-1">
                         <span
@@ -206,8 +210,9 @@ export default function ItemPriceChangesTable({
                       </div>
                     </td>
 
+                    {/* 최근 거래일 */}
                     <td className="py-3 px-2 text-right text-gray-400">
-                      {formatRelativeTime(item.log_date)}
+                      {formatRelativeTime(item.updated_at)}
                     </td>
                   </tr>
                 );

@@ -30,7 +30,7 @@ export default function ItemPriceChangesContainer({
     isPending,
     isFetching,
   } = useQuery({
-    queryKey: ["item-price-changes", formatDateYMD(start)],
+    queryKey: ["item-price-changes", formatDateYMD(start), limit],
     queryFn: () =>
       getItemPriceChanges({
         limit,

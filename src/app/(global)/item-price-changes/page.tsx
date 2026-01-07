@@ -25,7 +25,6 @@ export default async function ItemPriceChangesPage() {
         </ul>
 
         {/* 시세 변동 내역 */}
-        {/* <ItemPriceChangesTable /> */}
         <ItemPriceChangesContainer />
       </section>
     </section>
