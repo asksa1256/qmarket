@@ -1,5 +1,5 @@
 import ButtonToBack from "@/shared/ui/LinkButton/ButtonToBack";
-import { redirect } from "next/navigation";
+import ButtonToMain from "@/shared/ui/LinkButton/ButtonToMain";
 import { getUserServer } from "@/shared/api/get-supabase-user-server";
 import ItemPriceChangesContainer from "@/features/market/ui/itemPriceChanges/ItemPriceChangesContainer";
 
@@ -7,7 +7,14 @@ export default async function ItemPriceChangesPage() {
   const user = await getUserServer();
 
   if (!user) {
-    redirect("/");
+    return (
+      <div className="w-full max-w-6xl mx-auto">
+        <ButtonToMain />
+        <div className="flex flex-col items-center justify-center gap-4 min-h-[20vh]">
+          <p>로그인이 필요합니다.</p>
+        </div>
+      </div>
+    );
   }
 
   return (
