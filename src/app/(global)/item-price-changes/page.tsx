@@ -19,8 +19,12 @@ export default async function ItemPriceChangesPage() {
           📊 주간 시세 변동 내역
         </h2>
 
-        <ul className="border rounded-lg p-4 text-sm text-foreground/70 mb-8 list-disc list-inside">
+        <ul className="border rounded-lg p-4 text-sm text-foreground/70 mb-8 list-disc list-inside leading-6">
           <li>변동률은 최근 거래일 기준 n일 전 대비 변동률입니다.</li>
+          <li>
+            <span className="text-foreground/50">(신규)</span> 아이템은 시세가
+            신규 등록된 아이템입니다.
+          </li>
         </ul>
 
         {/* 시세 변동 내역 */}

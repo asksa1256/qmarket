@@ -136,6 +136,7 @@ export default function ItemPriceChangesTable({
                 const itemLogDate = new Date(item.log_date)
                   .toISOString()
                   .split("T")[0];
+
                 const isNewItem =
                   itemLogDate === today &&
                   (!item.prev_price || item.prev_price === 0);
@@ -201,10 +202,8 @@ export default function ItemPriceChangesTable({
                         </span>
 
                         <span className="text-xs text-gray-400">
-                          {isNewItem
+                          {isNewItem || item.days_since_last_sale === 0
                             ? "(신규)"
-                            : item.days_since_last_sale === 0
-                            ? ""
                             : `(${item.days_since_last_sale}일 전 대비)`}
                         </span>
                       </div>
