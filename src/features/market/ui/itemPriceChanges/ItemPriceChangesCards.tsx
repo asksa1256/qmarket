@@ -39,8 +39,8 @@ export default function ItemPriceChangesCards({
 
         // 신규 데이터 판별 (log_date가 오늘이고, prev_price가 null이거나 0인 데이터)
         const itemLogDate = new Date(item.log_date).toISOString().split("T")[0];
-        const isNewItem =
-          itemLogDate === today && (!item.prev_price || item.prev_price === 0);
+        const isNewItem = !item.prev_price || item.prev_price === 0;
+        const isTodayChange = !isNewItem && today === itemLogDate;
 
         return (
           <li
@@ -76,8 +76,8 @@ export default function ItemPriceChangesCards({
                     <span className="ml-1">
                       {isNewItem
                         ? "신규"
-                        : item.days_since_last_sale === 0
-                        ? ""
+                        : isTodayChange
+                        ? "당일 변동"
                         : `${item.days_since_last_sale}일 전 대비`}
                     </span>
                   </span>
