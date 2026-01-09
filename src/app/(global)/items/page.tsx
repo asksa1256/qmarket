@@ -5,6 +5,7 @@ import SellingItemCreateModal from "@/features/item/ui/SellingItemCreateModal";
 import PurchaseItemCreateModal from "@/features/item/ui/PurchaseItemCreateModal";
 import ButtonToMain from "@/shared/ui/LinkButton/ButtonToMain";
 import { getUserServer } from "@/shared/api/get-supabase-user-server";
+import DirectPriceCreateModal from "@/features/market/ui/DirectPriceCreateModal";
 
 export default async function ItemsPage() {
   const user = await getUserServer();

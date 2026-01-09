@@ -13,12 +13,12 @@ import { toast } from "sonner";
 import { Lock, Plus } from "lucide-react";
 import { useUser } from "@/shared/hooks/useUser";
 import { useState } from "react";
-import ItemForm from "./ItemForm";
 import { useQuery } from "@tanstack/react-query";
 import { getDailyItemCountAction } from "@/app/actions/item-actions";
-import { ItemDetail } from "./ItemDetailClient";
+import { ItemDetail } from "@/features/item/ui/ItemDetailClient";
+import DirectPriceCreateForm from "./DirectPriceCreateForm";
 
-export default function SellingItemCreateModal({
+export default function DirectPriceCreateModal({
   initialItem,
 }: {
   initialItem?: ItemDetail;
@@ -38,7 +38,7 @@ export default function SellingItemCreateModal({
   // 잔여 횟수 조회중이거나, 로그인 상태가 아니거나, remaining이 0 이하면 disabled
   const isDisabled = !user || isPending || (limitStatus?.remaining ?? 0) <= 0;
 
-  const handleItemUploadOpen = () => {
+  const handleModalOpen = () => {
     if (user) {
       setOpen(true);
     } else {
@@ -54,9 +54,9 @@ export default function SellingItemCreateModal({
           variant="default"
           className="w-auto font-bold bg-blue-600 hover:bg-blue-700"
           disabled={isDisabled}
-          onClick={handleItemUploadOpen}
+          onClick={handleModalOpen}
         >
-          <Plus /> 판매 등록
+          <Plus /> 시세 바로 등록
         </Button>
       ) : (
         <Tooltip>
@@ -66,9 +66,9 @@ export default function SellingItemCreateModal({
                 variant="default"
                 className="w-full font-bold bg-blue-600 hover:bg-blue-700"
                 disabled={isDisabled}
-                onClick={handleItemUploadOpen}
+                onClick={handleModalOpen}
               >
-                <Lock /> 판매 등록
+                <Lock /> 시세 바로 등록
               </Button>
             </span>
           </TooltipTrigger>
@@ -81,18 +81,14 @@ export default function SellingItemCreateModal({
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <DialogHeader className="mb-4">
-          <DialogTitle>판매 등록</DialogTitle>
+          <DialogTitle>시세 바로 등록</DialogTitle>
           <DialogDescription className="flex flex-col">
-            가격 제시 요청 시 경고 대상이 될 수 있습니다.
+            * 거래 완료 인증샷이 없을 경우 등록되지 않습니다.
+            <br />* 시세 입력 시 일일 등록 횟수가 동일하게 차감됩니다.
           </DialogDescription>
         </DialogHeader>
 
-        <ItemForm
-          isForSale={true}
-          initialItem={initialItem}
-          onSuccess={() => setOpen(false)}
-          onClose={() => setOpen(false)}
-        />
+        <DirectPriceCreateForm />
       </DialogContent>
     </Dialog>
   );

@@ -56,7 +56,7 @@ export default function PurchaseItemCreateModal({
           disabled={isDisabled}
           onClick={handleItemUploadOpen}
         >
-          <Plus /> 구매 아이템 등록
+          <Plus /> 구매 등록
         </Button>
       ) : (
         <Tooltip>
@@ -68,7 +68,7 @@ export default function PurchaseItemCreateModal({
                 disabled={isDisabled}
                 onClick={handleItemUploadOpen}
               >
-                <Lock /> 구매 아이템 등록
+                <Lock /> 구매 등록
               </Button>
             </span>
           </TooltipTrigger>
@@ -81,7 +81,7 @@ export default function PurchaseItemCreateModal({
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <DialogHeader className="mb-4">
-          <DialogTitle>구매 아이템 등록</DialogTitle>
+          <DialogTitle>구매 등록</DialogTitle>
           <DialogDescription className="flex flex-col">
             가격 제시 요청 시 경고 대상이 될 수 있습니다.
           </DialogDescription>

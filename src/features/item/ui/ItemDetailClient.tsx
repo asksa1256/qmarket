@@ -20,6 +20,7 @@ import { Badge } from "@/shared/ui/badge";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { FilterParams } from "@/features/item-search/model/filterTypes";
+import DirectPriceCreateModal from "@/features/market/ui/DirectPriceCreateModal";
 
 export interface ItemDetail {
   id: string;
@@ -172,6 +173,7 @@ export default function ItemDetailClient({
             <div className="flex flex-col gap-1 mt-4">
               <SellingItemCreateModal initialItem={item} />
               <PurchaseItemCreateModal initialItem={item} />
+              <DirectPriceCreateModal initialItem={item} />
             </div>
           </div>
         </div>
