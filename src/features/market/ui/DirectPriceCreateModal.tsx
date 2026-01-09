@@ -88,7 +88,10 @@ export default function DirectPriceCreateModal({
           </DialogDescription>
         </DialogHeader>
 
-        <DirectPriceCreateForm />
+        <DirectPriceCreateForm
+          initialItem={initialItem}
+          onClose={() => setOpen(false)}
+        />
       </DialogContent>
     </Dialog>
   );

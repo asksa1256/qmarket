@@ -17,11 +17,14 @@ import {
 } from "@/shared/config/constants";
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
-import { useCreateItemMutation } from "@/features/item/model/itemMutations";
 import { FieldError } from "react-hook-form";
 import { ItemDetail } from "@/features/item/ui/ItemDetailClient";
 import { getKeyByValue } from "@/shared/lib/getKeyByValue";
 import TransactionImageUploader from "./TransactionImageUploader";
+import { useQueryClient } from "@tanstack/react-query";
+import { useUser } from "@/shared/hooks/useUser";
+import { createDirectPriceAction } from "@/app/actions/direct-price-actions";
+import { toast } from "sonner";
 
 interface ItemFormProps {
   initialItem?: ItemDetail; // 아이템 상세 페이지에서 바로 등록할 아이템 정보
@@ -34,6 +37,14 @@ export default function DirectPriceCreateForm({
   onSuccess,
   onClose,
 }: ItemFormProps) {
+  const { data: user } = useUser();
+  const queryClient = useQueryClient();
+
+  if (!user?.id) {
+    alert("사용자 정보를 찾을 수 없습니다. 다시 로그인해주세요.");
+    return;
+  }
+
   const getDefaultValues = () => {
     if (initialItem) {
       return {
@@ -49,10 +60,12 @@ export default function DirectPriceCreateForm({
         category:
           getKeyByValue(ITEM_CATEGORY_MAP, initialItem.category) ||
           ("hair" as const),
+        transaction_image: "",
+        isForSale: false,
+        message: "시세 바로 등록",
       };
     }
 
-    // 둘 다 없으면 빈 폼
     return {
       item_name: "",
       image: "/images/empty.png",
@@ -60,7 +73,9 @@ export default function DirectPriceCreateForm({
       item_gender: "m" as const,
       category: "hair" as const,
       price: 0,
-      transactionImageUrl: "",
+      transaction_image: "",
+      isForSale: false,
+      message: "시세 바로 등록",
     };
   };
 
@@ -73,10 +88,8 @@ export default function DirectPriceCreateForm({
     handleSubmit,
     control,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = form;
-
-  // createDirectPriceMutation... (폼 제출 및 db 등록)
 
   // 거래 인증 이미지 미리보기
   const [preview, setPreview] = useState("");
@@ -94,13 +107,39 @@ export default function DirectPriceCreateForm({
     }
   };
 
-  // TO-DO: 거래 완료 이미지 필드 rhf 스키마 연동 + aws s3 업로드 처리 (imageUploader 컴포넌트 참고)
-  const handleImageUpload = (imgUrl: string) => {
-    setTransactionImageUrl(imgUrl);
-  };
+  const onSubmit = async (values: DirectPriceCreateFormType) => {
+    try {
+      const result = await createDirectPriceAction({
+        item_name: values.item_name,
+        image: values.image ?? "/images/empty.png",
+        item_gender: ITEM_GENDER_MAP[values.item_gender],
+        item_source: ITEM_SOURCES_MAP[values.item_source],
+        category: ITEM_CATEGORY_MAP[values.category],
+        price: values.price,
+        is_sold: true,
+        is_for_sale: values.isForSale,
+        transaction_image: values.transaction_image,
+        message: "시세 바로 등록",
+      });
 
-  // TO-DO: 폼 제출 및 supabase, aws s3 이미지 업로드 코드 추가
-  const onSubmit = (values: DirectPriceCreateFormType) => {};
+      if (!result.success) {
+        toast.error(result.error);
+        return;
+      }
+
+      toast.success("시세가 등록되었습니다.");
+
+      queryClient.invalidateQueries({
+        queryKey: ["item-create-limit-count", user.id],
+      });
+
+      onSuccess?.();
+      reset();
+    } catch (error) {
+      console.error("시세 등록 중 오류:", error);
+      toast.error("시세 등록에 실패했습니다.");
+    }
+  };
 
   const watchedImage = form.watch("image");
 
@@ -108,18 +147,16 @@ export default function DirectPriceCreateForm({
     <ScrollArea className="max-h-[60vh] pr-4">
       <form onSubmit={handleSubmit(onSubmit)} className="mb-4 item-form">
         <div className="grid gap-8 px-2">
-          <div className="grid gap-3">
+          <div className="grid gap-2">
             <label htmlFor="item_name" className="text-sm">
               아이템명
             </label>
 
-            <div className="mb-4">
-              <img
-                src={watchedImage ?? "/images/empty.png"}
-                alt="미리보기"
-                className="w-24 h-24 object-contain rounded-md border"
-              />
-            </div>
+            <img
+              src={watchedImage ?? "/images/empty.png"}
+              alt="미리보기"
+              className="w-24 h-24 object-contain rounded-md border"
+            />
 
             <Controller
               name="item_name"
@@ -129,6 +166,7 @@ export default function DirectPriceCreateForm({
                   value={field.value}
                   placeholder="아이템명 입력"
                   className="w-full [&_svg]:size-5 [&_svg]:right-4"
+                  isSearchMode={false}
                   onSearch={(value) => {
                     field.onChange(value);
                   }}
@@ -169,7 +207,7 @@ export default function DirectPriceCreateForm({
             )}
           </div>
 
-          <div className="grid gap-3">
+          <div className="grid gap-2">
             <label htmlFor="price" className="text-sm">
               가격
             </label>
@@ -230,52 +268,103 @@ export default function DirectPriceCreateForm({
               </p>
             )}
           </div>
-        </div>
 
-        <div className="flex flex-col gap-2">
-          <h4 className="font-medium text-sm">거래 인증 이미지 등록</h4>
-          <Controller
-            name="transactionImageUrl"
-            control={control}
-            render={({ field }) => (
-              <TransactionImageUploader
-                onFileChange={handleFileChange}
-                onUpload={handleImageUpload}
-              />
-            )}
-          />
-          {preview && (
-            <div className="relative w-full h-32 rounded-md overflow-hidden border border-gray-300">
-              <Image
-                src={preview}
-                alt="거래 인증 이미지 미리보기"
-                layout="fill"
-                objectFit="contain"
-              />
+          {/* 거래 인증 이미지 섹션 */}
+          <div className="grid gap-2">
+            <div>
+              <label htmlFor="price" className="text-sm">
+                거래 인증 이미지 등록
+              </label>
+              <p className="text-xs text-foreground/50">
+                이미지를 첨부한 뒤 [인증 등록]을 눌러주세요.
+              </p>
             </div>
-          )}
+
+            <Controller
+              name="transaction_image"
+              control={control}
+              render={({ field }) => (
+                <>
+                  <TransactionImageUploader
+                    onFileChange={handleFileChange}
+                    onUpload={(imgUrl) => {
+                      field.onChange(imgUrl);
+                    }}
+                  />
+                  {preview && (
+                    <div className="relative w-full h-32 rounded-md overflow-hidden border border-gray-300">
+                      <Image
+                        src={preview}
+                        alt="거래 인증 이미지 미리보기"
+                        fill
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                  )}
+                </>
+              )}
+            />
+            {errors.transaction_image && (
+              <p className="text-red-600 text-sm">
+                {errors.transaction_image.message}
+              </p>
+            )}
+          </div>
+
+          {/* 거래 유형 선택 섹션 */}
+          <div className="grid gap-2">
+            <label className="text-sm">거래 유형</label>
+            <Controller
+              name="isForSale"
+              control={control}
+              render={({ field }) => (
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant={!field.value ? "default" : "outline"}
+                    className="flex-1"
+                    onClick={() => field.onChange(false)}
+                  >
+                    구매
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={field.value ? "default" : "outline"}
+                    className="flex-1"
+                    onClick={() => field.onChange(true)}
+                  >
+                    판매
+                  </Button>
+                </div>
+              )}
+            />
+            {errors.isForSale && (
+              <p className="text-red-600 text-sm">{errors.isForSale.message}</p>
+            )}
+          </div>
         </div>
 
-        {/* {(Object.entries(errors) as [keyof ItemFormType, FieldError][]).map(
-          ([key, error]) => (
-            <li key={key as string} className="text-red-600 text-sm">
-              <span className="font-medium mr-1">
-                {(key as string).includes("item_name")
-                  ? "아이템명"
-                  : key}
-                :
-              </span>
-              {error?.message}
-            </li>
-          )
-        )} */}
+        {/* 폼 유효성 검사 에러 로그 */}
+        {/* {(
+          Object.entries(errors) as [
+            keyof DirectPriceCreateFormType,
+            FieldError
+          ][]
+        ).map(([key, error]) => (
+          <li key={key as string} className="text-red-600 text-sm">
+            <span className="font-medium mr-1">
+              {(key as string).includes("item_name") ? "아이템명" : key}:
+            </span>
+            {error?.message}
+          </li>
+        ))} */}
 
         <div className="mt-6 flex justify-end gap-2">
           <Button type="button" variant="outline" onClick={onClose}>
             닫기
           </Button>
-          <Button disabled={isPending}>
-            {isPending ? "등록 중..." : "등록하기"}
+          <Button disabled={isSubmitting}>
+            {isSubmitting ? "등록 중..." : "등록하기"}
           </Button>
         </div>
       </form>
