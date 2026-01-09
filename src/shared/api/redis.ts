@@ -87,6 +87,25 @@ export async function restoreDailyItemCount(userId: string): Promise<void> {
   }
 }
 
+/* 시세 바로 등록 실패 시 등록 횟수 1회 복구 */
+export async function rollbackDailyItemLimit(userId: string) {
+  const redis = getRedisClient();
+  const today = new Date().toISOString().slice(0, 10);
+  const key = `rate:insert:items:${userId}:${today}`;
+
+  await redis.eval(
+    `
+    local current = redis.call("GET", KEYS[1])
+    if current and tonumber(current) > 0 then
+      return redis.call("DECR", KEYS[1])
+    end
+    return current
+    `,
+    [key],
+    []
+  );
+}
+
 /* 검색어 점수 증가 */
 const BASE_SEARCH_KEY = "search:rank";
 

@@ -138,6 +138,9 @@ export default function DirectPriceCreateForm({
     } catch (error) {
       console.error("시세 등록 중 오류:", error);
       toast.error("시세 등록에 실패했습니다.");
+      queryClient.invalidateQueries({
+        queryKey: ["item-create-limit-count", user.id],
+      });
     }
   };
 

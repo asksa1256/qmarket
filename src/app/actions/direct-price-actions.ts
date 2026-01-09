@@ -1,9 +1,11 @@
 "use server";
 
-// import { supabase } from "@/shared/api/supabase-client";
 import { getSupabaseClientCookie } from "@/shared/api/supabase-cookie";
-import { revalidatePath } from "next/cache";
-import { getDailyItemCountAction } from "./item-actions";
+import {
+  checkAndIncrementDailyItemLimit,
+  DAILY_LIMIT,
+  rollbackDailyItemLimit,
+} from "@/shared/api/redis";
 import { ITEMS_TABLE_NAME } from "@/shared/config/constants";
 
 export async function createDirectPriceAction(values: {
@@ -30,12 +32,13 @@ export async function createDirectPriceAction(values: {
     return { success: false, error: "인증되지 않은 사용자입니다." };
   }
 
-  // 일일 등록 제한 확인
-  const { remaining } = await getDailyItemCountAction();
-  if (remaining <= 0) {
+  // 일일 등록 제한 확인 및 차감
+  const currentCount = await checkAndIncrementDailyItemLimit(user.id);
+
+  if (currentCount > DAILY_LIMIT) {
     return {
       success: false,
-      error: "일일 등록 횟수를 모두 사용했습니다. 내일 다시 시도해주세요.",
+      error: "일일 등록 횟수를 모두 사용했습니다.",
     };
   }
 
@@ -56,9 +59,9 @@ export async function createDirectPriceAction(values: {
 
   if (error) {
     console.error("시세 등록 실패:", error);
+    await rollbackDailyItemLimit(user.id);
     return { success: false, error: "시세 등록에 실패했습니다." };
   }
 
-  revalidatePath("/"); // 필요한 경로 갱신
   return { success: true, data };
 }
