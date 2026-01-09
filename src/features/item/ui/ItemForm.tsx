@@ -19,6 +19,7 @@ import {
 } from "../model/itemMutations";
 import { FieldError } from "react-hook-form";
 import { ItemDetail } from "./ItemDetailClient";
+import { getKeyByValue } from "../../../shared/lib/getKeyByValue";
 
 interface ItemFormProps {
   isForSale: boolean;
@@ -27,15 +28,6 @@ interface ItemFormProps {
   onSuccess?: () => void;
   onClose?: () => void;
 }
-
-// 수정 모드에서 db의 item_source, item_gender, category에 한글로 등록된 값을 key(영어)로 변환 (필드 유효성 검사용)
-const getKeyByValue = <T extends Record<string, string>>(
-  map: T,
-  value: string
-): keyof T => {
-  const entry = Object.entries(map).find(([_, v]) => v === value);
-  return entry?.[0] as keyof T;
-};
 
 export default function ItemForm({
   isForSale,
@@ -49,6 +41,7 @@ export default function ItemForm({
     if (initialData) {
       return {
         ...initialData,
+        // db의 item_source, item_gender, category에 한글로 등록된 값을 key(영어)로 변환 (필드 유효성 검사용)
         item_source:
           getKeyByValue(ITEM_SOURCES_MAP, initialData.item_source) ||
           initialData.item_source,
