@@ -197,7 +197,7 @@ export default function ItemPriceChangesTable({
                           <span className="text-[10px] mr-0.5">
                             {isRising ? "▲" : isFalling ? "▼" : ""}
                           </span>
-                          {Math.abs(Math.floor(item.change_rate))}%
+                          {Math.abs(Math.round(item.change_rate))}%
                         </span>
 
                         <span className="text-xs text-gray-400">
