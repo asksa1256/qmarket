@@ -28,6 +28,7 @@ import { logSearchKeywordAction } from "@/app/actions/search-actions";
 interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
   className?: string;
+  isSearchMode?: boolean; // 아이템 선택/검색 모드
   onSearch?: (value: string) => void;
   onSelectSuggestion?: (suggestion: SearchItemInfo) => void;
 }
@@ -38,6 +39,7 @@ const MAX_RECENT_SEARCHES = 5;
 export default function SearchInput({
   value,
   className,
+  isSearchMode = true,
   onSearch,
   onSelectSuggestion,
   ...rest
@@ -100,26 +102,28 @@ export default function SearchInput({
   };
 
   const handleSelect = (s: SearchItemInfo) => {
-    // 선택 시 최근 검색에 추가 (중복 제거, 5개까지 표시)
-    setRecentSearches((prev) => {
-      const filtered = prev.filter((item) => item.id !== s.id);
-      const updated = [s, ...filtered].slice(0, MAX_RECENT_SEARCHES);
+    if (isSearchMode) {
+      // 선택 시 최근 검색에 추가 (중복 제거, 5개까지 표시)
+      setRecentSearches((prev) => {
+        const filtered = prev.filter((item) => item.id !== s.id);
+        const updated = [s, ...filtered].slice(0, MAX_RECENT_SEARCHES);
 
-      // localStorage에 저장
-      try {
-        localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
-      } catch (error) {
-        console.error("최근 검색 저장 실패:", error);
-      }
+        // localStorage에 저장
+        try {
+          localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
+        } catch (error) {
+          console.error("최근 검색 저장 실패:", error);
+        }
 
-      return updated;
-    });
+        return updated;
+      });
 
-    onSearch?.(s.name);
-    if (onSelectSuggestion) onSelectSuggestion(s);
+      onSearch?.(s.name);
+      if (onSelectSuggestion) onSelectSuggestion(s);
 
-    // 검색어 1점 증가
-    logSearchKeywordAction(s.name, s.item_gender);
+      // 검색어 1점 증가
+      logSearchKeywordAction(s.name, s.item_gender);
+    }
 
     // 자동완성 닫기
     setSuggestionOpen(false);

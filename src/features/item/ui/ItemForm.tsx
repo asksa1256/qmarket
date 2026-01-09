@@ -19,7 +19,7 @@ import {
 } from "../model/itemMutations";
 import { FieldError } from "react-hook-form";
 import { ItemDetail } from "./ItemDetailClient";
-import { getKeyByValue } from "../../../shared/lib/getKeyByValue";
+import { getKeyByValue } from "@/shared/lib/getKeyByValue";
 
 interface ItemFormProps {
   isForSale: boolean;
@@ -161,6 +161,7 @@ export default function ItemForm({
                   value={field.value}
                   placeholder="아이템명 입력"
                   className="w-full [&_svg]:size-5 [&_svg]:right-4"
+                  isSearchMode={false}
                   onSearch={(value) => {
                     field.onChange(value);
                   }}
