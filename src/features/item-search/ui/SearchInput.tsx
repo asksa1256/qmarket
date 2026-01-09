@@ -118,12 +118,12 @@ export default function SearchInput({
         return updated;
       });
 
-      onSearch?.(s.name);
-      if (onSelectSuggestion) onSelectSuggestion(s);
-
       // 검색어 1점 증가
       logSearchKeywordAction(s.name, s.item_gender);
     }
+
+    onSearch?.(s.name);
+    if (onSelectSuggestion) onSelectSuggestion(s);
 
     // 자동완성 닫기
     setSuggestionOpen(false);
