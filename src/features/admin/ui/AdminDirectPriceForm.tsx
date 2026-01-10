@@ -75,22 +75,28 @@ export default function AdminDirectPriceForm() {
   const watchedImage = form.watch("image");
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="mb-4 item-form">
-      <div className="grid gap-8 px-2">
-        <div className="grid gap-3">
-          <label htmlFor="item_name" className="text-sm">
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+      <div className="space-y-6 md:space-y-8">
+        {/* 아이템 정보 */}
+        <div className="space-y-3">
+          <label htmlFor="item_name" className="text-sm font-medium block">
             아이템명
           </label>
 
-          <div className="mb-4">
-            <Image
-              src={watchedImage || "/images/empty.png"}
-              alt="미리보기"
-              width={48}
-              height={58}
-              className="object-contain rounded-md"
-            />
-          </div>
+          {watchedImage && (
+            <div className="mb-4">
+              <Image
+                src={watchedImage || "/images/empty.png"}
+                alt="미리보기"
+                width={96}
+                height={96}
+                className="w-20 h-20 md:w-24 md:h-24 object-contain rounded-md border bg-gray-50"
+                onError={(e) => {
+                  e.currentTarget.src = "/images/empty.png";
+                }}
+              />
+            </div>
+          )}
 
           <Controller
             name="item_name"
@@ -100,7 +106,7 @@ export default function AdminDirectPriceForm() {
                 value={field.value}
                 placeholder="아이템명 입력"
                 className="w-full [&_svg]:size-5 [&_svg]:right-4"
-                onSearch={(value) => {
+                onSearch={(value: string) => {
                   field.onChange(value);
                 }}
                 onSelectSuggestion={(s) => {
@@ -108,40 +114,75 @@ export default function AdminDirectPriceForm() {
 
                   const categoryKey = Object.entries(ITEM_CATEGORY_MAP).find(
                     ([_key, label]) => label === s.category
-                  )?.[0] as keyof typeof ITEM_CATEGORY_MAP;
+                  )?.[0] as keyof typeof ITEM_CATEGORY_MAP | undefined;
 
-                  form.setValue("category", categoryKey);
+                  if (categoryKey) {
+                    form.setValue("category", categoryKey);
+                  }
 
                   const genderKey = Object.entries(ITEM_GENDER_MAP).find(
                     ([_key, label]) => label === s.item_gender
-                  )?.[0] as keyof typeof ITEM_GENDER_MAP;
+                  )?.[0] as keyof typeof ITEM_GENDER_MAP | undefined;
 
-                  form.setValue("item_gender", genderKey);
+                  if (genderKey) {
+                    form.setValue("item_gender", genderKey);
+                  }
 
                   const sourceKey = Object.entries(ITEM_SOURCES_MAP).find(
                     ([_key, label]) => label === s.item_source
-                  )?.[0] as keyof typeof ITEM_SOURCES_MAP;
+                  )?.[0] as keyof typeof ITEM_SOURCES_MAP | undefined;
 
-                  if (sourceKey) {
-                    form.setValue("item_source", sourceKey);
-                  } else {
-                    form.setValue("item_source", "gatcha");
+                  form.setValue("item_source", sourceKey || "gatcha");
+
+                  if (s.image) {
+                    form.setValue("image", s.image);
                   }
-
-                  form.setValue("image", s.image);
                 }}
               />
             )}
           />
           {errors.item_name && (
-            <p className="text-red-600 text-sm mt-1">
-              {errors.item_name.message}
-            </p>
+            <p className="text-red-600 text-sm">{errors.item_name.message}</p>
           )}
         </div>
 
-        <div className="grid gap-3">
-          <label htmlFor="price" className="text-sm">
+        {/* 선택된 정보 표시 */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 bg-gray-50 rounded-lg">
+          <div className="space-y-1">
+            <label className="text-xs text-gray-500">카테고리</label>
+            <div className="text-sm font-medium">
+              {form.watch("category")
+                ? ITEM_CATEGORY_MAP[
+                    form.watch("category") as keyof typeof ITEM_CATEGORY_MAP
+                  ]
+                : "미선택"}
+            </div>
+          </div>
+          <div className="space-y-1">
+            <label className="text-xs text-gray-500">성별</label>
+            <div className="text-sm font-medium">
+              {form.watch("item_gender")
+                ? ITEM_GENDER_MAP[
+                    form.watch("item_gender") as keyof typeof ITEM_GENDER_MAP
+                  ]
+                : "미선택"}
+            </div>
+          </div>
+          <div className="space-y-1">
+            <label className="text-xs text-gray-500">출처</label>
+            <div className="text-sm font-medium">
+              {form.watch("item_source")
+                ? ITEM_SOURCES_MAP[
+                    form.watch("item_source") as keyof typeof ITEM_SOURCES_MAP
+                  ]
+                : "미선택"}
+            </div>
+          </div>
+        </div>
+
+        {/* 가격 섹션 */}
+        <div className="space-y-3">
+          <label htmlFor="price" className="text-sm font-medium block">
             가격
           </label>
           <Controller
@@ -160,11 +201,14 @@ export default function AdminDirectPriceForm() {
                 <div className="space-y-3">
                   <Input
                     id="price"
+                    type="text"
                     inputMode="numeric"
-                    placeholder="가격"
-                    value={value === 0 ? "0" : value.toLocaleString()}
+                    placeholder="가격을 입력하세요"
+                    value={value === 0 ? "" : value.toLocaleString()}
                     onFocus={(e) => {
-                      if (value === 0) e.target.value = "";
+                      if (value === 0) {
+                        e.target.value = "";
+                      }
                     }}
                     onChange={(e) => {
                       const raw = e.target.value.replace(/,/g, "");
@@ -175,6 +219,7 @@ export default function AdminDirectPriceForm() {
                     }}
                     onBlur={onBlur}
                     autoComplete="off"
+                    className="text-base md:text-sm"
                   />
 
                   <div className="flex flex-wrap gap-2">
@@ -185,25 +230,43 @@ export default function AdminDirectPriceForm() {
                         variant="outline"
                         size="sm"
                         onClick={() => onChange(value + unit.amount)}
-                        className="text-xs px-3"
+                        className="text-xs px-2.5 py-1.5 md:px-3 md:py-2 flex-grow sm:flex-grow-0"
                       >
                         {unit.label}
                       </Button>
                     ))}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onChange(0)}
+                      className="text-xs px-2.5 py-1.5 md:px-3 md:py-2 text-red-600 hover:text-red-700 flex-grow sm:flex-grow-0"
+                    >
+                      초기화
+                    </Button>
                   </div>
+
+                  {value > 0 && (
+                    <p className="text-sm text-gray-600 p-3 bg-blue-50 rounded-lg">
+                      현재 가격:{" "}
+                      <span className="font-semibold text-blue-700">
+                        {value.toLocaleString()}원
+                      </span>
+                    </p>
+                  )}
                 </div>
               );
             }}
           />
           {errors.price && (
-            <p className="text-red-600 text-sm mt-1">{errors.price.message}</p>
+            <p className="text-red-600 text-sm">{errors.price.message}</p>
           )}
         </div>
 
-        {/* 시세 등록일자 */}
-        <div className="space-y-2">
+        {/* 등록 일자 섹션 */}
+        <div className="space-y-3">
           <label htmlFor="created_at" className="text-sm font-medium block">
-            등록일자
+            등록 일자
           </label>
           <Controller
             name="created_at"
@@ -216,9 +279,9 @@ export default function AdminDirectPriceForm() {
                   value={value}
                   onChange={onChange}
                   onBlur={onBlur}
-                  className="w-full"
+                  className="w-full text-base md:text-sm"
                 />
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <Button
                     type="button"
                     variant="outline"
@@ -232,7 +295,7 @@ export default function AdminDirectPriceForm() {
                       const minutes = String(now.getMinutes()).padStart(2, "0");
                       onChange(`${year}-${month}-${day}T${hours}:${minutes}`);
                     }}
-                    className="text-xs"
+                    className="text-xs flex-1 sm:flex-initial"
                   >
                     현재 시각
                   </Button>
@@ -241,15 +304,15 @@ export default function AdminDirectPriceForm() {
                     variant="outline"
                     size="sm"
                     onClick={() => onChange("")}
-                    className="text-xs text-red-600 hover:text-red-700"
+                    className="text-xs text-red-600 hover:text-red-700 flex-1 sm:flex-initial"
                   >
                     초기화
                   </Button>
                 </div>
                 {value && (
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600 p-3 bg-green-50 rounded-lg">
                     선택된 일시:{" "}
-                    <span className="font-semibold">
+                    <span className="font-semibold text-green-700">
                       {new Date(value).toLocaleString("ko-KR", {
                         year: "numeric",
                         month: "long",
@@ -269,8 +332,13 @@ export default function AdminDirectPriceForm() {
         </div>
       </div>
 
-      <div className="mt-6 flex justify-end gap-2">
-        <Button disabled={isSubmitting}>
+      {/* 제출 버튼 */}
+      <div className="mt-8 pt-6 border-t flex flex-col sm:flex-row justify-end gap-3">
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full sm:w-auto"
+        >
           {isSubmitting ? "등록 중..." : "등록하기"}
         </Button>
       </div>
