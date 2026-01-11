@@ -89,3 +89,22 @@ export const formatRelativeTime = (targetDate: string) => {
   }
   return "방금 전";
 };
+
+// UTC -> KST(yyyy-mm-dd hh:mm)
+export const formatKST = (dateString: string) => {
+  const date = new Date(dateString);
+
+  const kst = new Date(
+    date.toLocaleString("en-US", {
+      timeZone: "Asia/Seoul",
+    })
+  );
+
+  const yyyy = kst.getFullYear();
+  const mm = String(kst.getMonth() + 1).padStart(2, "0");
+  const dd = String(kst.getDate()).padStart(2, "0");
+  const hh = String(kst.getHours()).padStart(2, "0");
+  const min = String(kst.getMinutes()).padStart(2, "0");
+
+  return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+};
