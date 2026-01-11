@@ -28,6 +28,7 @@ import { logSearchKeywordAction } from "@/app/actions/search-actions";
 interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
   className?: string;
+  isSearchMode?: boolean; // 검색/선택 모드
   onSearch?: (value: string) => void;
   onSelectSuggestion?: (suggestion: SearchItemInfo) => void;
 }
@@ -38,6 +39,7 @@ const MAX_RECENT_SEARCHES = 5;
 export default function SearchInput({
   value,
   className,
+  isSearchMode = true,
   onSearch,
   onSelectSuggestion,
   ...rest
@@ -119,7 +121,9 @@ export default function SearchInput({
     if (onSelectSuggestion) onSelectSuggestion(s);
 
     // 검색어 1점 증가
-    logSearchKeywordAction(s.name, s.item_gender);
+    if (isSearchMode) {
+      logSearchKeywordAction(s.name, s.item_gender);
+    }
 
     // 자동완성 닫기
     setSuggestionOpen(false);
@@ -172,20 +176,20 @@ export default function SearchInput({
                           key={s.id}
                           value={s.id}
                           onSelect={() => handleSelect(s)}
-                          className="flex items-center text-left gap-3 py-1 cursor-pointer"
+                          className="flex items-center text-left text-xs md:text-sm gap-3 py-1 cursor-pointer"
                         >
                           <img
                             src={s.image || "/images/empty.png"}
                             alt=""
                             className="w-10 h-12 object-contain"
                           />
-                          <span className="text-sm">
+                          <span>
                             {s.name} ({s.item_gender})
                           </span>
                         </CommandItem>
                       ))
                     ) : (
-                      <div className="py-6 text-center text-sm text-gray-400">
+                      <div className="py-6 text-center text-gray-400">
                         검색어를 입력하세요
                       </div>
                     )}
@@ -216,27 +220,28 @@ export default function SearchInput({
                           key={s.id}
                           value={s.id}
                           onSelect={() => handleSelect(s)}
-                          className="flex items-center text-left gap-3 py-1 cursor-pointer group"
+                          className="flex items-center text-left text-xs md:text-sm gap-3 py-1 cursor-pointer group"
                         >
                           <img
                             src={s.image || "/images/empty.png"}
                             alt=""
                             className="w-10 h-12 object-contain"
                           />
-                          <span className="text-sm flex-1">
-                            {s.name} ({s.item_gender})
-                          </span>
-                          <button
-                            onClick={(e) => removeRecentSearch(s.id, e)}
-                            className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-gray-100 rounded"
-                          >
-                            <X className="w-3.5 h-3.5 text-gray-400" />
-                          </button>
+                          <div className="flex items-start gap-1">
+                            <span>
+                              {s.name} ({s.item_gender})
+                            </span>
+                            <button
+                              onClick={(e) => removeRecentSearch(s.id, e)}
+                            >
+                              <X className="w-2 h-2 md:w-3 md:h-3 text-foreground/50" />
+                            </button>
+                          </div>
                         </CommandItem>
                       ))
                     ) : (
-                      <div className="py-6 text-center text-sm text-gray-400">
-                        검색 내역이 없습니다
+                      <div className="py-6 text-center text-gray-400">
+                        검색 내역이 없습니다.
                       </div>
                     )}
                   </CommandGroup>

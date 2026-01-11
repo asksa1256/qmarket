@@ -17,6 +17,7 @@ import {
 import { createAdminPrice } from "@/app/actions/admin-actions";
 import Image from "next/image";
 import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export default function AdminDirectPriceForm() {
   const queryClient = useQueryClient();
@@ -63,8 +64,8 @@ export default function AdminDirectPriceForm() {
 
       queryClient.invalidateQueries({ queryKey: ["filtered-items"] });
 
-      // reset();
-      alert("아이템이 성공적으로 등록되었습니다.");
+      toast.success("아이템이 성공적으로 등록되었습니다.");
+      reset();
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "등록 중 오류가 발생했습니다.";
@@ -105,6 +106,7 @@ export default function AdminDirectPriceForm() {
               <SearchInput
                 value={field.value}
                 placeholder="아이템명 입력"
+                isSearchMode={false}
                 className="w-full [&_svg]:size-5 [&_svg]:right-4"
                 onSearch={(value: string) => {
                   field.onChange(value);
