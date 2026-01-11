@@ -3,7 +3,6 @@
 import { getUserServer } from "@/shared/api/get-supabase-user-server";
 import { supabaseServer } from "@/shared/api/supabase-server";
 import { ITEMS_TABLE_NAME } from "@/shared/config/constants";
-import { revalidatePath } from "next/cache";
 
 export async function checkIsAdmin() {
   const user = await getUserServer();
@@ -42,6 +41,7 @@ export async function createAdminPrice(values: AdminDirectPriceFormValues) {
         updated_at: values.created_at,
         nickname: "큐마켓",
         user_id: user.id,
+        // is_for_sale은 일부러 채우지 않음 (목록에 관리자 데이터 뜨지 않게 하기 위함)
       },
     ])
     .select();
@@ -49,8 +49,6 @@ export async function createAdminPrice(values: AdminDirectPriceFormValues) {
   if (error) {
     throw new Error(error.message);
   }
-
-  revalidatePath("/admin");
 
   return data;
 }

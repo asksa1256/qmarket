@@ -15,11 +15,11 @@ import {
   AdminDirectPriceValues,
 } from "../model/adminDirectPriceFormSchema";
 import { createAdminPrice } from "@/app/actions/admin-actions";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function AdminDirectPriceForm() {
-  const router = useRouter();
+  const queryClient = useQueryClient();
 
   const form = useForm<AdminDirectPriceValues>({
     resolver: zodResolver(AdminDirectPriceFormSchema),
@@ -43,8 +43,7 @@ export default function AdminDirectPriceForm() {
 
   const onSubmit = async (values: AdminDirectPriceValues) => {
     try {
-      // 날짜 형식 변환: 'yyyy-mm-dd hh:mm:00+00'
-      const formattedDate = `${values.created_at}:00+00`;
+      const date = new Date(values.created_at); // KST 입력
 
       const itemData = {
         item_name: values.item_name,
@@ -57,14 +56,15 @@ export default function AdminDirectPriceForm() {
         image: values.image,
         price: values.price,
         is_sold: true,
-        created_at: formattedDate,
+        created_at: date.toISOString(), // db에 UTC로 변환해서 저장
       };
 
       await createAdminPrice(itemData);
 
-      reset();
+      queryClient.invalidateQueries({ queryKey: ["filtered-items"] });
+
+      // reset();
       alert("아이템이 성공적으로 등록되었습니다.");
-      router.refresh();
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "등록 중 오류가 발생했습니다.";
