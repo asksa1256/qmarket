@@ -11,8 +11,6 @@ export default function TransactionList({ payload }: TransactionListProps) {
     return null;
   }
 
-  console.log(payload);
-
   const dataPoint = payload[0].payload;
   const transactions = dataPoint.transactions || [];
 
@@ -24,10 +22,12 @@ export default function TransactionList({ payload }: TransactionListProps) {
       {transactions.length > 0 ? (
         <ol className="max-h-[150px] overflow-y-auto">
           {transactions.map((tx: Transaction, idx: number) => (
-            <li key={idx} className="pb-0.5 text-xs text-gray-500">
+            <li key={idx} className="pb-0.5 text-xs text-foreground/50">
               <p>
                 · {tx.price.toLocaleString()}원{" "}
-                <span className="text-xs">({formatKST(tx.updated_at)})</span>
+                <span className="text-xs text-foreground/30">
+                  ({formatKST(tx.updated_at).slice(11)})
+                </span>
               </p>
             </li>
           ))}

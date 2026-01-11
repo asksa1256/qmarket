@@ -229,13 +229,17 @@ export default function ItemDetailClient({
             </div>
           </div>
 
-          {isPending ? (
-            <div className="flex items-center justify-center">
+          {/* 거래 내역 차트 */}
+          <div>
+            <h3 className="md:text-lg font-bold mb-2 text-base">
+              📈 거래 내역 차트
+            </h3>
+            {isPending ? (
               <LoadingSpinner />
-            </div>
-          ) : (
-            <SaleHistoryChart data={saleHistory ?? []} />
-          )}
+            ) : (
+              <SaleHistoryChart data={saleHistory ?? []} />
+            )}
+          </div>
         </div>
       </div>
     </section>
