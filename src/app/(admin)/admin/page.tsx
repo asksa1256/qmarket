@@ -1,4 +1,5 @@
 import AdminDirectPriceForm from "@/features/admin/ui/AdminDirectPriceForm";
+import ButtonToMain from "@/shared/ui/LinkButton/ButtonToMain";
 
 export default async function AdminPage() {
   return (
