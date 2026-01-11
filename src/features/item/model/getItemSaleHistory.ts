@@ -1,5 +1,6 @@
-import { supabase } from "../../../shared/api/supabase-client";
+import { supabase } from "@/shared/api/supabase-client";
 import { Transaction } from "@/features/market/model/transactionTypes";
+import { formatKST } from "@/shared/lib/formatters";
 
 export interface SaleHistory {
   date: string;
@@ -64,8 +65,7 @@ export default async function getItemSaleHistory(
   const transactionsByDate: { [date: string]: Transaction[] } = {};
   if (detailData) {
     detailData.forEach((row: ItemRow) => {
-      // updated_at (timestamptz)에서 날짜 ('YYYY-MM-DD')만 추출
-      const saleDate = new Date(row.updated_at).toISOString().split("T")[0];
+      const saleDate = formatKST(row.updated_at).slice(0, 10); //transaction date 그룹핑 형식(yyyy-mm-dd)을 맞추기 위해 'hh:mm' 부분은 제거
 
       const transaction: Transaction = {
         item_name: row.item_name,

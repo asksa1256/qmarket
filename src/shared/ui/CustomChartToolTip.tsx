@@ -4,13 +4,11 @@ import { SaleHistory } from "../../features/item/model/getItemSaleHistory";
 interface CustomTooltipProps {
   active?: boolean;
   payload?: { value: number; payload: SaleHistory }[];
-  label?: string;
 }
 
 export default function CustomChartTooltip({
   active,
   payload,
-  label,
 }: CustomTooltipProps) {
   if (active && payload && payload.length) {
     const avgPrice = payload[0].value.toFixed(0);
@@ -28,7 +26,7 @@ export default function CustomChartTooltip({
             평균 거래가: <b className="text-blue-600">{formattedAvgPrice}원</b>
           </span>
         </p>
-        {/* <TransactionList payload={payload} label={label!} />{" "} */}
+        <TransactionList payload={payload} />{" "}
       </div>
     );
   }
