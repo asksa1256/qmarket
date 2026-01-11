@@ -19,7 +19,6 @@ export async function getItemPriceChanges({
       items_info ( image )
     `
     )
-    // .neq("change_rate", 0)
     .gte("log_date", formatDateYMD(startDate))
     .lt("log_date", formatDateYMD(nextWeekStart))
     .order("log_date", { ascending: false });
@@ -29,8 +28,10 @@ export async function getItemPriceChanges({
   const { data, error } = await query;
   if (error) return [];
 
-  return data.map(({ items_info, ...rest }) => ({
-    ...rest,
+  return data.map(({ items_info, cur_price, prev_price, ...rest }) => ({
+    cur_price: Math.round(cur_price),
+    prev_price: Math.round(prev_price),
     image: items_info?.image ?? null,
+    ...rest,
   }));
 }
