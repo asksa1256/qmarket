@@ -39,6 +39,7 @@ export default function AdminDirectPriceForm() {
     handleSubmit,
     control,
     reset,
+    getValues,
     formState: { errors, isSubmitting },
   } = form;
 
@@ -65,7 +66,9 @@ export default function AdminDirectPriceForm() {
       queryClient.invalidateQueries({ queryKey: ["filtered-items"] });
 
       toast.success("아이템이 성공적으로 등록되었습니다.");
-      reset();
+      reset({
+        created_at: getValues("created_at"),
+      });
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "등록 중 오류가 발생했습니다.";
