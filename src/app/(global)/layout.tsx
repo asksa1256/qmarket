@@ -39,9 +39,8 @@ export default async function RootLayout({
     <html lang="ko">
       <body className={`${pretendard.className} antialiased`}>
         <QueryProvider dehydratedState={dehydratedState}>
-          <Header />
-
           <HydrationBoundary state={dehydrate(queryClient)}>
+            <Header />
             <div className="pt-12 xl:px-0 px-4">{children}</div>
           </HydrationBoundary>
 

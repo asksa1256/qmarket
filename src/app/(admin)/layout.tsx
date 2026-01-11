@@ -8,6 +8,8 @@ import { getUserServer } from "@/shared/api/get-supabase-user-server";
 import { QueryProvider } from "@/shared/providers/QueryProvider";
 import { galmuri9 } from "@/shared/config/fonts";
 import "@/globals.css";
+import { Toaster } from "sonner";
+import Header from "@/shared/ui/Header";
 
 export default async function AdminLayout({
   children,
@@ -33,12 +35,21 @@ export default async function AdminLayout({
   return (
     <html lang="ko">
       <body
-        className={`${galmuri9.className} antialiased min-h-screen py-12 px-4 bg-gradient-to-br from-red-50 via-yellow-50 to-purple-50`}
+        className={`${galmuri9.className} antialiased min-h-screen bg-gradient-to-br from-red-50 via-yellow-50 to-purple-50`}
       >
         <QueryProvider dehydratedState={dehydratedState}>
           <HydrationBoundary state={dehydratedState}>
+            <Header />
             {children}
           </HydrationBoundary>
+
+          <Toaster
+            position="bottom-center"
+            richColors
+            toastOptions={{
+              className: "font-pretendard",
+            }}
+          />
         </QueryProvider>
       </body>
     </html>
