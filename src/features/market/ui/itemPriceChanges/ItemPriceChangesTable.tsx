@@ -9,9 +9,10 @@ import { Button } from "@/shared/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import ChevronUpDown from "@/shared/ui/Icon/ChevronUpDown";
 import { cn } from "@/shared/lib/utils";
-import ItemPriceChangesCards from "./ItemPriceChangesCards";
 import { ChangeRateSortOrder } from "../../model/itemPriceChangeTypes";
 import { ItemPriceChange } from "../../model/itemPriceChangeTypes";
+import ChangeRateBadge from "../ChangeRateBadge";
+import ItemPriceChangesMobileAccordion from "./ItemPriceChangesMobileAccordion";
 
 interface Props {
   items: ItemPriceChange[];
@@ -20,7 +21,7 @@ interface Props {
   filter: "all" | "up" | "down";
 }
 
-interface DailyGroup {
+export interface DailyGroup {
   date: string;
   items: ItemPriceChange[];
 }
@@ -67,27 +68,6 @@ export default function ItemPriceChangesTable({
       if (prev === "desc") return "asc";
       return "default";
     });
-  };
-
-  // 변동률 뱃지
-  const renderChangeRate = (item: ItemPriceChange) => {
-    const isUp = item.change_rate > 0;
-    const isDown = item.change_rate < 0;
-
-    return (
-      <span
-        className={cn(
-          "inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold",
-          isUp && "bg-red-50 text-red-600",
-          isDown && "bg-blue-50 text-blue-600",
-          !isUp && !isDown && "bg-gray-100 text-gray-500"
-        )}
-      >
-        {isUp && "▲"}
-        {isDown && "▼"}
-        {Math.abs(item.change_rate)}%
-      </span>
-    );
   };
 
   // 필터링 + 정렬
@@ -216,6 +196,7 @@ export default function ItemPriceChangesTable({
                                     src={item.image || "/images/empty.png"}
                                     alt={item.item_name}
                                     fill
+                                    loading="lazy"
                                     className="object-contain rounded-lg"
                                   />
                                 </div>
@@ -245,7 +226,7 @@ export default function ItemPriceChangesTable({
 
                             <td className="py-2 px-2 text-center">
                               <div className="flex flex-col items-center gap-1">
-                                {renderChangeRate(item)}
+                                <ChangeRateBadge value={item.change_rate} />
                                 <span className="text-xs text-gray-400">
                                   {isNewItem
                                     ? "(신규)"
@@ -272,8 +253,10 @@ export default function ItemPriceChangesTable({
 
       {/* 테이블 본문 (태블릿, 모바일) */}
       <div className="block md:hidden">
-        <ItemPriceChangesCards
-          items={filteredAndSortedItems}
+        <ItemPriceChangesMobileAccordion
+          dailyGroups={dailyGroups}
+          openDates={openDates}
+          toggleDate={toggleDate}
           isLoading={isLoading}
         />
       </div>
