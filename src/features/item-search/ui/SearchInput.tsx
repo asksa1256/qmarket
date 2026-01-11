@@ -28,6 +28,7 @@ import { logSearchKeywordAction } from "@/app/actions/search-actions";
 interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
   className?: string;
+  isSearchMode?: boolean; // 검색/선택 모드
   onSearch?: (value: string) => void;
   onSelectSuggestion?: (suggestion: SearchItemInfo) => void;
 }
@@ -38,6 +39,7 @@ const MAX_RECENT_SEARCHES = 5;
 export default function SearchInput({
   value,
   className,
+  isSearchMode = true,
   onSearch,
   onSelectSuggestion,
   ...rest
@@ -119,7 +121,9 @@ export default function SearchInput({
     if (onSelectSuggestion) onSelectSuggestion(s);
 
     // 검색어 1점 증가
-    logSearchKeywordAction(s.name, s.item_gender);
+    if (isSearchMode) {
+      logSearchKeywordAction(s.name, s.item_gender);
+    }
 
     // 자동완성 닫기
     setSuggestionOpen(false);

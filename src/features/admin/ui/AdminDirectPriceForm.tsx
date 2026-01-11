@@ -106,6 +106,7 @@ export default function AdminDirectPriceForm() {
               <SearchInput
                 value={field.value}
                 placeholder="아이템명 입력"
+                isSearchMode={false}
                 className="w-full [&_svg]:size-5 [&_svg]:right-4"
                 onSearch={(value: string) => {
                   field.onChange(value);
