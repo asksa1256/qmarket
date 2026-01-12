@@ -162,100 +162,111 @@ export default function ItemPriceChangesTable({
             </thead>
 
             <tbody className="divide-y">
-              {filteredDailyGroups.map(({ date, items }) => {
-                const isOpen = openDates.has(date);
+              {filteredDailyGroups.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={5}
+                    className="py-3 px-4 text-sm text-center text-foreground/50"
+                  >
+                    해당 기간의 시세 변동 내역이 없습니다.
+                  </td>
+                </tr>
+              ) : (
+                filteredDailyGroups.map(({ date, items }) => {
+                  const isOpen = openDates.has(date);
 
-                return (
-                  <Fragment key={date}>
-                    {/* 일별 아코디언 헤더 */}
-                    <tr
-                      className="bg-gray-100 cursor-pointer hover:bg-gray-200"
-                      onClick={() => toggleDate(date)}
-                    >
-                      <td colSpan={5} className="py-3 px-4 font-bold">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            {formatDateYMD(date)}
+                  return (
+                    <Fragment key={date}>
+                      {/* 일별 아코디언 헤더 */}
+                      <tr
+                        className="bg-gray-100 cursor-pointer hover:bg-gray-200"
+                        onClick={() => toggleDate(date)}
+                      >
+                        <td colSpan={5} className="py-3 px-4 font-bold">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              {formatDateYMD(date)}
+                            </div>
+
+                            <span className="text-sm text-gray-600">
+                              변동 {items.length}개
+                            </span>
                           </div>
+                        </td>
+                      </tr>
 
-                          <span className="text-sm text-gray-600">
-                            변동 {items.length}개
-                          </span>
-                        </div>
-                      </td>
-                    </tr>
+                      {/* 해당 날짜 아이템 리스트 */}
+                      {isOpen &&
+                        items.map((item) => {
+                          const itemLogDate = new Date(item.log_date)
+                            .toISOString()
+                            .split("T")[0];
 
-                    {/* 해당 날짜 아이템 리스트 */}
-                    {isOpen &&
-                      items.map((item) => {
-                        const itemLogDate = new Date(item.log_date)
-                          .toISOString()
-                          .split("T")[0];
+                          const isNewItem =
+                            !item.prev_price || item.prev_price === 0;
+                          const isTodayChange =
+                            !isNewItem && today === itemLogDate;
 
-                        const isNewItem =
-                          !item.prev_price || item.prev_price === 0;
-                        const isTodayChange =
-                          !isNewItem && today === itemLogDate;
-
-                        return (
-                          <tr key={item.id} className="text-sm">
-                            <td className="py-2 px-4">
-                              <div className="flex items-center gap-3">
-                                <div className="relative w-12 h-14 bg-gray-50 flex-shrink-0">
-                                  <Image
-                                    src={item.image || "/images/empty.png"}
-                                    alt={item.item_name}
-                                    fill
-                                    loading="lazy"
-                                    className="object-contain rounded-lg"
-                                  />
+                          return (
+                            <tr key={item.id} className="text-sm">
+                              <td className="py-2 px-4">
+                                <div className="flex items-center gap-3">
+                                  <div className="relative w-12 h-14 bg-gray-50 flex-shrink-0">
+                                    <Image
+                                      src={item.image || "/images/empty.png"}
+                                      alt={item.item_name}
+                                      fill
+                                      loading="lazy"
+                                      className="object-contain rounded-lg"
+                                    />
+                                  </div>
+                                  <Link
+                                    href={`/item/${item.item_name}/${item.item_gender}`}
+                                    prefetch={false}
+                                  >
+                                    <b className="font-bold text-foreground mr-1 hover:underline hover:underline-offset-2 hover:text-blue-500">
+                                      {item.item_name}
+                                    </b>
+                                    <span className="text-xs text-gray-400">
+                                      ({item.item_gender})
+                                    </span>
+                                  </Link>
                                 </div>
-                                <Link
-                                  href={`/item/${item.item_name}/${item.item_gender}`}
-                                  prefetch={false}
-                                >
-                                  <b className="font-bold text-foreground mr-1 hover:underline hover:underline-offset-2 hover:text-blue-500">
-                                    {item.item_name}
-                                  </b>
+                              </td>
+
+                              <td className="py-2 px-2 font-medium">
+                                {item.cur_price.toLocaleString()}
+                              </td>
+
+                              <td className="py-2 px-2 font-medium text-foreground/50">
+                                {item.prev_price !== 0
+                                  ? item.prev_price.toLocaleString()
+                                  : "-"}
+                              </td>
+
+                              <td className="py-2 px-2 text-center">
+                                <div className="flex flex-col items-center gap-1">
+                                  <ChangeRateBadge value={item.change_rate} />
                                   <span className="text-xs text-gray-400">
-                                    ({item.item_gender})
+                                    {isNewItem
+                                      ? "(신규)"
+                                      : isTodayChange
+                                      ? "(당일 변동)"
+                                      : `(${item.days_since_last_sale}일 전 대비)`}
                                   </span>
-                                </Link>
-                              </div>
-                            </td>
+                                </div>
+                              </td>
 
-                            <td className="py-2 px-2 font-medium">
-                              {item.cur_price.toLocaleString()}
-                            </td>
-
-                            <td className="py-2 px-2 font-medium text-foreground/50">
-                              {item.prev_price !== 0
-                                ? item.prev_price.toLocaleString()
-                                : "-"}
-                            </td>
-
-                            <td className="py-2 px-2 text-center">
-                              <div className="flex flex-col items-center gap-1">
-                                <ChangeRateBadge value={item.change_rate} />
-                                <span className="text-xs text-gray-400">
-                                  {isNewItem
-                                    ? "(신규)"
-                                    : isTodayChange
-                                    ? "(당일 변동)"
-                                    : `(${item.days_since_last_sale}일 전 대비)`}
-                                </span>
-                              </div>
-                            </td>
-
-                            <td className="py-2 px-2 text-right text-gray-400">
-                              {formatRelativeTime(item.updated_at)}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                  </Fragment>
-                );
-              })}
+                              <td className="py-2 px-2 text-right text-gray-400">
+                                {formatRelativeTime(item.updated_at)}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                    </Fragment>
+                  );
+                })
+              )}
             </tbody>
           </table>
         )}
