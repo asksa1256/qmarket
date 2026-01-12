@@ -11,6 +11,10 @@ export async function getItemPriceChanges({
 }) {
   const nextWeekStart = addWeeks(startDate, 1);
 
+  // KST 날짜 문자열을 만들고, 이를 UTC timestamp로 변환
+  const startKST = `${formatDateYMD(startDate)}T00:00:00+09:00`;
+  const endKST = `${formatDateYMD(nextWeekStart)}T00:00:00+09:00`;
+
   let query = supabase
     .from("item_price_changes")
     .select(
@@ -19,8 +23,8 @@ export async function getItemPriceChanges({
       items_info ( image )
     `
     )
-    .gte("log_date", formatDateYMD(startDate))
-    .lt("log_date", formatDateYMD(nextWeekStart))
+    .gte("log_date", startKST)
+    .lt("log_date", endKST)
     .order("log_date", { ascending: false });
 
   if (limit) query = query.limit(limit);
