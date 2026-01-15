@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, Fragment } from "react";
+import { useMemo, useState, Fragment, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { formatRelativeTime, formatDateYMD } from "@/shared/lib/formatters";
@@ -33,8 +33,8 @@ export default function ItemPriceChangesTable({
   filter,
 }: Props) {
   const [sortOrder, setSortOrder] = useState<ChangeRateSortOrder>("default");
-  const [openDates, setOpenDates] = useState<Set<string>>(new Set()); // 일별 그룹 아코디언 오픈 상태
   const today = new Date().toISOString().split("T")[0];
+  const [openDates, setOpenDates] = useState<Set<string>>(new Set()); // 일별 그룹 아코디언 오픈 상태
 
   const dailyGroups = useMemo<DailyGroup[]>(() => {
     const map = new Map<string, ItemPriceChange[]>();
@@ -52,6 +52,13 @@ export default function ItemPriceChangesTable({
         items,
       }));
   }, [items]);
+
+  // 아코디언 첫번째 그룹 기본 펼침 상태 설정
+  useEffect(() => {
+    if (dailyGroups.length > 0 && openDates.size === 0) {
+      setOpenDates(new Set([dailyGroups[0].date]));
+    }
+  }, [dailyGroups]);
 
   // 일별 그룹 아코디언 토글
   const toggleDate = (date: string) => {
@@ -178,22 +185,24 @@ export default function ItemPriceChangesTable({
                   return (
                     <Fragment key={date}>
                       {/* 일별 아코디언 헤더 */}
-                      <tr
-                        className="bg-gray-100 cursor-pointer hover:bg-gray-200"
-                        onClick={() => toggleDate(date)}
-                      >
-                        <td colSpan={5} className="py-3 px-4 font-bold">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              {formatDateYMD(date)}
-                            </div>
+                      {!preview && (
+                        <tr
+                          className="bg-gray-100 cursor-pointer hover:bg-gray-200"
+                          onClick={() => toggleDate(date)}
+                        >
+                          <td colSpan={5} className="py-3 px-4 font-bold">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                {formatDateYMD(date)}
+                              </div>
 
-                            <span className="text-sm text-gray-600">
-                              변동 {items.length}개
-                            </span>
-                          </div>
-                        </td>
-                      </tr>
+                              <span className="text-sm text-gray-600">
+                                변동 {items.length}개
+                              </span>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
 
                       {/* 해당 날짜 아이템 리스트 */}
                       {isOpen &&
