@@ -160,6 +160,7 @@ export default function ItemForm({
                 <SearchInput
                   value={field.value}
                   placeholder="아이템명 입력"
+                  isSearchMode={false}
                   className="w-full [&_svg]:size-5 [&_svg]:right-4"
                   isSearchMode={false}
                   onSearch={(value) => {
