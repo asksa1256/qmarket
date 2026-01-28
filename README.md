@@ -9,7 +9,7 @@ https://q-market.vercel.app
 
 ---
 
-## ✨ 주요 기능 (Features)
+## ✨ 주요 기능 
 
 - 아이템 판매/구매 게시글 CRUD
 - 아이템 시세 변동 내역 데이터 시각화 
@@ -21,9 +21,9 @@ https://q-market.vercel.app
 ## 📚 기술 스택 
 | 기술 | 카테고리 | 용도 |
 |------------|----------|---------------------|
+| <img src="https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white"> | 프레임워크 | 멀티 렌더링 전략을 통한 렌더링 성능 최적화, SEO |
 | <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> | UI 개발 | 컴포넌트 기반 선언적 UI 개발 |
 | <img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white"> | 언어 | 정적 타이핑을 통한 코드 안정성 확보 및 런타임 에러 방지 |
-| <img src="https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white"> | 프레임워크 | 멀티 렌더링 전략을 통한 렌더링 성능 최적화, SEO |
 | <img src="https://img.shields.io/badge/react hook form-EC5990?style=for-the-badge&logo=reacthookform&logoColor=black"> | 폼 관리 | 비제어 컴포넌트 기반 폼 상태 관리 및 렌더링 최적화 |
 | <img src="https://img.shields.io/badge/zod-408AFF?style=for-the-badge&logo=zod&logoColor=white"> | 유효성 검사 | 스키마 기반 검사 로직 분리로 관심사 분리 및 TS 타입 추론 |
 | <img src="https://img.shields.io/badge/TanStack Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white"> | 데이터 페칭 | 서버 데이터 캐싱, 동기화 및 선언적 데이터 상태 관리 |
