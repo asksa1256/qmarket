@@ -28,8 +28,9 @@ export default async function ItemPriceChangesPage() {
           <li>변동률은 최근 거래일 기준 n일 전 대비 변동률입니다.</li>
           <li>
             <span className="text-foreground/50">(신규)</span> 아이템은 시세가
-            신규 등록된 아이템입니다.
+            당일에 신규 등록된 아이템입니다.
           </li>
+          <li>시세는 단일 거래 가격이 아닌 당일 거래 평균가로 산출됩니다.</li>
         </ul>
 
         {/* 시세 변동 내역 */}
