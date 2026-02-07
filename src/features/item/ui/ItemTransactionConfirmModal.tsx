@@ -133,19 +133,29 @@ export default function ItemTransactionConfirmModal({
         </AlertDialogHeader>
 
         <div className="flex flex-col gap-2">
-          <h4 className="font-medium text-sm">거래 인증 이미지 등록</h4>
+          <div className="flex flex-col">
+            <h4 className="font-medium text-sm">거래 인증 이미지 등록</h4>
+            <p className="text-xs text-blue-500">
+              * 이미지 업로드 후 [인증 등록] 버튼을 눌러주세요!
+            </p>
+          </div>
+
           <TransactionImageUploader
             onFileChange={handleFileChange}
             onUpload={handleImageUpload}
           />
+
           {preview && (
-            <div className="relative w-full h-32 rounded-md overflow-hidden border border-gray-300">
-              <Image
-                src={preview}
-                alt="거래 인증 이미지 미리보기"
-                layout="fill"
-                objectFit="contain"
-              />
+            <div className="flex flex-col gap-1 mt-2">
+              <h4 className="font-medium text-sm">이미지 미리보기</h4>
+              <div className="relative w-full h-32 rounded-md overflow-hidden border border-gray-300">
+                <Image
+                  src={preview}
+                  alt="거래 인증 이미지 미리보기"
+                  layout="fill"
+                  objectFit="contain"
+                />
+              </div>
             </div>
           )}
         </div>
