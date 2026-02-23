@@ -20,7 +20,7 @@ import {
 } from "@/shared/ui/select";
 import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/shared/api/supabase-client";
 import { useUser } from "@/shared/hooks/useUser";
@@ -30,7 +30,17 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@/shared/ui/label";
 
-const CreateReportModal = () => {
+interface CreateReportModalProps {
+  initialData?: {
+    report_category?: string;
+    item_name?: string;
+    user_id?: string;
+    details?: string;
+  };
+  trigger?: React.ReactNode;
+}
+
+const CreateReportModal = ({ initialData, trigger }: CreateReportModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { data: user } = useUser();
 
@@ -43,12 +53,24 @@ const CreateReportModal = () => {
   } = useForm<ReportFormData>({
     resolver: zodResolver(reportFormSchema),
     defaultValues: {
-      report_category: "",
-      item_name: "",
-      discord_id: "",
-      details: "",
+      report_category: initialData?.report_category || "",
+      item_name: initialData?.item_name || "",
+      user_id: initialData?.user_id || "",
+      details: initialData?.details || "",
     },
   });
+
+  // 모달이 열릴 때 initialData가 바뀌면 폼 초기화
+  useEffect(() => {
+    if (isOpen && initialData) {
+      reset({
+        report_category: initialData.report_category || "",
+        item_name: initialData.item_name || "",
+        user_id: initialData.user_id || "",
+        details: initialData.details || "",
+      });
+    }
+  }, [isOpen, initialData, reset]);
 
   const onSubmit = async (data: ReportFormData) => {
     try {
@@ -56,10 +78,9 @@ const CreateReportModal = () => {
         {
           report_category: data.report_category,
           item_name: data.item_name || null,
-          discord_id: data.discord_id || null,
+          user_id: data.user_id || null,
           details: data.details,
           contact: user?.email,
-          user_id: user?.id,
         },
       ]);
 
@@ -81,9 +102,11 @@ const CreateReportModal = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="link" size="sm" className="p-0 text-xs">
-          신고
-        </Button>
+        {trigger || (
+          <Button variant="link" size="sm" className="p-0 text-xs">
+            신고
+          </Button>
+        )}
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[480px]">
@@ -144,20 +167,20 @@ const CreateReportModal = () => {
               )}
             </div>
 
-            {/* 신고 대상 디스코드 아이디 */}
+            {/* 신고 대상 아이디 */}
             <div className="flex flex-col justify-center gap-2">
-              <Label htmlFor="discord_id" className="text-sm font-medium">
-                신고 대상 디스코드 아이디
+              <Label htmlFor="user_id" className="text-sm font-medium">
+                신고 대상 아이디
               </Label>
               <Input
-                id="discord_id"
-                {...register("discord_id")}
+                id="user_id"
+                {...register("user_id")}
                 placeholder="디스코드 아이디"
                 className="col-span-3"
               />
-              {errors.discord_id && (
+              {errors.user_id && (
                 <p className="text-red-600 text-sm">
-                  {errors.discord_id.message}
+                  {errors.user_id.message}
                 </p>
               )}
             </div>
