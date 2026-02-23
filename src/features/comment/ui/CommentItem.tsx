@@ -18,6 +18,8 @@ interface CommentItemProps {
   onUpdate: (content: string) => void;
   onDelete: () => void;
   onReplyClick?: () => void;
+  itemName?: string;
+  itemGender?: string;
 }
 
 export default function CommentItem({
@@ -30,7 +32,9 @@ export default function CommentItem({
   onEditCancel,
   onUpdate,
   onDelete,
-  onReplyClick
+  onReplyClick,
+  itemName,
+  itemGender
 }: CommentItemProps) {
   const isEditing = editingId === comment.id;
 
@@ -75,6 +79,7 @@ export default function CommentItem({
             initialData={{
               report_category: "유저 신고",
               user_id: comment.user_id,
+              item_name: itemName && itemGender ? `${itemName}(${itemGender})` : undefined,
               details: `댓글 내용: ${comment.content}`
             }}
           />

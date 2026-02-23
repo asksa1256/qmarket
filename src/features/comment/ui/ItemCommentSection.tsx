@@ -17,9 +17,15 @@ import CommentItem from "./CommentItem";
 
 interface ItemCommentSectionProps {
   itemId: string;
+  itemName: string;
+  itemGender: string;
 }
 
-export default function ItemCommentSection({ itemId }: ItemCommentSectionProps) {
+export default function ItemCommentSection({ 
+  itemId,
+  itemName,
+  itemGender
+}: ItemCommentSectionProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [replyingId, setReplyingId] = useState<string | null>(null);
   const [editContent, setEditContent] = useState("");
@@ -212,6 +218,8 @@ export default function ItemCommentSection({ itemId }: ItemCommentSectionProps) 
                 onUpdate={(content) => updateComment({ id: parent.id, content })}
                 onDelete={() => deleteComment(parent.id)}
                 onReplyClick={() => setReplyingId(parent.id)}
+                itemName={itemName}
+                itemGender={itemGender}
               />
 
               {/* 답글 입력 폼 */}
@@ -243,6 +251,8 @@ export default function ItemCommentSection({ itemId }: ItemCommentSectionProps) 
                       onEditCancel={() => setEditingId(null)}
                       onUpdate={(content) => updateComment({ id: reply.id, content })}
                       onDelete={() => deleteComment(reply.id)}
+                      itemName={itemName}
+                      itemGender={itemGender}
                     />
                   </div>
                 </div>

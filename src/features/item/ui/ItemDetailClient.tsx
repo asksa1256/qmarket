@@ -246,7 +246,11 @@ export default function ItemDetailClient({
           </div>
 
           {/* 댓글 섹션 */}
-          <ItemCommentSection itemId={item.id} />
+          <ItemCommentSection 
+            itemId={item.id} 
+            itemName={item.name}
+            itemGender={item.item_gender}
+          />
         </div>
       </div>
     </section>
