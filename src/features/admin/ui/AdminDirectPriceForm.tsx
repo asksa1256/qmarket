@@ -118,7 +118,7 @@ export default function AdminDirectPriceForm() {
                   field.onChange(s.name);
 
                   const categoryKey = Object.entries(ITEM_CATEGORY_MAP).find(
-                    ([_key, label]) => label === s.category
+                    ([, label]) => label === s.category
                   )?.[0] as keyof typeof ITEM_CATEGORY_MAP | undefined;
 
                   if (categoryKey) {
@@ -126,7 +126,7 @@ export default function AdminDirectPriceForm() {
                   }
 
                   const genderKey = Object.entries(ITEM_GENDER_MAP).find(
-                    ([_key, label]) => label === s.item_gender
+                    ([, label]) => label === s.item_gender
                   )?.[0] as keyof typeof ITEM_GENDER_MAP | undefined;
 
                   if (genderKey) {
@@ -134,7 +134,7 @@ export default function AdminDirectPriceForm() {
                   }
 
                   const sourceKey = Object.entries(ITEM_SOURCES_MAP).find(
-                    ([_key, label]) => label === s.item_source
+                    ([, label]) => label === s.item_source
                   )?.[0] as keyof typeof ITEM_SOURCES_MAP | undefined;
 
                   form.setValue("item_source", sourceKey || "gatcha");
@@ -158,8 +158,8 @@ export default function AdminDirectPriceForm() {
             <div className="text-sm font-medium">
               {form.watch("category")
                 ? ITEM_CATEGORY_MAP[
-                    form.watch("category") as keyof typeof ITEM_CATEGORY_MAP
-                  ]
+                form.watch("category") as keyof typeof ITEM_CATEGORY_MAP
+                ]
                 : "미선택"}
             </div>
           </div>
@@ -168,8 +168,8 @@ export default function AdminDirectPriceForm() {
             <div className="text-sm font-medium">
               {form.watch("item_gender")
                 ? ITEM_GENDER_MAP[
-                    form.watch("item_gender") as keyof typeof ITEM_GENDER_MAP
-                  ]
+                form.watch("item_gender") as keyof typeof ITEM_GENDER_MAP
+                ]
                 : "미선택"}
             </div>
           </div>
@@ -178,8 +178,8 @@ export default function AdminDirectPriceForm() {
             <div className="text-sm font-medium">
               {form.watch("item_source")
                 ? ITEM_SOURCES_MAP[
-                    form.watch("item_source") as keyof typeof ITEM_SOURCES_MAP
-                  ]
+                form.watch("item_source") as keyof typeof ITEM_SOURCES_MAP
+                ]
                 : "미선택"}
             </div>
           </div>

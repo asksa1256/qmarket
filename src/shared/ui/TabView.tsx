@@ -1,15 +1,11 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { Item } from "@/features/item/model/itemTypes";
 import MarketPriceDashboard from "@/features/market/ui/MarketPriceDashboard";
 import ItemRankingView from "@/features/item-ranking/ui/ItemRankingView";
 
-interface Props {
-  initialItems: Item[];
-}
 
-export default function TabView({ initialItems }: Props) {
+export default function TabView() {
   return (
     <Tabs defaultValue="marketPrices" className="max-w-6xl mx-auto">
       <TabsList className="w-full">

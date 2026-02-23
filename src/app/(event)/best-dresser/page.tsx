@@ -1,4 +1,3 @@
-import EntryUploadModal from "@/features/best-dresser/ui/EntryUploadModal";
 import Footer from "@/shared/ui/Footer";
 import { getUserServer } from "@/shared/api/get-supabase-user-server";
 import EntryList from "@/features/best-dresser/ui/EntryList";
