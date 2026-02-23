@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useTransition } from "react";
 import {
   Dialog,
   DialogContent,
@@ -14,6 +14,7 @@ import { Checkbox } from "@/shared/ui/checkbox";
 import { type CheckedState } from "@radix-ui/react-checkbox";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useLatestPatchNote } from "../model/useLatestPatchNote";
 
 const POPUP_STORAGE_KEY = "hide_patch_note_2026.02.23";
@@ -25,6 +26,8 @@ export default function PatchNotePopup() {
   const [open, setOpen] = useState(false);
   const [hidePopup, setHidePopup] = useState(false);
   const { data: latestDate } = useLatestPatchNote();
+  const router = useRouter();
+  const [, startTransition] = useTransition();
 
   useEffect(() => {
     // 팝업 만료 확인
@@ -48,7 +51,9 @@ export default function PatchNotePopup() {
     setOpen(false);
   };
 
-  const handleGoToPatchNote = () => {
+  const handleGoToPatchNote = (e: React.MouseEvent) => {
+    e.preventDefault();
+
     if (latestDate) {
       localStorage.setItem(
         "lastPatchNoteVisit",
@@ -57,6 +62,10 @@ export default function PatchNotePopup() {
       window.dispatchEvent(new Event("patchNoteVisited"));
     }
     handleClose();
+
+    startTransition(() => {
+      router.push("/patch-note");
+    });
   };
 
   return (
