@@ -42,7 +42,6 @@ interface EntryCardProps {
 export default function EntryCard({
   data,
   user,
-  rank,
   disabled,
 }: EntryCardProps) {
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -153,7 +152,7 @@ export default function EntryCard({
     },
 
     // 낙관적 업데이트
-    onMutate: async (newVotes) => {
+    onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: ["best_dresser"] });
       await queryClient.cancelQueries({
         queryKey: ["my_vote", data.id, user?.id],

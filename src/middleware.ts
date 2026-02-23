@@ -5,7 +5,7 @@ import { getUserServer } from "./shared/api/get-supabase-user-server";
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
 
-  const supabase = createServerClient(
+  createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {

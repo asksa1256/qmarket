@@ -51,19 +51,19 @@ export default function ItemNameField({ form }: ItemNameFieldProps) {
               field.onChange(s.name);
 
               const categoryKey = Object.entries(ITEM_CATEGORY_MAP).find(
-                ([_key, label]) => label === s.category
+                ([, label]) => label === s.category
               )?.[0] as keyof typeof ITEM_CATEGORY_MAP;
 
               form.setValue("category", categoryKey);
 
               const genderKey = Object.entries(ITEM_GENDER_MAP).find(
-                ([_key, label]) => label === s.item_gender
+                ([, label]) => label === s.item_gender
               )?.[0] as keyof typeof ITEM_GENDER_MAP;
 
               form.setValue("item_gender", genderKey);
 
               const sourceKey = Object.entries(ITEM_SOURCES_MAP).find(
-                ([_key, label]) => label === s.item_source
+                ([, label]) => label === s.item_source
               )?.[0] as keyof typeof ITEM_SOURCES_MAP;
 
               if (sourceKey) {

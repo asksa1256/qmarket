@@ -24,7 +24,6 @@ import { ReactNode } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/shared/api/supabase-client";
 import { Input } from "@/shared/ui/input";
-import { MailQuestionMark } from "lucide-react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InquiryFormSchema, InquiryFormType } from "../model/inquirySchema";

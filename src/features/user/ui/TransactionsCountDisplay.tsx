@@ -2,7 +2,6 @@ import { getTransactionsCount } from "../model/getTransactionsCount";
 import { useQuery } from "@tanstack/react-query";
 import CheckBadgeIcon from "@/shared/ui/Icon/CheckBadge";
 import CheckCircle from "@/shared/ui/Icon/CheckCircle";
-import { Badge } from "@/shared/ui/badge";
 
 export default function TransactionCountDisplay({
   userId,
@@ -30,10 +29,10 @@ export default function TransactionCountDisplay({
     return <p className="text-center text-xs">{errorMessage}</p>;
   }
 
-  const hasCount = counts.transactionImagesCount > 0 || counts.isSoldCount > 0;
-  const trustScore = Math.round(
-    (counts.transactionImagesCount / counts.isSoldCount) * 100
-  );
+  // const hasCount = counts.transactionImagesCount > 0 || counts.isSoldCount > 0;
+  // const trustScore = Math.round(
+  //   (counts.transactionImagesCount / counts.isSoldCount) * 100
+  // );
 
   return (
     <>

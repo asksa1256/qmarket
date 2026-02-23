@@ -82,6 +82,7 @@ export const ALLOWED_RETURN_TO = new Set([
   "/items",
   "/my-items",
   "/item-price-changes",
+  "/item/",
 ]);
 
 export const CUSTOM_ENTRY_TAGS = (idx: number) => {

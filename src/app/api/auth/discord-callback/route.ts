@@ -41,7 +41,7 @@ export async function GET(req: Request) {
   let returnTo = "/";
   const rawReturnTo = url.searchParams.get("returnTo");
 
-  if (rawReturnTo && ALLOWED_RETURN_TO.has(rawReturnTo)) {
+  if (rawReturnTo && (ALLOWED_RETURN_TO.has(rawReturnTo) || rawReturnTo.startsWith("/item/"))) {
     returnTo = rawReturnTo;
   }
 

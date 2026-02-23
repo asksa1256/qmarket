@@ -5,7 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/shared/api/supabase-client";
 import { toast } from "sonner";
-import { Loader2, CheckCircle2, Pencil } from "lucide-react";
+import { Loader2, CheckCircle2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,

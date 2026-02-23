@@ -21,6 +21,7 @@ import { Badge } from "@/shared/ui/badge";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { FilterParams } from "@/features/item-search/model/filterTypes";
+import ItemCommentSection from "@/features/comment/ui/ItemCommentSection";
 
 export interface ItemDetail {
   id: string;
@@ -243,6 +244,13 @@ export default function ItemDetailClient({
               <SaleHistoryChart data={saleHistory ?? []} />
             )}
           </div>
+
+          {/* 댓글 섹션 */}
+          <ItemCommentSection 
+            itemId={item.id} 
+            itemName={item.name}
+            itemGender={item.item_gender}
+          />
         </div>
       </div>
     </section>
