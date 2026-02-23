@@ -69,7 +69,7 @@ export default function Header() {
     <header className="sticky top-0 backdrop-blur-sm z-50">
       <div className="flex items-center justify-between py-2 lg:max-w-6xl mx-auto px-4 xl:px-0">
         <Link href="/" className="lg:w-[280px] md:w-[240px] shrink-0">
-          <Image src="/images/logo.png" alt="큐마켓" width={140} height={54} />
+          <Image src="/images/logo.png" alt="큐마켓" width={140} height={54} priority />
         </Link>
 
         {/* Desktop View */}
