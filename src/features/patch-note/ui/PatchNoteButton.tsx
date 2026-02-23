@@ -17,15 +17,24 @@ export default function PatchNoteButton({ onClose }: Props) {
   const { data: latestDate } = useLatestPatchNote();
 
   useEffect(() => {
-    if (!latestDate) return;
+    const checkBadge = () => {
+      if (!latestDate) return;
 
-    const latestPatchNoteDate = new Date(latestDate).getTime();
-    const lastVisitedStr = localStorage.getItem("lastPatchNoteVisit");
-    const lastVisited = lastVisitedStr ? parseInt(lastVisitedStr) : 0;
+      const latestPatchNoteDate = new Date(latestDate).getTime();
+      const lastVisitedStr = localStorage.getItem("lastPatchNoteVisit");
+      const lastVisited = lastVisitedStr ? parseInt(lastVisitedStr) : 0;
 
-    if (latestPatchNoteDate > lastVisited) {
-      setHasNewPatchNote(true);
-    }
+      if (latestPatchNoteDate > lastVisited) {
+        setHasNewPatchNote(true);
+      } else {
+        setHasNewPatchNote(false);
+      }
+    };
+
+    checkBadge();
+
+    window.addEventListener("patchNoteVisited", checkBadge);
+    return () => window.removeEventListener("patchNoteVisited", checkBadge);
   }, [latestDate]);
 
   const handleClick = () => {

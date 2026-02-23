@@ -13,6 +13,7 @@ import GoToItemsButton from "@/features/items/ui/GoToItemsButton";
 import GoToMyItemsButton from "@/features/user/ui/GoToMyItemsButton";
 import GoToItemPriceChangesButton from "@/features/market/ui/itemPriceChanges/GoToItemPriceChangesButton";
 import ItemPriceChangesContainer from "@/features/market/ui/itemPriceChanges/ItemPriceChangesContainer";
+import PatchNotePopup from "@/features/patch-note/ui/PatchNotePopup";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -46,6 +47,7 @@ export default async function Home() {
       </Suspense>
 
       <main className="flex">
+        <PatchNotePopup />
         <div className="flex flex-col w-full gap-8 items-center">
           {/* 아이템 검색 */}
           <section className="mb-12 flex flex-col gap-2 items-center md:w-xl w-full max-w-md">
