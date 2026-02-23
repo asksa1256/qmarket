@@ -5,21 +5,22 @@ import { Textarea } from "@/shared/ui/textarea";
 import { formatRelativeTime } from "@/shared/lib/formatters";
 import Link from "next/link";
 import CreateReportModal from "@/features/report/ui/CreateReportModal";
+import { User } from "@supabase/supabase-js";
 import { Comment } from "../model/commentTypes";
 
 interface CommentItemProps {
   comment: Comment;
-  user: any;
+  user?: User | null;
   editingId: string | null;
   editContent: string;
+  itemName?: string;
+  itemGender?: string;
   setEditContent: (v: string) => void;
   onEditStart: (content: string) => void;
   onEditCancel: () => void;
   onUpdate: (content: string) => void;
   onDelete: () => void;
   onReplyClick?: () => void;
-  itemName?: string;
-  itemGender?: string;
 }
 
 export default function CommentItem({
