@@ -1,4 +1,4 @@
-import ButtonToBack from "@/shared/ui/LinkButton/ButtonToBack";
+import ButtonToMain from "@/shared/ui/LinkButton/ButtonToMain";
 import { getUserServer } from "@/shared/api/get-supabase-user-server";
 import ItemPriceChangesContainer from "@/features/market/ui/itemPriceChanges/ItemPriceChangesContainer";
 
@@ -17,7 +17,7 @@ export default async function ItemPriceChangesPage() {
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-16">
-      <ButtonToBack />
+      <ButtonToMain />
 
       <section>
         <h2 className="text-2xl font-bold tracking-tight mb-6">
