@@ -22,6 +22,43 @@ export default function PatchNotePage() {
       <SectionTitle className="text-center">패치노트</SectionTitle>
 
       <Accordion type="single" collapsible className="w-full">
+        <AccordionItem value="patch-2026-02-23" className="border-b">
+          <AccordionTrigger className="text-lg font-semibold text-left hover:no-underline py-4 text-gray-700">
+            2026.02.23. 업데이트 안내
+          </AccordionTrigger>
+
+          <AccordionContent className="text-foreground p-4 bg-gray-50 border-t break-keep">
+            <h4 className="font-bold text-xl mb-2">📢 아이템 상세 페이지 댓글 시스템 추가</h4>
+
+            <p className="leading-relaxed">
+              아이템 상세 페이지 하단에 <strong>댓글 영역</strong>이 추가되었습니다.
+            </p>
+
+            <details className="mt-6">
+              <summary className="cursor-pointer font-semibold text-gray-700">
+                자세히 보기
+              </summary>
+              <div className="mt-4">
+                <ul className="list-disc list-inside mt-4 text-foreground/80 leading-relaxed">
+                  <li>로그인 후, 아이템에 대한 댓글과 답글을 등록할 수 있습니다.</li>
+                  <li>부적절한 댓글은 해당 댓글의 <strong>신고</strong>버튼을 눌러 제보해주세요.</li>
+                </ul>
+                <Image
+                  src="/images/patch-item-comment-1.png"
+                  alt="아이템 상세 페이지 댓글 시스템 미리보기"
+                  width={600}
+                  height={400}
+                  className="object-contain my-4"
+                />
+              </div>
+            </details>
+
+            <p className="leading-relaxed mt-6">
+              감사합니다.
+            </p>
+          </AccordionContent>
+        </AccordionItem>
+
         <AccordionItem value="patch-2026-01-08" className="border-b">
           <AccordionTrigger className="text-lg font-semibold text-left hover:no-underline py-4 text-gray-700">
             2026.01.08. 업데이트 안내

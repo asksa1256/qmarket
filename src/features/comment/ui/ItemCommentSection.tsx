@@ -151,12 +151,12 @@ export default function ItemCommentSection({
 
   return (
     <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm mt-8">
-      <div className="flex items-center gap-2 mb-6">
+      <div className="flex items-center gap-2 mb-4">
         <MessageSquare className="size-5 text-gray-700" />
         <h3 className="font-bold text-lg">댓글 {comments?.length || 0}</h3>
       </div>
 
-      <div className="mb-8">
+      <div className="mb-2">
         {user ? (
           <form
             className="flex gap-2"
@@ -236,7 +236,7 @@ export default function ItemCommentSection({
 
               {/* 답글 목록 */}
               {parent.replies.map(reply => (
-                <div key={reply.id} className="ml-8 mt-4 flex gap-2 relative group/reply">
+                <div key={reply.id} className="ml-8 mt-2 flex gap-2 relative group/reply">
                   <CornerDownRight className="size-4 text-gray-300 shrink-0 mt-1" />
                   <div className="flex-1 bg-gray-50/50 p-4 rounded-lg relative">
                     <CommentItem

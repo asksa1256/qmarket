@@ -41,7 +41,7 @@ export default function CommentItem({
 
   return (
     <div className="flex-1">
-      <div className="flex justify-between items-start mb-2">
+      <div className="flex justify-between">
         <div className="flex items-center gap-2">
           <Link
             href={`/user/${comment.user_id}`}
@@ -75,7 +75,7 @@ export default function CommentItem({
           </div>
         </div>
 
-        <div className="opacity-0 group-hover:opacity-100 group-hover/reply:opacity-100 transition-opacity">
+        <div className="h-[20px] opacity-0 group-hover:opacity-100 group-hover/reply:opacity-100 transition-opacity">
           <CreateReportModal
             initialData={{
               report_category: "유저 신고",
