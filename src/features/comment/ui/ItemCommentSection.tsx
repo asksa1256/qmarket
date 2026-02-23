@@ -11,6 +11,7 @@ import { CommentFormValues, commentFormSchema } from "../model/commentSchema";
 import { Textarea } from "@/shared/ui/textarea";
 import { toast } from "sonner";
 import { Loader2, MessageSquare, CornerDownRight, LogIn } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { login } from "@/features/auth/signin/model/actions";
 import { Comment, OrganizedComment } from "../model/commentTypes";
 import CommentItem from "./CommentItem";
@@ -21,7 +22,7 @@ interface ItemCommentSectionProps {
   itemGender: string;
 }
 
-export default function ItemCommentSection({ 
+export default function ItemCommentSection({
   itemId,
   itemName,
   itemGender
@@ -29,6 +30,7 @@ export default function ItemCommentSection({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [replyingId, setReplyingId] = useState<string | null>(null);
   const [editContent, setEditContent] = useState("");
+  const pathname = usePathname();
 
   const queryClient = useQueryClient();
   const { data: user } = useUser();
@@ -53,7 +55,7 @@ export default function ItemCommentSection({
         .select(`*`)
         .eq("item_id", itemId)
         .order("created_at", { ascending: true });
-      
+
       if (error) {
         console.error("Error fetching comments:", error);
         return [];
@@ -133,7 +135,7 @@ export default function ItemCommentSection({
         .delete()
         .eq("id", commentId)
         .eq("user_id", user?.id);
-      
+
       if (error) throw error;
     },
     onSuccess: () => {
@@ -143,7 +145,7 @@ export default function ItemCommentSection({
   });
 
   const handleSignIn = async () => {
-    const res = await login();
+    const res = await login(pathname);
     if (res.url) window.location.href = res.url;
   };
 
@@ -167,16 +169,16 @@ export default function ItemCommentSection({
                 render={({ field }) => (
                   <Textarea
                     {...field}
-                    placeholder="아이템에 대한 의견을 남겨주세요."
+                    placeholder="내용을 입력해주세요."
                     disabled={isSubmitting}
                     className="resize-none min-h-[80px]"
                   />
                 )}
               />
             </div>
-            <Button 
-              type="submit" 
-              disabled={isSubmitting} 
+            <Button
+              type="submit"
+              disabled={isSubmitting}
               className="h-auto px-6"
             >
               등록
@@ -184,9 +186,9 @@ export default function ItemCommentSection({
           </form>
         ) : (
           <div className="bg-gray-50 rounded-lg p-6 border border-dashed border-gray-200 flex flex-col items-center gap-3">
-            <p className="text-gray-500 text-sm">로그인 후 아이템에 대한 의견을 남겨보세요!</p>
+            <p className="text-gray-500 text-sm">로그인 후 아이템 댓글을 등록할 수 있습니다.</p>
             <Button onClick={handleSignIn} size="sm" className="gap-2">
-              <LogIn className="size-4" /> 로그인하기
+              <LogIn className="size-4" /> 로그인
             </Button>
           </div>
         )}
@@ -203,7 +205,7 @@ export default function ItemCommentSection({
         {organizedComments.map((parent) => (
           <div key={parent.id} className="flex flex-col">
             <div className="group border-b border-gray-50 py-6 last:border-0 relative">
-              <CommentItem 
+              <CommentItem
                 comment={parent}
                 user={user}
                 editingId={editingId}
@@ -225,7 +227,7 @@ export default function ItemCommentSection({
               {/* 답글 입력 폼 */}
               {replyingId === parent.id && (
                 <div className="mt-4 ml-8 pl-4 border-l-2 border-gray-100">
-                  <ReplyForm 
+                  <ReplyForm
                     onCancel={() => setReplyingId(null)}
                     onSubmit={(content) => addComment({ content, parentId: parent.id })}
                   />
@@ -237,7 +239,7 @@ export default function ItemCommentSection({
                 <div key={reply.id} className="ml-8 mt-4 flex gap-2 relative group/reply">
                   <CornerDownRight className="size-4 text-gray-300 shrink-0 mt-1" />
                   <div className="flex-1 bg-gray-50/50 p-4 rounded-lg relative">
-                    <CommentItem 
+                    <CommentItem
                       comment={reply}
                       user={user}
                       editingId={editingId}
@@ -263,7 +265,7 @@ export default function ItemCommentSection({
 
         {!isPending && comments?.length === 0 && (
           <div className="text-center py-12 text-gray-400 text-sm">
-            등록된 댓글이 없습니다. 첫 댓글을 남겨보세요!
+            등록된 댓글이 없습니다.
           </div>
         )}
       </div>
