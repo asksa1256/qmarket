@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/shared/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -9,6 +9,8 @@ import {
   getWeekRange,
   formatDateYMD,
 } from "@/shared/lib/formatters";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
+import { Calendar } from "@/shared/ui/calendar";
 
 interface ItemPriceChangesHeaderProps {
   preview?: boolean;
@@ -26,6 +28,7 @@ export default function ItemPriceChangesHeader({
   const router = useRouter();
   const searchParams = useSearchParams();
   const weekParam = searchParams.get("week");
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   /** 기준 주 시작일 (월요일) 설정 */
   const weekStart = useMemo(() => {
@@ -62,18 +65,43 @@ export default function ItemPriceChangesHeader({
           <ChevronLeft /> 지난주
         </Button>
 
-        <div
-          className={cn(
-            "flex flex-col items-center gap-0.5 px-4 py-2 rounded-lg bg-gray-50 border",
-            {
-              "items-start": preview,
-            }
-          )}
-        >
-          <span className="text-sm text-foreground text-medium">
-            {format(start, "yyyy.MM.dd")} ~ {format(end, "MM.dd")}
-          </span>
-        </div>
+        <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+          <PopoverTrigger asChild>
+            <div
+              className={cn(
+                "flex flex-col items-center gap-0.5 px-4 py-2 rounded-lg bg-gray-50 border hover:bg-gray-100 cursor-pointer transition-colors focus-within:ring-2 focus-within:ring-blue-500",
+                {
+                  "items-start": preview,
+                }
+              )}
+            >
+              <span className="text-sm text-foreground text-medium pointer-events-none">
+                {format(start, "yyyy.MM.dd")} ~ {format(end, "MM.dd")}
+              </span>
+            </div>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="center">
+            <Calendar
+              mode="single"
+              selected={weekStart}
+              onSelect={(date) => {
+                if (date) {
+                  const newWeekStart = getWeekStart(date);
+                  router.replace(`?week=${formatDateYMD(newWeekStart)}`);
+                  onWeekChange?.(newWeekStart);
+                  setIsCalendarOpen(false);
+                }
+              }}
+              disabled={(date) => date > new Date()}
+              modifiers={{
+                selectedWeek: (date) => date >= start && date <= end,
+              }}
+              modifiersClassNames={{
+                selectedWeek: "bg-accent/50 text-accent-foreground",
+              }}
+            />
+          </PopoverContent>
+        </Popover>
 
         <Button
           type="button"
