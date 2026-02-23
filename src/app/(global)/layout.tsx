@@ -14,7 +14,7 @@ import {
 } from "@tanstack/react-query";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://q-market.kr"),
+  metadataBase: new URL("https://www.q-market.kr"),
   title: {
     default: "Q-Market | 큐플레이 아이템 거래",
     template: "%s | Q-Market",

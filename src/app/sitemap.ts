@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { supabaseServer } from "@/shared/api/supabase-server";
 
-const BASE_URL = "https://q-market.kr";
+const BASE_URL = "https://www.q-market.kr";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 정적 페이지
@@ -46,8 +46,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // 동적 페이지: 카테고리
   const categories = [
-    "face", "hair", "clothes", "mouth", "eye",
-    "ear", "pet", "acc", "bg", "slime", "board", "game",
+    "face",
+    "hair",
+    "clothes",
+    "mouth",
+    "eye",
+    "ear",
+    "pet",
+    "acc",
+    "bg",
+    "slime",
+    "board",
+    "game",
   ];
 
   const categoryPages: MetadataRoute.Sitemap = categories.map((category) => ({

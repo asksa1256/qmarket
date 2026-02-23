@@ -8,7 +8,7 @@ import { QueryProvider } from "@/shared/providers/QueryProvider";
 import "@/globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://q-market.kr"),
+  metadataBase: new URL("https://www.q-market.kr"),
   title: "Q-Market 이용약관 | 개인정보처리방침",
   description: "큐마켓 이용약관, 개인정보 처리방침 안내",
   robots: { index: false, follow: false },

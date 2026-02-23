@@ -7,7 +7,7 @@ import { QueryProvider } from "@/shared/providers/QueryProvider";
 import "@/globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://q-market.kr"),
+  metadataBase: new URL("https://www.q-market.kr"),
   title: {
     default: "큐마켓 | 2025 베스트 드레서 컨테스트",
     template: "%s | Q-Market 이벤트",
