@@ -51,6 +51,7 @@ export default function UserMenu({ user }: UserMenuProps) {
   if (!user) {
     return (
       <Button
+        title="디스코드 로그인"
         className="bg-discord hover:bg-discord-hover"
         onClick={handleSignIn}
       >
