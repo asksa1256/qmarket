@@ -30,7 +30,7 @@ export default function ItemPriceChangesHeader({
   const weekParam = searchParams.get("week");
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
-  /** 기준 주 시작일 (월요일) 설정 */
+  // 기준 주 시작일 (월요일) 설정
   const weekStart = useMemo(() => {
     const parsed = weekParam ? new Date(weekParam) : null;
     if (!parsed || isNaN(parsed.getTime())) {
@@ -51,6 +51,30 @@ export default function ItemPriceChangesHeader({
     onWeekChange?.(newDate);
   };
 
+  // preview 날짜 표시 (date picker X)
+  const WeeklyView = (
+    <div
+      className={cn(
+        "inline-flex items-center gap-0.5 px-4 py-2 rounded-lg bg-gray-50 border mb-2",
+        {
+          "items-start": preview,
+        },
+        {
+          "hover:bg-gray-100 cursor-pointer transition-colors focus-within:ring-2 focus-within:ring-blue-500":
+            !preview,
+        },
+      )}
+    >
+      <span className="text-sm text-foreground text-medium pointer-events-none">
+        {format(start, "yyyy.MM.dd")} ~ {format(end, "MM.dd")}
+      </span>
+    </div>
+  );
+
+  if (preview) {
+    return WeeklyView;
+  }
+
   return (
     <div className="flex flex-col items-center">
       <div className="flex w-full items-center justify-between mb-2">
@@ -66,31 +90,19 @@ export default function ItemPriceChangesHeader({
         </Button>
 
         <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-          <PopoverTrigger asChild>
-            <div
-              className={cn(
-                "flex flex-col items-center gap-0.5 px-4 py-2 rounded-lg bg-gray-50 border hover:bg-gray-100 cursor-pointer transition-colors focus-within:ring-2 focus-within:ring-blue-500",
-                {
-                  "items-start": preview,
-                }
-              )}
-            >
-              <span className="text-sm text-foreground text-medium pointer-events-none">
-                {format(start, "yyyy.MM.dd")} ~ {format(end, "MM.dd")}
-              </span>
-            </div>
-          </PopoverTrigger>
+          <PopoverTrigger asChild>{WeeklyView}</PopoverTrigger>
+
           <PopoverContent className="w-auto p-0" align="center">
             <Calendar
               mode="single"
               selected={weekStart}
               onSelect={(date) => {
-                if (date) {
-                  const newWeekStart = getWeekStart(date);
-                  router.replace(`?week=${formatDateYMD(newWeekStart)}`);
-                  onWeekChange?.(newWeekStart);
-                  setIsCalendarOpen(false);
-                }
+                if (!date) return;
+
+                const newWeekStart = getWeekStart(date);
+                router.replace(`?week=${formatDateYMD(newWeekStart)}`);
+                onWeekChange?.(newWeekStart);
+                setIsCalendarOpen(false);
               }}
               disabled={(date) => date > new Date()}
               modifiers={{
