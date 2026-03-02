@@ -129,7 +129,24 @@ export default function ItemCommentSection({
 
   // 댓글 삭제
   const { mutate: deleteComment } = useMutation({
-    mutationFn: async (commentId: string) => {
+    mutationFn: async ({
+      commentId,
+      isParent,
+    }: {
+      commentId: string;
+      isParent: boolean;
+    }) => {
+      if (isParent) {
+        const { error } = await supabase
+          .from("item_comments")
+          .update({ content: "삭제된 댓글입니다." })
+          .eq("id", commentId)
+          .eq("user_id", user?.id);
+
+        if (error) throw error;
+        return;
+      }
+
       const { error } = await supabase
         .from("item_comments")
         .delete()
@@ -218,7 +235,7 @@ export default function ItemCommentSection({
                 }}
                 onEditCancel={() => setEditingId(null)}
                 onUpdate={(content) => updateComment({ id: parent.id, content })}
-                onDelete={() => deleteComment(parent.id)}
+                onDelete={() => deleteComment({ commentId: parent.id, isParent: true })}
                 onReplyClick={() => setReplyingId(parent.id)}
                 itemName={itemName}
                 itemGender={itemGender}
@@ -252,7 +269,7 @@ export default function ItemCommentSection({
                       }}
                       onEditCancel={() => setEditingId(null)}
                       onUpdate={(content) => updateComment({ id: reply.id, content })}
-                      onDelete={() => deleteComment(reply.id)}
+                      onDelete={() => deleteComment({ commentId: reply.id, isParent: false })}
                       itemName={itemName}
                       itemGender={itemGender}
                     />
