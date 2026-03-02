@@ -25,7 +25,7 @@ interface ItemCommentSectionProps {
 export default function ItemCommentSection({
   itemId,
   itemName,
-  itemGender
+  itemGender,
 }: ItemCommentSectionProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [replyingId, setReplyingId] = useState<string | null>(null);
@@ -67,16 +67,22 @@ export default function ItemCommentSection({
   // 계층 구조 데이터 가공 최적화
   const organizedComments = useMemo<OrganizedComment[]>(() => {
     if (!comments) return [];
-    const parents = comments.filter(c => !c.parent_id);
-    return parents.map(parent => ({
+    const parents = comments.filter((c) => !c.parent_id);
+    return parents.map((parent) => ({
       ...parent,
-      replies: comments.filter(c => c.parent_id === parent.id)
+      replies: comments.filter((c) => c.parent_id === parent.id),
     }));
   }, [comments]);
 
   // 댓글/답글 등록
   const { mutate: addComment } = useMutation({
-    mutationFn: async ({ content, parentId }: { content: string; parentId?: string | null }) => {
+    mutationFn: async ({
+      content,
+      parentId,
+    }: {
+      content: string;
+      parentId?: string | null;
+    }) => {
       if (!user) throw new Error("로그인이 필요합니다.");
 
       const { data: profile } = await supabase
@@ -105,7 +111,9 @@ export default function ItemCommentSection({
     },
     onError: (error) => {
       console.error(error);
-      toast.error(error instanceof Error ? error.message : "댓글 등록에 실패했습니다.");
+      toast.error(
+        error instanceof Error ? error.message : "댓글 등록에 실패했습니다.",
+      );
     },
   });
 
@@ -129,7 +137,24 @@ export default function ItemCommentSection({
 
   // 댓글 삭제
   const { mutate: deleteComment } = useMutation({
-    mutationFn: async (commentId: string) => {
+    mutationFn: async ({
+      commentId,
+      isParent,
+    }: {
+      commentId: string;
+      isParent: boolean;
+    }) => {
+      if (isParent) {
+        const { error } = await supabase
+          .from("item_comments")
+          .update({ content: "삭제된 댓글입니다." })
+          .eq("id", commentId)
+          .eq("user_id", user?.id);
+
+        if (error) throw error;
+        return;
+      }
+
       const { error } = await supabase
         .from("item_comments")
         .delete()
@@ -151,12 +176,12 @@ export default function ItemCommentSection({
 
   return (
     <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm mt-8">
-      <div className="flex items-center gap-2 mb-4">
+      <div className="flex items-center gap-2 mb-6">
         <MessageSquare className="size-5 text-gray-700" />
         <h3 className="font-bold text-lg">댓글 {comments?.length || 0}</h3>
       </div>
 
-      <div className="mb-2">
+      <div className="mb-8">
         {user ? (
           <form
             className="flex gap-2"
@@ -186,7 +211,9 @@ export default function ItemCommentSection({
           </form>
         ) : (
           <div className="bg-gray-50 rounded-lg p-6 border border-dashed border-gray-200 flex flex-col items-center gap-3">
-            <p className="text-gray-500 text-sm">로그인 후 아이템 댓글을 등록할 수 있습니다.</p>
+            <p className="text-gray-500 text-sm">
+              로그인 후 아이템 댓글을 등록할 수 있습니다.
+            </p>
             <Button onClick={handleSignIn} size="sm" className="gap-2">
               <LogIn className="size-4" /> 로그인
             </Button>
@@ -217,8 +244,12 @@ export default function ItemCommentSection({
                   setReplyingId(null);
                 }}
                 onEditCancel={() => setEditingId(null)}
-                onUpdate={(content) => updateComment({ id: parent.id, content })}
-                onDelete={() => deleteComment(parent.id)}
+                onUpdate={(content) =>
+                  updateComment({ id: parent.id, content })
+                }
+                onDelete={() =>
+                  deleteComment({ commentId: parent.id, isParent: true })
+                }
                 onReplyClick={() => setReplyingId(parent.id)}
                 itemName={itemName}
                 itemGender={itemGender}
@@ -229,14 +260,19 @@ export default function ItemCommentSection({
                 <div className="mt-4 ml-8 pl-4 border-l-2 border-gray-100">
                   <ReplyForm
                     onCancel={() => setReplyingId(null)}
-                    onSubmit={(content) => addComment({ content, parentId: parent.id })}
+                    onSubmit={(content) =>
+                      addComment({ content, parentId: parent.id })
+                    }
                   />
                 </div>
               )}
 
               {/* 답글 목록 */}
-              {parent.replies.map(reply => (
-                <div key={reply.id} className="ml-8 mt-2 flex gap-2 relative group/reply">
+              {parent.replies.map((reply) => (
+                <div
+                  key={reply.id}
+                  className="ml-8 mt-4 flex gap-2 relative group/reply"
+                >
                   <CornerDownRight className="size-4 text-gray-300 shrink-0 mt-1" />
                   <div className="flex-1 bg-gray-50/50 p-4 rounded-lg relative">
                     <CommentItem
@@ -251,8 +287,12 @@ export default function ItemCommentSection({
                         setReplyingId(null);
                       }}
                       onEditCancel={() => setEditingId(null)}
-                      onUpdate={(content) => updateComment({ id: reply.id, content })}
-                      onDelete={() => deleteComment(reply.id)}
+                      onUpdate={(content) =>
+                        updateComment({ id: reply.id, content })
+                      }
+                      onDelete={() =>
+                        deleteComment({ commentId: reply.id, isParent: false })
+                      }
                       itemName={itemName}
                       itemGender={itemGender}
                     />
@@ -273,14 +313,27 @@ export default function ItemCommentSection({
   );
 }
 
-function ReplyForm({ onCancel, onSubmit }: { onCancel: () => void, onSubmit: (content: string) => void }) {
-  const { handleSubmit, control, formState: { isSubmitting } } = useForm<CommentFormValues>({
+function ReplyForm({
+  onCancel,
+  onSubmit,
+}: {
+  onCancel: () => void;
+  onSubmit: (content: string) => void;
+}) {
+  const {
+    handleSubmit,
+    control,
+    formState: { isSubmitting },
+  } = useForm<CommentFormValues>({
     resolver: zodResolver(commentFormSchema),
     defaultValues: { content: "" },
   });
 
   return (
-    <form className="flex gap-2" onSubmit={handleSubmit((v) => onSubmit(v.content))}>
+    <form
+      className="flex gap-2"
+      onSubmit={handleSubmit((v) => onSubmit(v.content))}
+    >
       <div className="flex-1">
         <Controller
           name="content"
@@ -296,8 +349,12 @@ function ReplyForm({ onCancel, onSubmit }: { onCancel: () => void, onSubmit: (co
         />
       </div>
       <div className="flex flex-col gap-1">
-        <Button type="submit" disabled={isSubmitting} size="sm">등록</Button>
-        <Button variant="ghost" type="button" size="sm" onClick={onCancel}>취소</Button>
+        <Button type="submit" disabled={isSubmitting} size="sm">
+          등록
+        </Button>
+        <Button variant="ghost" type="button" size="sm" onClick={onCancel}>
+          취소
+        </Button>
       </div>
     </form>
   );
