@@ -1,0 +1,20 @@
+name: Sync Fork
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to fork
+        run: |
+          git remote add fork https://x-access-token:${{ secrets.QM_FORK_SYNC_PAT }}@github.com/didi1129/qmarket.git
+          git push fork main --force
