@@ -23,7 +23,7 @@ export default function ItemPriceChangesContainer({
   const [filter, setFilter] = useState<"all" | "up" | "down">("all");
 
   // 주차 정보 가져오기
-  const { start } = useWeekNavigation();
+  const { start, end } = useWeekNavigation();
 
   const {
     data = [],
@@ -68,7 +68,13 @@ export default function ItemPriceChangesContainer({
       <hr className="mt-4" />
 
       {/* 시세 변동 요약 */}
-      {!preview && <ItemPriceChangesSummary items={priceChanges} />}
+      {!preview && (
+        <ItemPriceChangesSummary
+          items={priceChanges}
+          weekStart={start}
+          weekEnd={end}
+        />
+      )}
     </>
   );
 }
