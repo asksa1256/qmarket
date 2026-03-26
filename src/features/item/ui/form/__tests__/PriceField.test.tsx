@@ -12,11 +12,15 @@ import PriceField from "../PriceField";
 import { ItemFormSchema, ItemFormType } from "../../../model/schema";
 
 // PriceField를 실제 react-hook-form 폼에 연결하는 래퍼 컴포넌트
-function PriceFieldWrapper({ onSubmit }: { onSubmit: (v: ItemFormType) => void }) {
+function PriceFieldWrapper({
+  onSubmit,
+}: {
+  onSubmit: (v: ItemFormType) => void;
+}) {
   const form = useForm<ItemFormType>({
     resolver: zodResolver(ItemFormSchema),
     defaultValues: {
-      item_name: "테스트아이템",
+      item_name: "테스트 아이템",
       price: 0,
       is_sold: false,
       item_source: "gatcha",
@@ -43,13 +47,10 @@ describe("PriceField - 새 단위 버튼 동작", () => {
     { label: "+ 오백만원", amount: 5_000_000 },
   ];
 
-  test.each(NEW_UNITS)(
-    "$label 버튼이 렌더링된다",
-    async ({ label }) => {
-      render(<PriceFieldWrapper onSubmit={jest.fn()} />);
-      expect(screen.getByRole("button", { name: label })).toBeInTheDocument();
-    }
-  );
+  test.each(NEW_UNITS)("$label 버튼이 렌더링된다", async ({ label }) => {
+    render(<PriceFieldWrapper onSubmit={jest.fn()} />);
+    expect(screen.getByRole("button", { name: label })).toBeInTheDocument();
+  });
 
   test.each(NEW_UNITS)(
     "$label 버튼 클릭 시 input 값이 $amount 로 증가한다",
@@ -61,7 +62,7 @@ describe("PriceField - 새 단위 버튼 동작", () => {
 
       const input = screen.getByPlaceholderText("가격");
       expect(input).toHaveValue(amount.toLocaleString());
-    }
+    },
   );
 
   test("오천원 버튼을 3번 클릭하면 15,000이 된다", async () => {
@@ -97,7 +98,7 @@ describe("PriceField - 새 단위 버튼 동작", () => {
 
     expect(handleSubmit).toHaveBeenCalledWith(
       expect.objectContaining({ price: 5_000_000 }),
-      expect.anything()
+      expect.anything(),
     );
   });
 
@@ -113,7 +114,7 @@ describe("PriceField - 새 단위 버튼 동작", () => {
     // 500,000 + 50,000 = 550,000
     expect(handleSubmit).toHaveBeenCalledWith(
       expect.objectContaining({ price: 550_000 }),
-      expect.anything()
+      expect.anything(),
     );
   });
 });
