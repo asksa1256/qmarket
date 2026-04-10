@@ -67,6 +67,37 @@ export default function PatchNotePage() {
               </div>
             </details>
 
+            <hr className="my-6 border-gray-200" />
+
+            <h4 className="font-bold text-xl mb-2">
+              📢 전체 로테이션 조회 페이지 추가
+            </h4>
+
+            <p className="leading-relaxed">
+              큐마켓에 등록된 큐플레이 아카이브의 월별 로테이션 아이템을
+              확인하실 수 있습니다.
+            </p>
+
+            <details className="mt-6">
+              <summary className="cursor-pointer font-semibold text-gray-700">
+                자세히 보기
+              </summary>
+              <div className="mt-4">
+                <ul className="list-disc list-inside text-foreground/80 leading-relaxed space-y-2">
+                  <li>
+                    메인 페이지 로테이션 섹션의{" "}
+                    <strong>전체 로테이션 보기</strong> 버튼을 통해 접근할 수
+                    있습니다.
+                  </li>
+                  <li>
+                    <strong>남 / 여</strong> 버튼으로 성별별 아이템을 구분하여
+                    볼 수 있으며, 뽑기와 요술상자 아이템이 각각 분리되어
+                    표시됩니다.
+                  </li>
+                </ul>
+              </div>
+            </details>
+
             <p className="leading-relaxed mt-6">감사합니다.</p>
           </AccordionContent>
         </AccordionItem>
