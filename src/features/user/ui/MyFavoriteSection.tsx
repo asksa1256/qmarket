@@ -5,6 +5,7 @@ import Link from "next/link";
 import SectionTitle from "@/shared/ui/SectionTitle";
 import { useFavorites, useToggleFavorite } from "@/shared/hooks/useFavorites";
 import { Trash2 } from "lucide-react";
+import LoadingSpinner from "@/shared/ui/LoadingSpinner";
 
 export default function MyFavoriteSection({ userId }: { userId: string }) {
   const { data = [], isLoading } = useFavorites(userId);
@@ -20,13 +21,15 @@ export default function MyFavoriteSection({ userId }: { userId: string }) {
     });
   };
 
-  if (isLoading) return null;
-
   return (
     <section className="md:pl-8 mb-8">
       <SectionTitle>❤️ 찜 목록</SectionTitle>
 
-      {data.length === 0 ? (
+      {isLoading ? (
+        <div className="flex justify-center py-6">
+          <LoadingSpinner />
+        </div>
+      ) : data.length === 0 ? (
         <p className="text-foreground/50 text-sm">찜한 아이템이 없습니다.</p>
       ) : (
         <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">

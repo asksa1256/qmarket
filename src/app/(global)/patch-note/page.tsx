@@ -11,7 +11,8 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "패치노트",
-  description: "큐마켓 업데이트 내역 및 패치노트. 새로운 기능과 변경 사항을 확인하세요.",
+  description:
+    "큐마켓 업데이트 내역 및 패치노트. 새로운 기능과 변경 사항을 확인하세요.",
 };
 
 export default function PatchNotePage() {
@@ -22,16 +23,67 @@ export default function PatchNotePage() {
       <SectionTitle className="text-center">패치노트</SectionTitle>
 
       <Accordion type="single" collapsible className="w-full">
+        <AccordionItem value="patch-2026-04-10" className="border-b">
+          <AccordionTrigger className="text-lg font-semibold text-left hover:no-underline py-4 text-gray-700">
+            2026.04.10. 업데이트 안내
+          </AccordionTrigger>
+
+          <AccordionContent className="text-foreground p-4 bg-gray-50 border-t break-keep">
+            <h4 className="font-bold text-xl mb-2">📢 아이템 찜 기능 추가</h4>
+
+            <p className="leading-relaxed">
+              관심 있는 아이템을 마이페이지에서 확인할 수 있는 기능이
+              추가되었습니다.
+              <br />
+              로테이션이 지난 아이템, 상점에 없는 아이템도 찜 목록에 추가할 수
+              있습니다.
+            </p>
+
+            <details className="mt-6">
+              <summary className="cursor-pointer font-semibold text-gray-700">
+                자세히 보기
+              </summary>
+              <div className="mt-4">
+                <ul className="list-disc list-inside text-foreground/80 leading-relaxed space-y-2">
+                  <li>
+                    아이템 검색 자동완성 결과 및 아이템 상세 페이지에{" "}
+                    <strong>찜(♥) 버튼</strong>이 표시됩니다.
+                  </li>
+                  <li>
+                    하트 버튼 우측에는 해당 아이템을 찜한 총 유저 수가
+                    표시됩니다.
+                  </li>
+                  <li>
+                    찜한 아이템은 <strong>마이페이지 → 찜 목록</strong>에서
+                    확인할 수 있습니다.
+                  </li>
+                  <li>찜 기능은 로그인 후 이용 가능합니다.</li>
+                  <li>
+                    * 큐마켓에 등록되지 않은 아이템은 찜할 수 없습니다. 찜하고
+                    싶은데 등록되지 않은 인게임 아이템이 있을 경우, 아이템
+                    검색창의 &apos;아이템 등록 요청&apos;을 통해 제보해주세요.
+                  </li>
+                </ul>
+              </div>
+            </details>
+
+            <p className="leading-relaxed mt-6">감사합니다.</p>
+          </AccordionContent>
+        </AccordionItem>
+
         <AccordionItem value="patch-2026-02-23" className="border-b">
           <AccordionTrigger className="text-lg font-semibold text-left hover:no-underline py-4 text-gray-700">
             2026.02.23. 업데이트 안내
           </AccordionTrigger>
 
           <AccordionContent className="text-foreground p-4 bg-gray-50 border-t break-keep">
-            <h4 className="font-bold text-xl mb-2">📢 아이템 상세 페이지 댓글 시스템 추가</h4>
+            <h4 className="font-bold text-xl mb-2">
+              📢 아이템 상세 페이지 댓글 시스템 추가
+            </h4>
 
             <p className="leading-relaxed">
-              아이템 상세 페이지 하단에 <strong>댓글 영역</strong>이 추가되었습니다.
+              아이템 상세 페이지 하단에 <strong>댓글 영역</strong>이
+              추가되었습니다.
             </p>
 
             <details className="mt-6">
@@ -40,8 +92,13 @@ export default function PatchNotePage() {
               </summary>
               <div className="mt-4">
                 <ul className="list-disc list-inside mt-4 text-foreground/80 leading-relaxed">
-                  <li>로그인 후, 아이템에 대한 댓글과 답글을 등록할 수 있습니다.</li>
-                  <li>부적절한 댓글은 해당 댓글의 <strong>신고</strong>버튼을 눌러 제보해주세요.</li>
+                  <li>
+                    로그인 후, 아이템에 대한 댓글과 답글을 등록할 수 있습니다.
+                  </li>
+                  <li>
+                    부적절한 댓글은 해당 댓글의 <strong>신고</strong>버튼을 눌러
+                    제보해주세요.
+                  </li>
                 </ul>
                 <Image
                   src="/images/patch-item-comment-1.png"
@@ -53,9 +110,7 @@ export default function PatchNotePage() {
               </div>
             </details>
 
-            <p className="leading-relaxed mt-6">
-              감사합니다.
-            </p>
+            <p className="leading-relaxed mt-6">감사합니다.</p>
           </AccordionContent>
         </AccordionItem>
 
