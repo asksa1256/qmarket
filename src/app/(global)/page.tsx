@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import ItemCategoryNav from "@/features/items/ui/ItemCategoryNav";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
+import { Button } from "@/shared/ui/button";
 import SearchBar from "@/features/item-search/ui/SearchBar";
 import ItemList from "@/features/items/ui/ItemList";
 import RollingPopularSearch from "@/features/item-search/ui/RollingPopularSearch";
@@ -155,11 +156,18 @@ export default async function Home() {
             </div>
           </section>
 
-          {/* 이번 달 로테이션 */}
+          {/* 로테이션 */}
           <section className="w-full max-w-4xl">
-            <h3 className="font-bold text-2xl flex items-center gap-2 mb-4">
-              ✨ 이번 달 로테이션
-            </h3>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-bold text-2xl flex items-center gap-2">
+                ✨ 로테이션
+              </h3>
+              <Link href="/rotation-items/all">
+                <Button variant="outline" size="sm" className="text-xs">
+                  전체 로테이션 보기
+                </Button>
+              </Link>
+            </div>
 
             <Link href="/rotation-items/new" className="group block">
               {/* 좌측 상단 배경 그라데이션 */}
