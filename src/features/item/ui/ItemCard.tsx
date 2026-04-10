@@ -14,6 +14,7 @@ import { ExternalLink } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 import CheckBadgeIcon from "@/shared/ui/Icon/CheckBadge";
 import { AdaptiveInfo } from "@/shared/ui/AdaptiveInfo";
+import FavoriteButton from "@/features/item/ui/FavoriteButton";
 
 interface ItemCardProps {
   item: Item;
@@ -136,6 +137,15 @@ const ItemCard = ({ item, userId }: ItemCardProps) => {
           <span className="text-foreground/50">
             {formatRelativeTime(item.created_at)}
           </span>
+
+          {/* 찜 버튼 (my-items 페이지 제외) */}
+          {!pathname.includes("my-items") && (
+            <FavoriteButton
+              itemName={item.item_name}
+              itemImage={item.image}
+              itemGender={item.item_gender}
+            />
+          )}
 
           {/* 거래완료일시 */}
           {item.updated_at && item.is_sold && (

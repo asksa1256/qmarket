@@ -4,6 +4,7 @@ import UserProfileCard from "./UserProfileCard";
 import { UserDetail } from "../model/userTypes";
 import SectionTitle from "@/shared/ui/SectionTitle";
 import MyItemRequestSection from "./MyItemRequestSection";
+import MyFavoriteSection from "./MyFavoriteSection";
 import LoadingSpinner from "@/shared/ui/LoadingSpinner";
 import UserItemListHeader from "./UserItemListHeader";
 
@@ -72,6 +73,9 @@ export default async function UserDetailSection({
 
         {/* 전체 공개: 팝니다/삽니다 목록 */}
         <BuySellListSection />
+
+        {/* 찜 목록 (마이페이지 전용) */}
+        {isMyPage && <MyFavoriteSection userId={user.id} />}
 
         {/* 아이템 등록 요청 정보 (마이페이지 전용) */}
         {isMyPage && <MyItemRequestSection userId={user.id} />}

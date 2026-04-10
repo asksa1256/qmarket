@@ -26,6 +26,7 @@ import RequestItemModal from "@/features/item/ui/RequestItemModal";
 import { Button } from "@/shared/ui/button";
 import { Clock, X, Search } from "lucide-react";
 import { logSearchKeywordAction } from "@/app/actions/search-actions";
+import FavoriteButton from "@/features/item/ui/FavoriteButton";
 
 interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
@@ -187,9 +188,15 @@ export default function SearchInput({
                             height={48}
                             className="w-10 h-12 object-contain"
                           />
-                          <span>
+                          <span className="flex-1">
                             {s.name} ({s.item_gender})
                           </span>
+                          <FavoriteButton
+                            itemInfoId={String(s.id)}
+                            itemName={s.name}
+                            itemImage={s.image}
+                            itemGender={s.item_gender}
+                          />
                         </CommandItem>
                       ))
                     ) : (

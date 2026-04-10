@@ -22,6 +22,7 @@ import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { FilterParams } from "@/features/item-search/model/filterTypes";
 import ItemCommentSection from "@/features/comment/ui/ItemCommentSection";
+import FavoriteButton from "@/features/item/ui/FavoriteButton";
 
 export interface ItemDetail {
   id: string;
@@ -74,9 +75,18 @@ export default function ItemDetailClient({
                 className="w-36 h-40 object-cover rounded-xl border border-gray-200 p-1 mb-4"
               />
 
-              <h1 className="text-2xl font-extrabold text-gray-800 mb-4 text-center">
-                {item.name}({item.item_gender})
-              </h1>
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <h1 className="text-2xl font-extrabold text-gray-800 text-center">
+                  {item.name}({item.item_gender})
+                </h1>
+                <FavoriteButton
+                  itemInfoId={item.id}
+                  itemName={item.name}
+                  itemImage={item.image}
+                  itemGender={item.item_gender}
+                  size="lg"
+                />
+              </div>
 
               <ul className="w-full space-y-2 text-foreground/70 text-sm">
                 <li className="flex justify-between border-b pb-1 last:border-b-0">
