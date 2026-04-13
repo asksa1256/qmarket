@@ -6,6 +6,7 @@ import { Toaster } from "sonner";
 import Header from "@/shared/ui/Header";
 import { Analytics } from "@vercel/analytics/next";
 import Footer from "@/shared/ui/Footer";
+import NextTopLoader from "nextjs-toploader";
 import { getUserServer } from "@/shared/api/get-supabase-user-server";
 import {
   QueryClient,
@@ -56,6 +57,7 @@ export default async function RootLayout({
   return (
     <html lang="ko">
       <body className={`${pretendard.className} antialiased`}>
+        <NextTopLoader color="#60a5fa" height={3} showSpinner={false} />
         <QueryProvider dehydratedState={dehydratedState}>
           <HydrationBoundary state={dehydrate(queryClient)}>
             <Header />

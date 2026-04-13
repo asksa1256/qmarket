@@ -6,7 +6,8 @@
       "Bash(grep -E \"\\\\.\\(ts|tsx\\)$\")",
       "Bash(grep -E \"\\\\.\\(ts\\)$\")",
       "Bash(grep -r \"SELECT\\\\|CREATE TABLE\" /d/sd/dev/projects/2025/qmarket -include=\"*.sql\")",
-      "Bash(xargs -I {} basename {})"
+      "Bash(xargs -I {} basename {})",
+      "Bash(npm install:*)"
     ]
   }
 }
