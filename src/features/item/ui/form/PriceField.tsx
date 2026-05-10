@@ -1,7 +1,7 @@
 "use client";
 
 import { UseFormReturn, Controller } from "react-hook-form";
-import { ItemFormType } from "../../model/schema";
+import { ItemFormType } from "@/features/item/model/schema";
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
 
