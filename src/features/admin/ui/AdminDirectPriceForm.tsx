@@ -196,9 +196,13 @@ export default function AdminDirectPriceForm() {
             render={({ field: { value, onChange, onBlur } }) => {
               const priceUnits = [
                 { label: "+ 천원", amount: 1000 },
+                { label: "+ 오천원", amount: 5000 },
                 { label: "+ 만원", amount: 10000 },
+                { label: "+ 오만원", amount: 50000 },
                 { label: "+ 십만원", amount: 100000 },
+                { label: "+ 오십만원", amount: 500000 },
                 { label: "+ 백만원", amount: 1000000 },
+                { label: "+ 오백만원", amount: 5000000 },
                 { label: "+ 천만원", amount: 10000000 },
               ];
 
