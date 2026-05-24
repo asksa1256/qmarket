@@ -1,11 +1,23 @@
 "use client";
 
 import { ChangeEvent, useState } from "react";
-import { getUploadUrl } from "@/app/actions/s3-actions";
+import { supabase } from "@/shared/api/supabase-client";
 import { toast } from "sonner";
 import { Button } from "@/shared/ui/button";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+const BUCKET = "transaction_images";
+
+function sanitizeFileName(name: string): string {
+  const ext = name.includes(".") ? name.split(".").pop()! : "";
+  const base = ext ? name.slice(0, -(ext.length + 1)) : name;
+  const safeBase = base
+    .replace(/[^\w\s-]/g, "")  // 영문, 숫자, _-, 공백 외 제거 (한글 포함)
+    .replace(/\s+/g, "_")       // 공백 → 언더스코어
+    .replace(/^_+|_+$/g, "")   // 앞뒤 언더스코어 제거
+    || Date.now().toString();   // 빈 문자열이면 타임스탬프로 대체
+  return ext ? `${safeBase}.${ext}` : safeBase;
+}
 
 export default function TransactionImageUploader({
   onUpload,
@@ -39,20 +51,19 @@ export default function TransactionImageUploader({
     setIsSucceeded(false);
 
     try {
-      const { signedUrl, fileUrl } = await getUploadUrl(file.name, file.type);
+      const path = `uploads/${Date.now()}-${sanitizeFileName(file.name)}`;
 
-      const res = await fetch(signedUrl, {
-        method: "PUT",
-        body: file,
-        headers: { "Content-Type": file.type },
-      });
+      const { error } = await supabase.storage
+        .from(BUCKET)
+        .upload(path, file, { contentType: file.type });
 
-      if (res.ok) {
-        // 업로드 성공 시에만 onUpload 호출
-        onUpload?.(fileUrl);
-        toast.success("거래 인증 등록에 성공했습니다.");
-        setIsSucceeded(true);
-      }
+      if (error) throw error;
+
+      const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
+
+      onUpload?.(data.publicUrl);
+      toast.success("거래 인증 등록에 성공했습니다.");
+      setIsSucceeded(true);
     } catch (error) {
       console.error("실패:", error);
       toast.error("등록 중 오류가 발생했습니다.");
