@@ -63,7 +63,7 @@ export default async function ItemDetailPage({
   const { data: item, error } = await supabaseServer
     .from("items_info")
     .select(
-      "id, name, item_gender, image, category, item_source, rotation_date, rotation_degree"
+      "id, name, item_gender, image, category, item_source, rotation_date, rotation_degree, shop_price, shop_price_type"
     )
     .eq("name", decodedItemName)
     .eq("item_gender", decodedItemGender)

@@ -8,6 +8,7 @@ import {
   ItemCategory,
   ItemSource,
 } from "@/features/item/model/itemTypes";
+import { ITEM_SOURCES_MAP } from "@/shared/config/constants";
 import ButtonToBack from "@/shared/ui/LinkButton/ButtonToBack";
 import ItemList from "@/features/items/ui/ItemList";
 import ItemsFilter from "@/features/item-search/ui/ItemsFilter";
@@ -33,6 +34,8 @@ export interface ItemDetail {
   item_source: ItemSource;
   rotation_date?: string;
   rotation_degree?: number;
+  shop_price?: number | null;
+  shop_price_type?: "cyber" | "cash" | null;
 }
 
 interface ItemDetailProps {
@@ -92,7 +95,12 @@ export default function ItemDetailClient({
                 <li className="flex justify-between border-b pb-1 last:border-b-0">
                   <span className="font-semibold">출처:</span>
                   <span>
-                    {item.item_source ? item.item_source : "미등록"}{" "}
+                    {item.item_source
+                      ? item.item_source === ITEM_SOURCES_MAP.shop
+                        ? `상점 (${item.shop_price ? item.shop_price.toLocaleString("ko-KR") : "미등록"} ${item.shop_price_type === "cash" ? "캐시" : "사이버머니"})`
+                        : (ITEM_SOURCES_MAP[item.item_source] ??
+                          item.item_source)
+                      : "미등록"}
                     {item.rotation_date && (
                       <em className="text-xs not-italic">
                         (로테이션: {item.rotation_date}
@@ -109,6 +117,34 @@ export default function ItemDetailClient({
                     )}
                   </span>
                 </li>
+                {item.item_source === "shop" && (
+                  <li className="flex justify-between border-b pb-1 last:border-b-0">
+                    <span className="font-semibold">상점가:</span>
+                    <span className="flex items-center gap-1">
+                      {item.shop_price != null ? (
+                        <>
+                          {`${item.shop_price.toLocaleString("ko-KR")}원`}
+                          {item.shop_price_type && (
+                            <Badge
+                              variant={
+                                item.shop_price_type === "cash"
+                                  ? "default"
+                                  : "secondary"
+                              }
+                              className="px-1 py-0 text-[11px] rounded-xs"
+                            >
+                              {item.shop_price_type === "cash"
+                                ? "캐시"
+                                : "사이버머니"}
+                            </Badge>
+                          )}
+                        </>
+                      ) : (
+                        "미등록"
+                      )}
+                    </span>
+                  </li>
+                )}
                 <li className="flex justify-between border-b pb-1 last:border-b-0">
                   <span className="font-semibold">판매 희망가:</span>
                   <div>
@@ -256,8 +292,8 @@ export default function ItemDetailClient({
           </div>
 
           {/* 댓글 섹션 */}
-          <ItemCommentSection 
-            itemId={item.id} 
+          <ItemCommentSection
+            itemId={item.id}
             itemName={item.name}
             itemGender={item.item_gender}
           />
