@@ -9,6 +9,7 @@ import {
 } from "@/shared/api/redis";
 import { ITEMS_TABLE_NAME } from "@/shared/config/constants";
 import preventCreateExistingItem from "@/features/item/model/preventCreateExistingItem";
+import { notifyFavoriteUsersForSaleItem } from "@/features/notification/model/favoriteSaleNotification";
 import { getUserServer } from "@/shared/api/get-supabase-user-server";
 import { supabaseServer } from "@/shared/api/supabase-server";
 
@@ -52,6 +53,15 @@ export async function createItem(values: ItemFormValues) {
   // 아이템 등록 잔여 횟수 차감
   const currentCount = await checkAndIncrementDailyItemLimit(user.id);
   const remaining = DAILY_LIMIT - currentCount;
+
+  if (values.is_for_sale) {
+    await notifyFavoriteUsersForSaleItem({
+      itemId: data?.[0]?.id,
+      itemName: values.item_name,
+      itemGender: values.item_gender,
+      sellerUserId: user.id,
+    });
+  }
 
   return { data, remaining };
 }

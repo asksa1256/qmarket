@@ -12,6 +12,7 @@ import SearchBar from "@/features/item-search/ui/SearchBar";
 import DiscordIcon from "@/shared/assets/icons/DiscordIcon";
 import { login, logout } from "@/features/auth/signin/model/actions";
 import { ALLOWED_RETURN_TO } from "@/shared/config/constants";
+import NotificationInbox from "@/features/notification/ui/NotificationInbox";
 
 const DynamicSheetTrigger = dynamic(
   () => import("@/shared/ui/sheet").then((mod) => mod.SheetTrigger),
@@ -52,7 +53,8 @@ export default function MobileNav({ user }: MobileNavProps) {
   };
 
   return (
-    <div className="md:hidden">
+    <div className="md:hidden flex items-center gap-2">
+      <NotificationInbox user={user} />
       <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
         <DynamicSheetTrigger asChild>
           <Button variant="outline" size="icon">

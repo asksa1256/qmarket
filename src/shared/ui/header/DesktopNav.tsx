@@ -1,6 +1,7 @@
 import SearchBar from "@/features/item-search/ui/SearchBar";
 import FAQButton from "@/features/faq/ui/FAQButton";
 import PatchNoteButton from "@/features/patch-note/ui/PatchNoteButton";
+import NotificationInbox from "@/features/notification/ui/NotificationInbox";
 import UserMenu from "./UserMenu";
 import { cn } from "@/shared/lib/utils";
 import { User } from "@supabase/supabase-js";
@@ -29,6 +30,7 @@ export default function DesktopNav({ pathname, user }: DesktopNavProps) {
       >
         <FAQButton onClose={() => {}} />
         <PatchNoteButton onClose={() => {}} />
+        <NotificationInbox user={user} />
         <UserMenu user={user} />
       </div>
     </div>
