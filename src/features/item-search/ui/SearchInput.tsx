@@ -5,6 +5,8 @@ import Image from "next/image";
 import { Input } from "@/shared/ui/input";
 import {
   ChangeEvent,
+  KeyboardEvent,
+  useId,
   useState,
   useMemo,
   InputHTMLAttributes,
@@ -48,6 +50,8 @@ export default function SearchInput({
   ...rest
 }: SearchInputProps) {
   const [suggestionOpen, setSuggestionOpen] = useState(false);
+  const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
+  const suggestionsListId = useId();
 
   // 최근 검색 기록
   const [recentSearches, setRecentSearches] = useState<SearchItemInfo[]>(() => {
@@ -97,6 +101,7 @@ export default function SearchInput({
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
+    setActiveSuggestionIndex(-1);
     onSearch?.(val); // 즉시 부모에게 값 전달 (실시간 업데이트)
     debouncedSearch(val); // debounced 검색도 수행
 
@@ -130,10 +135,38 @@ export default function SearchInput({
 
     // 자동완성 닫기
     setSuggestionOpen(false);
+    setActiveSuggestionIndex(-1);
   };
 
   const handleFocus = () => {
     if (value.length > 0) setSuggestionOpen(true);
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Escape") {
+      setSuggestionOpen(false);
+      setActiveSuggestionIndex(-1);
+      return;
+    }
+
+    if (!suggestionOpen || suggestions.length === 0) return;
+
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveSuggestionIndex((currentIndex) => {
+        if (e.key === "ArrowDown") {
+          return currentIndex >= suggestions.length - 1 ? 0 : currentIndex + 1;
+        }
+
+        return currentIndex <= 0 ? suggestions.length - 1 : currentIndex - 1;
+      });
+      return;
+    }
+
+    if (e.key === "Enter" && activeSuggestionIndex >= 0) {
+      e.preventDefault();
+      handleSelect(suggestions[activeSuggestionIndex]);
+    }
   };
 
   return (
@@ -145,6 +178,14 @@ export default function SearchInput({
         className="bg-background hover:border-blue-300 focus:border-blue-300"
         onChange={handleChange}
         onFocus={handleFocus}
+        onKeyDown={handleKeyDown}
+        aria-expanded={suggestionOpen}
+        aria-controls={suggestionsListId}
+        aria-activedescendant={
+          activeSuggestionIndex >= 0
+            ? `${suggestionsListId}-item-${suggestions[activeSuggestionIndex]?.id}`
+            : undefined
+        }
         {...rest}
       />
       <Search className="absolute text-blue-600 size-5 md:size-6 md:right-6 right-4 top-1/2 -translate-y-1/2 z-[1]" />
@@ -152,7 +193,7 @@ export default function SearchInput({
       {suggestionOpen && (
         <div className="command-wrap md:min-w-[450px] absolute left-0 right-0 top-full z-10 mt-1 rounded-md border bg-popover text-popover-foreground shadow-md">
           <Command className="border rounded-lg">
-            <CommandList>
+            <CommandList id={suggestionsListId}>
               {value.length > 0 && suggestions.length === 0 ? (
                 <CommandEmpty className="flex flex-col gap-2 items-center py-4 text-sm text-gray-400 p-3">
                   <p className="text-center text-gray-500 text-xs">
@@ -174,12 +215,19 @@ export default function SearchInput({
                   {/* 왼쪽: 자동 완성 목록 */}
                   <CommandGroup heading="검색 결과">
                     {suggestions.length > 0 ? (
-                      suggestions.map((s) => (
+                      suggestions.map((s, index) => (
                         <CommandItem
                           key={s.id}
+                          id={`${suggestionsListId}-item-${s.id}`}
                           value={s.id}
                           onSelect={() => handleSelect(s)}
-                          className="flex items-center text-left text-xs md:text-sm gap-3 py-1 cursor-pointer"
+                          onMouseMove={() => setActiveSuggestionIndex(index)}
+                          aria-selected={activeSuggestionIndex === index}
+                          className={cn(
+                            "flex items-center text-left text-xs md:text-sm gap-3 py-1 cursor-pointer",
+                            activeSuggestionIndex === index &&
+                              "bg-accent text-accent-foreground"
+                          )}
                         >
                           <Image
                             src={s.image || "/images/empty.png"}
