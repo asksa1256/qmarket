@@ -12,7 +12,7 @@ import { ITEM_SOURCES_MAP } from "@/shared/config/constants";
 import ButtonToBack from "@/shared/ui/LinkButton/ButtonToBack";
 import ItemList from "@/features/items/ui/ItemList";
 import ItemsFilter from "@/features/item-search/ui/ItemsFilter";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import LoadingSpinner from "@/shared/ui/LoadingSpinner";
 import SectionTitle from "@/shared/ui/SectionTitle";
@@ -20,7 +20,7 @@ import SellingItemCreateModal from "./SellingItemCreateModal";
 import PurchaseItemCreateModal from "./PurchaseItemCreateModal";
 import { Badge } from "@/shared/ui/badge";
 import Link from "next/link";
-import { ExternalLink } from "lucide-react";
+import { Eye, ExternalLink } from "lucide-react";
 import { FilterParams } from "@/features/item-search/model/filterTypes";
 import ItemCommentSection from "@/features/comment/ui/ItemCommentSection";
 import FavoriteButton from "@/features/item/ui/FavoriteButton";
@@ -36,6 +36,7 @@ export interface ItemDetail {
   rotation_degree?: number;
   shop_price?: number | null;
   shop_price_type?: "cyber" | "cash" | null;
+  view_count: number;
 }
 
 interface ItemDetailProps {
@@ -49,6 +50,7 @@ export default function ItemDetailClient({
   marketPrice,
   desiredPrice,
 }: ItemDetailProps) {
+  const [viewCount, setViewCount] = useState(item.view_count);
   const [filterParams, setFilterParams] = useState<FilterParams>({
     sortBy: "updated_at",
     sortOrder: "desc",
@@ -58,6 +60,29 @@ export default function ItemDetailClient({
     queryKey: ["item-sale-history", item.name, item.item_gender],
     queryFn: () => getItemSaleHistory(item.name, item.item_gender),
   });
+
+  useEffect(() => {
+    const recordView = async () => {
+      try {
+        const response = await fetch(`/api/items/${item.id}/views`, {
+          method: "POST",
+          cache: "no-store",
+        });
+
+        if (!response.ok) return;
+
+        const { viewCount: updatedViewCount } = (await response.json()) as {
+          viewCount: number;
+        };
+        setViewCount(updatedViewCount);
+      } catch {
+        // View counts are supplementary information, so a failed request
+        // should not interrupt the item detail page.
+      }
+    };
+
+    void recordView();
+  }, [item.id]);
 
   return (
     <section className="w-full lg:max-w-6xl mx-auto">
@@ -90,6 +115,11 @@ export default function ItemDetailClient({
                   size="lg"
                 />
               </div>
+
+              <p className="flex items-center gap-1 self-end mb-2 text-xs text-foreground/50">
+                <Eye className="size-3.5" aria-hidden="true" />
+                조회 {viewCount.toLocaleString("ko-KR")}
+              </p>
 
               <ul className="w-full space-y-2 text-foreground/70 text-sm">
                 <li className="flex justify-between border-b pb-1 last:border-b-0">
