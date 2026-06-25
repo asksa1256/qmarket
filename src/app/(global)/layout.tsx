@@ -7,12 +7,6 @@ import Header from "@/shared/ui/Header";
 import { Analytics } from "@vercel/analytics/next";
 import Footer from "@/shared/ui/Footer";
 import NextTopLoader from "nextjs-toploader";
-import { getUserServer } from "@/shared/api/get-supabase-user-server";
-import {
-  QueryClient,
-  dehydrate,
-  HydrationBoundary,
-} from "@tanstack/react-query";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.q-market.kr"),
@@ -38,32 +32,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const queryClient = new QueryClient();
-
-  // 유저 데이터 요청 최적화
-  const user = await getUserServer();
-
-  if (user) {
-    queryClient.setQueryData(["user"], user);
-  }
-
-  const dehydratedState = dehydrate(queryClient);
-
   return (
     <html lang="ko">
       <body className={`${pretendard.className} antialiased`}>
         <NextTopLoader color="#60a5fa" height={3} showSpinner={false} />
-        <QueryProvider dehydratedState={dehydratedState}>
-          <HydrationBoundary state={dehydrate(queryClient)}>
-            <Header />
-            <div className="pt-12 xl:px-0 px-4">{children}</div>
-          </HydrationBoundary>
-
+        <QueryProvider>
+          <Header />
+          <div className="pt-12 xl:px-0 px-4">{children}</div>
           <Footer />
           <Toaster
             position="bottom-center"

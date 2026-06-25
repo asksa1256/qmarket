@@ -131,7 +131,9 @@ export default async function Home() {
               📊 주간 시세 변동 내역
             </h2>
 
-            <ItemPriceChangesContainer limit={3} preview={true} />
+            <Suspense fallback={null}>
+              <ItemPriceChangesContainer limit={3} preview={true} />
+            </Suspense>
 
             {/* 전체 시세 변동 내역 보기 CTA */}
             <GoToItemPriceChangesButton />

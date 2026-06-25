@@ -1,29 +1,40 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
-import { getUserServer } from "./shared/api/get-supabase-user-server";
 
 export async function middleware(request: NextRequest) {
-  const response = NextResponse.next();
+  let response = NextResponse.next({
+    request,
+  });
 
-  createServerClient(
+  const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
         getAll: () => request.cookies.getAll(),
-        setAll: (cookies) => {
-          cookies.forEach(({ name, value }) => {
-            response.cookies.set(name, value);
+        setAll: (cookiesToSet) => {
+          cookiesToSet.forEach(({ name, value }) => {
+            request.cookies.set(name, value);
+          });
+
+          response = NextResponse.next({
+            request,
+          });
+
+          cookiesToSet.forEach(({ name, value, options }) => {
+            response.cookies.set(name, value, options);
           });
         },
       },
     }
   );
 
-  const user = await getUserServer();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   // 로그인 상태면 /signin, /signup 접근 차단
-  if (user && ["/signin", "/signup"].includes(request.nextUrl.pathname)) {
+  if (user) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
@@ -31,7 +42,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
-  ],
+  matcher: ["/signin", "/signup"],
 };
